@@ -84,9 +84,9 @@ stages:
             archiveFile: compressed/${{ parameters.projectName }}.zip
             verbose: true
 
-        - publish: published
+        - publish: compressed
           displayName: Publish for release
-          artifact: compressed
+          artifact: published
 
   - stage: DeployDev
     displayName: 'Deploy to Development'
