@@ -108,7 +108,7 @@ stages:
                   displayName: download published artifact
                   artifact: published
 
-                - script: echo "$(serviceTemplate)" > $(Pipeline.Workspace)/drop/linux.service
+                - script: echo "$(serviceTemplate)" > $(Pipeline.Workspace)/published/linux.service
                   displayName: Generate service file
 
                 - template: config-template.yml
