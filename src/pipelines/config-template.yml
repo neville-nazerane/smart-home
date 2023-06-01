@@ -1,0 +1,10 @@
+
+parameters:
+  - name: configs
+    type: object
+    default: {}
+
+steps:
+- ${{ each config in parameters.configs }}:
+  - script: 'echo "Environment=${{ config.key }}=''${{ config.value }}''" >> $(Pipeline.Workspace)/drop/linux.service'
+    displayName: Adding configuration for ${{ config.key }}
