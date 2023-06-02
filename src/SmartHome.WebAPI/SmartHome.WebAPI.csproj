@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="libsoundio-sharp-net" Version="1.0.0" />
+    <!--<PackageReference Include="NAudio" Version="2.1.0" />-->
   </ItemGroup>
   
 </Project>
