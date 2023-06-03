@@ -24,7 +24,7 @@ stages:
     - job: Compile
       steps:
 
-      - script: dotnet publish $(projectPath) -c release -o published -lp Development
+      - script: dotnet publish $(projectPath) -c release -o published
         displayName: Publishing Website
 
       - task: ArchiveFiles@2
