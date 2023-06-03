@@ -31,10 +31,13 @@ namespace SmartHome.ServerServices.Clients
             return client;
         }
 
+        
+        public static HttpClientHandler GetHandler() => new HueHandler();
+
         public async Task<IEnumerable<LightModel>> GetAllLightsAsync(CancellationToken cancellationToken = default)
         {
-            var res = await _httpClient.GetFromJsonAsync<IEnumerable<LightResponse>>("clip/v2/resource/light", cancellationToken);
-            return res.Select(r => r.ToModel()).ToList();
+            var res = await _httpClient.GetFromJsonAsync<HueData<LightResponse>>("clip/v2/resource/light", cancellationToken);
+            return res.Data.Select(r => r.ToModel()).ToList();
         }
 
         public Task SwitchLightAsync(LightRequestModel request, bool switchOn, CancellationToken cancellationToken = default)
@@ -50,6 +53,14 @@ namespace SmartHome.ServerServices.Clients
         }
 
         #region models
+
+        class HueData<TModel>
+        {
+
+            [JsonPropertyName("data")]
+            public IEnumerable<TModel> Data { get; set; }
+
+        }
 
         class LightSwitch
         {
@@ -69,17 +80,17 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("id")]
             public string Id { get; set; }
 
-            [JsonPropertyName("On")]
-            public LightSwitch On { get; set; }
+            [JsonPropertyName("on")]
+            public LightOnOff_OnModel On { get; set; }
 
-            [JsonPropertyName("Metadata")]
+            [JsonPropertyName("metadata")]
             public Metadata Metadata { get; set; }
 
             public LightModel ToModel()
                 => new()
                 {
                     Id = Id,
-                    IsSwitchedOn = On.On.On,
+                    IsSwitchedOn = On.On,
                     Name = Metadata.Name
                 };
         }
@@ -97,6 +108,25 @@ namespace SmartHome.ServerServices.Clients
 
 
         #endregion
+
+        class HueHandler : HttpClientHandler
+        {
+
+            public HueHandler()
+            {
+                //MaxConnectionsPerServer = 1;
+                ClientCertificateOptions = ClientCertificateOption.Manual;
+                ServerCertificateCustomValidationCallback =
+                    (httpRequestMessage, cert, cetChain, policyErrors) => true;
+            }
+
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                request.Version = new Version(2, 0);
+                return base.SendAsync(request, cancellationToken);
+            }
+
+        }
 
     }
 }

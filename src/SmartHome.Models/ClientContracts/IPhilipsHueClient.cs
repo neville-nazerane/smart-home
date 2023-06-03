@@ -10,6 +10,7 @@ namespace SmartHome.Models.ClientContracts
 {
     public interface IPhilipsHueClient
     {
+        Task<IEnumerable<LightModel>> GetAllLightsAsync(CancellationToken cancellationToken = default);
         Task SwitchLightAsync(LightRequestModel request, bool switchOn, CancellationToken cancellationToken = default);
     }
 }

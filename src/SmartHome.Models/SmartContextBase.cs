@@ -18,13 +18,22 @@ namespace SmartHome.Models
             _philipsHueClient = philipsHueClient;
         }
 
+        //protected abstract IEnumerable<HueModels.LightModel> GetAllPhilipsHueLightsAsync();
 
+        public async Task<IEnumerable<DeviceModelBase>> FetchAllDevicesAsync()
+        {
+            var result = new List<DeviceModelBase>();
 
+            var hueDevices = await _philipsHueClient.GetAllLightsAsync();
+            result.AddRange(hueDevices);
+
+            return result.OrderBy(r => r.Name).ToList();
+        }
 
         #region Philips Hue
 
         public LightRequestModel MakeRequest(HueModels.LightModel model) => MakeLightRequestModel(model.Id);
-        protected LightRequestModel MakeLightRequestModel(string id) => new(this, id);
+        LightRequestModel MakeLightRequestModel(string id) => new(this, id);
 
         #endregion
 
