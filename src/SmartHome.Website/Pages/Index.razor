@@ -1,0 +1,8 @@
+﻿@page "/"
+
+@if (res is not null){
+    @foreach (var device in res)
+    {
+        <div><i>@device.Id</i>  <b>@device.Name</b> </div>
+    }
+}

@@ -1,80 +1,28 @@
-
-using SoundIOSharp;
+using Microsoft.Extensions.Configuration;
+using SmartHome.Models;
+using SmartHome.Models.ClientContracts;
+using SmartHome.ServerServices;
+using SmartHome.ServerServices.Clients;
+using SmartHome.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+var services = builder.Services;
+services.AddCors();
+
+
+var hueConfig = configuration.GetSection("hue");
+services.AddHttpClient<IPhilipsHueClient, PhilipsHueClient>(c => PhilipsHueClient.SetupClient(c, hueConfig["baseUrl"], hueConfig["key"]))
+        .ConfigurePrimaryHttpMessageHandler(PhilipsHueClient.GetHandler);
+
+services.AddTransient<SmartContext>();
+
 var app = builder.Build();
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
-app.MapGet("/list", GetAudioDevices);
-//app.MapGet("/run", RecordAndPlayAsync);
-
-app.MapGet("/", () => "Hello Web World!");
+app.MapGet("/", () => "Hello Smart Home");
+app.MapAllEndpoints();
 
 await app.RunAsync();
-
-static IEnumerable<string> GetAudioDevices()
-{
-    using var soundio = new SoundIO();
-    soundio.Connect();
-    soundio.FlushEvents();
-    
-    var inputDevices = Enumerable.Range(0, soundio.InputDeviceCount)
-                                .Select(soundio.GetInputDevice)
-                                .Where(device => device.ProbeError == 0)
-                                .Select(device => device.Name);
-    
-    var outputDevices = Enumerable.Range(0, soundio.OutputDeviceCount)
-                                    .Select(soundio.GetOutputDevice)
-                                    .Where(device => device.ProbeError == 0)
-                                    .Select(device => device.Name);
-        
-    return inputDevices.Concat(outputDevices);
-}
-
-
-
-//async Task<string> RecordAndPlayAsync()
-//{
-//    using var waveIn = new WasapiLoopbackCapture();
-//    var waveFormat = waveIn.WaveFormat;
-//    await using var outputStream = new MemoryStream();
-
-//    waveIn.RecordingStopped += async (sender, args) =>
-//    {
-//        outputStream.Position = 0;
-
-//        using var waveOut = new WaveOutEvent();
-//        await using var inputStream = new MemoryStream(outputStream.ToArray());
-//        var waveStream = new RawSourceWaveStream(inputStream, waveFormat);
-//        waveOut.Init(waveStream);
-//        waveOut.Play();
-
-//        while (waveOut.PlaybackState == PlaybackState.Playing)
-//            await Task.Delay(100);
-//    };
-
-//    waveIn.StartRecording();
-//    await Task.Delay(TimeSpan.FromSeconds(10));
-
-//    waveIn.StopRecording();
-
-//    // making sure function is still running during play back
-//    await Task.Delay(TimeSpan.FromSeconds(10));
-
-//    return "Done";
-//}
-
-
-//IEnumerable<string> GetAudioDevices()
-//{
-//    var enumerator = new MMDeviceEnumerator();
-//    var playbackDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)
-//                                    .Select((device, index) => $"Playback Device {index}: {device.FriendlyName}");
-
-//    var recordingDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active)
-//                                     .Select((device, index) => $"Recording Device {index}: {device.FriendlyName}");
-
-//    return playbackDevices.Concat(recordingDevices);
-//}
-
 
 

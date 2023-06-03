@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>smarthub</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="libsoundio-sharp-net" Version="1.0.0" />
-    <!--<PackageReference Include="NAudio" Version="2.1.0" />-->
+    <ProjectReference Include="..\SmartHome.ServerServices\SmartHome.ServerServices.csproj" />
   </ItemGroup>
   
 </Project>

@@ -1,0 +1,73 @@
+
+pool:
+  vmImage: ubuntu-latest
+
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - src/SmartHome.Website
+      - pipelines/website.yaml
+
+variables:
+  projectPath: src/SmartHome.Website
+  projectName: SmartHome.Website
+  deploymentDestDirectory: /var/www/website
+
+stages:
+  - stage: 
+    displayName: Build Blazor
+    jobs:
+
+    - job: Compile
+      steps:
+
+      - script: dotnet publish $(projectPath) -c release -o published -lp Development
+        displayName: Publishing Website
+
+      - task: ArchiveFiles@2
+        displayName: Compress before publish
+        inputs:
+          rootFolderOrFile: published
+          includeRootFolder: false
+          archiveFile: compressed/$(projectPath).zip
+          verbose: true
+
+      - publish: compressed
+        displayName: Publish for release
+        artifact: published
+
+  - stage: CD
+    displayName: Deploy to the PI
+
+    jobs:
+      - deployment: DeployLAN
+        displayName: Deploy to Development VM
+        environment:
+          name: voice pi
+          resourceType: VirtualMachine
+          resourceName: ubuntu
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+
+                - checkout: none
+
+                - download: current
+                  displayName: download published artifact
+                  artifact: published
+
+                - script: |
+                    sudo rm -rf $(deploymentDestDirectory)
+                    sudo unzip $(projectName).zip -d $(deploymentDestDirectory)
+
+                    rm -rf *
+                  displayName: Unzipping website into destination folder
+
+      
+                - task: DeleteFiles@1
+                  displayName: Clean up
+                              
