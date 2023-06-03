@@ -2,7 +2,22 @@
 parameters:
   - name: configs
     type: object
-    default: {}
+    default: 
+      ASPNETCORE_ENVIRONMENT: Production
+      smartthings__PAT: $(PAT)
+      sql: $(sql)
+      web_insights: $(web_insights)
+      worker_insights: $(worker_insights)
+      smartworker_insights: $(smartworker_insights)
+      global__dataPath: "/home/ubuntu/data"
+      backup__key: $(backup_key)
+      backup__baseUrl: $(backup_baseUrl)
+      hue__baseUrl: $(hue_baseUrl)
+      hue__key: $(hue_key)
+      bond__baseUrl: $(bond_baseUrl)
+      bond__token: $(bond_token)
+      hueSync__baseUrl: $(hueSync_baseUrl)
+      hueSync__token: $(hueSync_token)
 
 steps:
 - ${{ each config in parameters.configs }}:
