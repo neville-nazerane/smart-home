@@ -62,10 +62,11 @@ stages:
 
                 - script: |
                     sudo rm -rf $(deploymentDestDirectory)
-                    sudo unzip $(projectName).zip -d $(deploymentDestDirectory)
+                    sudo unzip src/$(projectName).zip -d $(deploymentDestDirectory)
 
                     rm -rf *
                   displayName: Unzipping website into destination folder
+                  workingDirectory: $(Pipeline.Workspace)/published
 
       
                 - task: DeleteFiles@1
