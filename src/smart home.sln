@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Models", "SmartHo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.ServerServices", "SmartHome.ServerServices\SmartHome.ServerServices.csproj", "{69908AA6-9F57-47FE-B401-0D5AA1095BE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.ClientServices", "SmartHome.ClientServices\SmartHome.ClientServices.csproj", "{EBD2565B-E91E-4AD9-B9F2-EC26450C88BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{69908AA6-9F57-47FE-B401-0D5AA1095BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69908AA6-9F57-47FE-B401-0D5AA1095BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69908AA6-9F57-47FE-B401-0D5AA1095BE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD2565B-E91E-4AD9-B9F2-EC26450C88BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD2565B-E91E-4AD9-B9F2-EC26450C88BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD2565B-E91E-4AD9-B9F2-EC26450C88BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD2565B-E91E-4AD9-B9F2-EC26450C88BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

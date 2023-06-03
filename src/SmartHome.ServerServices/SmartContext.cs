@@ -11,8 +11,11 @@ namespace SmartHome.ServerServices
 {
     public class SmartContext : SmartContextBase
     {
-        public SmartContext(IPhilipsHueClient philipsHueClient) : base(philipsHueClient)
+        protected override IPhilipsHueClient PhilipsHueClient { get; }
+
+        public SmartContext(IPhilipsHueClient philipsHueClient) : base()
         {
+            PhilipsHueClient = philipsHueClient;
         }
 
     }

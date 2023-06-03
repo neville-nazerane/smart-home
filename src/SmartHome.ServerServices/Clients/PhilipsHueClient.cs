@@ -40,7 +40,7 @@ namespace SmartHome.ServerServices.Clients
             return res.Data.Select(r => r.ToModel()).ToList();
         }
 
-        public Task SwitchLightAsync(LightRequestModel request, bool switchOn, CancellationToken cancellationToken = default)
+        public Task SwitchLightAsync(HueLightRequestModel request, bool switchOn, CancellationToken cancellationToken = default)
         {
             var model = new LightSwitch
             {

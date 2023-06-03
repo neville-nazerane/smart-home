@@ -11,12 +11,8 @@ namespace SmartHome.Models
 {
     public abstract class SmartContextBase
     {
-        private readonly IPhilipsHueClient _philipsHueClient;
 
-        public SmartContextBase(IPhilipsHueClient philipsHueClient)
-        {
-            _philipsHueClient = philipsHueClient;
-        }
+        protected abstract IPhilipsHueClient PhilipsHueClient { get; }
 
         //protected abstract IEnumerable<HueModels.LightModel> GetAllPhilipsHueLightsAsync();
 
@@ -24,7 +20,7 @@ namespace SmartHome.Models
         {
             var result = new List<DeviceModelBase>();
 
-            var hueDevices = await _philipsHueClient.GetAllLightsAsync();
+            var hueDevices = await PhilipsHueClient.GetAllLightsAsync();
             result.AddRange(hueDevices);
 
             return result.OrderBy(r => r.Name).ToList();
@@ -32,23 +28,23 @@ namespace SmartHome.Models
 
         #region Philips Hue
 
-        public LightRequestModel MakeRequest(HueModels.LightModel model) => MakeLightRequestModel(model.Id);
-        LightRequestModel MakeLightRequestModel(string id) => new(this, id);
+        public HueLightRequestModel MakeRequest(HueModels.LightModel model) => MakeLightRequestModel(model.Id);
+        HueLightRequestModel MakeLightRequestModel(string id) => new(this, id);
 
         #endregion
 
 
         #region Request Models
 
-        public class LightRequestModel
+        public class HueLightRequestModel
         {
             private readonly IPhilipsHueClient _client;
 
             public string Id { get; set; }
 
-            public LightRequestModel(SmartContextBase source, string id)
+            public HueLightRequestModel(SmartContextBase source, string id)
             {
-                _client = source._philipsHueClient;
+                _client = source.PhilipsHueClient;
                 Id = id;
             }
 
