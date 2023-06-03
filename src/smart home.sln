@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.WebAPI", "SmartHome.WebAPI\SmartHome.WebAPI.csproj", "{946D27E3-EE41-4AB4-9082-35354D46AD0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Models", "SmartHome.Models\SmartHome.Models.csproj", "{01A5230B-F4FA-4ECE-8864-D9A164B7F088}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.ServerServices", "SmartHome.ServerServices\SmartHome.ServerServices.csproj", "{69908AA6-9F57-47FE-B401-0D5AA1095BE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{946D27E3-EE41-4AB4-9082-35354D46AD0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{946D27E3-EE41-4AB4-9082-35354D46AD0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{946D27E3-EE41-4AB4-9082-35354D46AD0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01A5230B-F4FA-4ECE-8864-D9A164B7F088}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01A5230B-F4FA-4ECE-8864-D9A164B7F088}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01A5230B-F4FA-4ECE-8864-D9A164B7F088}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01A5230B-F4FA-4ECE-8864-D9A164B7F088}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69908AA6-9F57-47FE-B401-0D5AA1095BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69908AA6-9F57-47FE-B401-0D5AA1095BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69908AA6-9F57-47FE-B401-0D5AA1095BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69908AA6-9F57-47FE-B401-0D5AA1095BE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
