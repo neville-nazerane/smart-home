@@ -3,6 +3,7 @@ using SmartHome.Models.PhilipsHue;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
@@ -51,6 +52,10 @@ namespace SmartHome.ServerServices.Clients
             };
             return _httpClient.PutAsJsonAsync($"/clip/v2/resource/light/{request.Id}", model, cancellationToken);
         }
+
+        public Task<HttpResponseMessage> StreamEventAsync(CancellationToken cancellationToken = default)
+            => _httpClient.GetAsync("eventstream/clip/v2", cancellationToken);
+
 
         #region models
 

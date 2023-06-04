@@ -9,15 +9,10 @@ using SmartHome.WebAPI.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var services = builder.Services;
-services.AddCors()
+services.AddAllServer(configuration)
+        .AddCors()
         .AddSignalR();
 
-
-var hueConfig = configuration.GetSection("hue");
-services.AddHttpClient<IPhilipsHueClient, PhilipsHueClient>(c => PhilipsHueClient.SetupClient(c, hueConfig["baseUrl"], hueConfig["key"]))
-        .ConfigurePrimaryHttpMessageHandler(PhilipsHueClient.GetHandler);
-
-services.AddTransient<SmartContext>();
 
 var app = builder.Build();
 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
