@@ -55,7 +55,10 @@ namespace SmartHome.Models
             }
 
             public Task TriggerSwitchAsync(bool switchOn, CancellationToken cancellationToken = default)
-                => _client.SwitchLightAsync(this, switchOn, cancellationToken);
+                => _client.SwitchLightAsync(Id, switchOn, cancellationToken);
+
+            public Task<HueModels.LightModel> GetAsync(CancellationToken cancellationToken = default)
+               => _client.GetLightAsync(Id, cancellationToken);
 
         }
 
