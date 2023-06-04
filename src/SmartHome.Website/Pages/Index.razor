@@ -1,8 +1,8 @@
 ﻿@page "/"
 
-@if (res is not null)
+@if (devices is not null)
 {
-    @foreach (var deviceGrp in res.Chunk(3))
+    @foreach (var deviceGrp in devices.Chunk(3))
     {
         <div class="row">
             @foreach (var device in deviceGrp)

@@ -21,5 +21,4 @@ var app = builder.Build();
 
 await app.Services.GetService<ChangeListener>().StartAsync();
 
-
 await app.RunAsync();

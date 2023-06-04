@@ -13,22 +13,13 @@ namespace SmartHome.WebAPI
 
         public static void MapAllEndpoints(this WebApplication app)
         {
-            app.MapGet("/tryNotifyChange/{id}", TryNotifyAsync);
             app.MapPost("/notifyDeviceChange", NotifyDeviceChangeAsync);
 
             app.MapGet("/philipsHue/lights", GetAllHueLightsAsync);
+            app.MapGet("/philipsHue/light/{id}", HueGetLightAsync);
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
 
         }
-
-        public static Task TryNotifyAsync(IHubContext<ChangeNotifyHub> hubContext,
-                                          string id,
-                                          CancellationToken cancellationToken = default)
-            => NotifyDeviceChangeAsync(hubContext, new()
-            {
-                Id = id,
-                Type = DeviceChangedNotify.DeviceType.HueLight
-            }, cancellationToken);
 
         public static Task NotifyDeviceChangeAsync(IHubContext<ChangeNotifyHub> hubContext,
                                                    DeviceChangedNotify model,
@@ -45,7 +36,11 @@ namespace SmartHome.WebAPI
                                                string id,
                                                CancellationToken cancellationToken = default)
             => context.MakeHueLightRequestModel(id).TriggerSwitchAsync(switchOn, cancellationToken);
-        //=> client.SwitchLightAsync(model, switchOn, cancellationToken); 
+
+        public static Task HueGetLightAsync(SmartContext context, 
+                                            string id,
+                                            CancellationToken cancellationToken = default)
+            => context.MakeHueLightRequestModel(id).GetAsync(cancellationToken);
 
         #endregion
 

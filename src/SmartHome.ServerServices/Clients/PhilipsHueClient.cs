@@ -41,7 +41,7 @@ namespace SmartHome.ServerServices.Clients
             return res.Data.Select(r => r.ToModel()).ToList();
         }
 
-        public Task SwitchLightAsync(HueLightRequestModel request, bool switchOn, CancellationToken cancellationToken = default)
+        public Task SwitchLightAsync(string id, bool switchOn, CancellationToken cancellationToken = default)
         {
             var model = new LightSwitch
             {
@@ -50,7 +50,13 @@ namespace SmartHome.ServerServices.Clients
                     On = switchOn
                 }
             };
-            return _httpClient.PutAsJsonAsync($"/clip/v2/resource/light/{request.Id}", model, cancellationToken);
+            return _httpClient.PutAsJsonAsync($"/clip/v2/resource/light/{id}", model, cancellationToken);
+        }
+
+        public async Task<LightModel> GetLightAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var res = await _httpClient.GetFromJsonAsync<HueData<LightResponse>>($"clip/v2/resource/light/{id}", cancellationToken);
+            return res.Data.SingleOrDefault().ToModel();
         }
 
         public Task<HttpResponseMessage> StreamEventAsync(CancellationToken cancellationToken = default)
