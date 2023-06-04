@@ -70,12 +70,16 @@ namespace SmartHome.ServerServices.Clients
         public async Task<IEnumerable<MotionModel>> GetAllMotionSensorsAsync(CancellationToken cancellationToken = default)
         {
             var res = await _httpClient.GetFromJsonAsync<HueData<MotionResponse>>("clip/v2/resource/motion", cancellationToken);
-            var models = res.Data.Select(r => r.ToModel()).ToList();
             var devices = await GetAllDevicesAsync(cancellationToken);
-            foreach (var model in models)
+
+            var models = new List<MotionModel>();
+
+            foreach (var item in res.Data)
             {
-                var device = devices.Single(d => d.Id == model.Id);
+                var model = item.ToModel();
+                var device = devices.Single(d => d.Id == item.Owner.Rid);
                 model.Name = device.Metadata.Name;
+                models.Add(model);
             }
             return models;
         }
@@ -83,8 +87,9 @@ namespace SmartHome.ServerServices.Clients
         public async Task<MotionModel> GetMotionSensorAsync(string id, CancellationToken cancellationToken = default)
         {
             var res = await _httpClient.GetFromJsonAsync<HueData<MotionResponse>>($"clip/v2/resource/motion/{id}", cancellationToken);
-            var model = res.Data.SingleOrDefault().ToModel();
-            var device = await GetDeviceAsync(id, cancellationToken);
+            var data = res.Data.SingleOrDefault();
+            var device = await GetDeviceAsync(data.Owner.Rid, cancellationToken);
+            var model = data.ToModel();
             model.Name = device.Metadata.Name;
 
             return model;
@@ -112,8 +117,27 @@ namespace SmartHome.ServerServices.Clients
 
         #endregion
 
+        class HueHandler : HttpClientHandler
+        {
 
-        #region models
+            public HueHandler()
+            {
+                //MaxConnectionsPerServer = 1;
+                ClientCertificateOptions = ClientCertificateOption.Manual;
+                ServerCertificateCustomValidationCallback =
+                    (httpRequestMessage, cert, cetChain, policyErrors) => true;
+            }
+
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                request.Version = new Version(2, 0);
+                return base.SendAsync(request, cancellationToken);
+            }
+
+        }
+
+
+        #region Models
 
 
         class HueData<TModel>
@@ -132,6 +156,16 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("metadata")]
             public Metadata Metadata { get; set; }
 
+        }
+
+        public class Owner
+        {
+
+            [JsonPropertyName("rid")]
+            public string Rid { get; set; }
+
+            [JsonPropertyName("rtype")]
+            public string Rtype { get; set; }
         }
 
         class LightSwitch
@@ -186,6 +220,9 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("motion")]
             public Motion_OnModel Motion { get; set; }
 
+            [JsonPropertyName("owner")]
+            public Owner Owner { get; set; }
+
             public MotionModel ToModel()
                 => new()
                 {
@@ -203,25 +240,6 @@ namespace SmartHome.ServerServices.Clients
         }
 
         #endregion
-
-        class HueHandler : HttpClientHandler
-        {
-
-            public HueHandler()
-            {
-                //MaxConnectionsPerServer = 1;
-                ClientCertificateOptions = ClientCertificateOption.Manual;
-                ServerCertificateCustomValidationCallback =
-                    (httpRequestMessage, cert, cetChain, policyErrors) => true;
-            }
-
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-            {
-                request.Version = new Version(2, 0);
-                return base.SendAsync(request, cancellationToken);
-            }
-
-        }
 
     }
 }
