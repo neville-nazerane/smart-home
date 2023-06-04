@@ -18,6 +18,7 @@ parameters:
       bond__token: $(bond_token)
       hueSync__baseUrl: $(hueSync_baseUrl)
       hueSync__token: $(hueSync_token)
+      smarthomeEndpoint: $(smarthome_endpoint)
 
 steps:
 - ${{ each config in parameters.configs }}:

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using SmartHome.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +17,12 @@ namespace SmartHome.BackgroundProcessor.Services
             _client = client;
         }
 
-
+        public async Task NotifyDeviceChangeAsync(DeviceChangedNotify device, 
+                                                  CancellationToken cancellationToken = default)
+        {
+            using var res = await _client.PostAsJsonAsync("notifyDeviceChange", device, cancellationToken);
+            res.EnsureSuccessStatusCode();
+        }
 
     }
 }

@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 namespace SmartHome.BackgroundProcessor
 {
-    public class HueListener : Worker
+    public class HueListener : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
         private readonly IServiceProvider _serviceProvider;
 
-        public HueListener(ILogger<Worker> logger, IServiceProvider serviceProvider) : base(logger)
+        public HueListener(IServiceProvider serviceProvider) 
         {
-            _logger = logger;
             _serviceProvider = serviceProvider;
         }
 

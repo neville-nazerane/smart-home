@@ -8,10 +8,12 @@ IHost host = Host.CreateDefaultBuilder(args)
         var configs = hostContext.Configuration;
         services.AddAllServer(configs)
                 .AddTransient<HueProcessor>()
-                .AddHttpClient<ApiConsumer>();
+                .AddHttpClient<ApiConsumer>(c =>
+                {
+                    c.BaseAddress = new(configs["smarthomeEndpoint"]);
+                });
         
-        services.AddHostedService<Worker>()
-                .AddHostedService<HueListener>();
+        services.AddHostedService<HueListener>();
     })
     .Build();
 
