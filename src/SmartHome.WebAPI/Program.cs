@@ -4,11 +4,13 @@ using SmartHome.Models.ClientContracts;
 using SmartHome.ServerServices;
 using SmartHome.ServerServices.Clients;
 using SmartHome.WebAPI;
+using SmartHome.WebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var services = builder.Services;
-services.AddCors();
+services.AddCors()
+        .AddSignalR();
 
 
 var hueConfig = configuration.GetSection("hue");
@@ -21,6 +23,9 @@ var app = builder.Build();
 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.MapGet("/", () => "Hello Smart Home");
+
+app.MapHub<ChangeNotifyHub>("/hubs/changeNotify");
+
 app.MapAllEndpoints();
 
 await app.RunAsync();
