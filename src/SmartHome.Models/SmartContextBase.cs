@@ -28,8 +28,8 @@ namespace SmartHome.Models
 
         #region Philips Hue
 
-        public HueLightRequestModel MakeRequest(HueModels.LightModel model) => MakeLightRequestModel(model.Id);
-        HueLightRequestModel MakeLightRequestModel(string id) => new(this, id);
+        public HueLightRequestModel MakeRequest(HueModels.LightModel model) => MakeHueLightRequestModel(model.Id);
+        public HueLightRequestModel MakeHueLightRequestModel(string id) => new(this, id);
 
         #endregion
 
@@ -41,6 +41,12 @@ namespace SmartHome.Models
             private readonly IPhilipsHueClient _client;
 
             public string Id { get; set; }
+
+            [JsonConstructor]
+            public HueLightRequestModel()
+            {
+                
+            }
 
             public HueLightRequestModel(SmartContextBase source, string id)
             {

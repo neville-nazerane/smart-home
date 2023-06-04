@@ -38,7 +38,7 @@ namespace SmartHome.ClientServices
 
             public async Task SwitchLightAsync(HueLightRequestModel request, bool switchOn, CancellationToken cancellationToken = default)
             {
-                using var res = await _httpClient.PutAsJsonAsync($"philipsHue/switchLight/{switchOn}", request, cancellationToken);
+                using var res = await _httpClient.PutAsync($"philipsHue/switchLight/{request.Id}/{switchOn}", null, cancellationToken);
                 res.EnsureSuccessStatusCode();
             }
         }

@@ -7,13 +7,19 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-string url = builder.Configuration["baseUrl"];
+string baseUrl = builder.Configuration["baseUrl"];
 
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration["baseUrl"]) });
 
 builder.Services.AddScoped(sp => new SmartContext(new HttpClient
 {
-    BaseAddress = new(builder.Configuration["baseUrl"])
+    BaseAddress = new(baseUrl)
 }));
+builder.Services.AddSingleton(sp => new ChangeListener(baseUrl));
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+await app.Services.GetService<ChangeListener>().StartAsync();
+
+
+await app.RunAsync();
