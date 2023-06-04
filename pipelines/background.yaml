@@ -122,7 +122,7 @@ stages:
                     sudo systemctl start ${{ parameters.service.name }}.service
   
                     rm -rf *
-                  displayName: Updating website
+                  displayName: Updating Service
                   workingDirectory: $(Pipeline.Workspace)/published
       
                 - task: DeleteFiles@1
