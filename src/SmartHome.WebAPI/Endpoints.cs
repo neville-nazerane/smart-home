@@ -37,7 +37,7 @@ namespace SmartHome.WebAPI
                                                CancellationToken cancellationToken = default)
             => context.MakeHueLightRequestModel(id).TriggerSwitchAsync(switchOn, cancellationToken);
 
-        public static Task HueGetLightAsync(SmartContext context, 
+        public static Task<HueModels.LightModel> HueGetLightAsync(SmartContext context, 
                                             string id,
                                             CancellationToken cancellationToken = default)
             => context.MakeHueLightRequestModel(id).GetAsync(cancellationToken);
