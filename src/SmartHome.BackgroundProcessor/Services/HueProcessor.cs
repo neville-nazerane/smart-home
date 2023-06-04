@@ -85,6 +85,9 @@ namespace SmartHome.BackgroundProcessor.Services
                     case "light":
                         model.Type = DeviceChangedNotify.DeviceType.HueLight;
                         break;
+                    case "motion":
+                        model.Type = DeviceChangedNotify.DeviceType.HueMotion;
+                        break;
                 }
 
                 if (model.Type != DeviceChangedNotify.DeviceType.None)

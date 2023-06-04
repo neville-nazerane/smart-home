@@ -16,7 +16,8 @@ namespace SmartHome.Models
         public enum DeviceType
         {
             None,
-            HueLight
+            HueLight,
+            HueMotion
         }
 
     }
