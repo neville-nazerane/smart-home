@@ -39,8 +39,12 @@ namespace SmartHome.Website.Pages
                 }
             }
 
-            if (updatedDevice is not null) devices[i] = updatedDevice;
-            
+            if (updatedDevice is not null)
+            {
+                devices[i] = updatedDevice;
+                StateHasChanged();
+            }
+
 
             //var index = devices.FindIndex(d => DeviceEquals(d, e));
             //var device = devices.ElementAtOrDefault(index);
