@@ -1,7 +1,7 @@
 ﻿using SmartHome.Models.ClientContracts;
 using SmartHome.ServerServices;
 using HueModels = SmartHome.Models.PhilipsHue;
-using static SmartHome.Models.SmartContextBase;
+//using static SmartHome.Models.SmartContextBase;
 
 namespace SmartHome.WebAPI
 {
@@ -12,7 +12,7 @@ namespace SmartHome.WebAPI
         {
 
             app.MapGet("/philipsHue/lights", GetAllHueLightsAsync);
-            app.MapPut("/philipsHue/switchLight/{switchOn}", HueLightSwitchAsync);
+            app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
 
         }
 
@@ -21,11 +21,12 @@ namespace SmartHome.WebAPI
         public static Task<IEnumerable<HueModels.LightModel>> GetAllHueLightsAsync(IPhilipsHueClient client, CancellationToken cancellationToken = default)
             => client.GetAllLightsAsync(cancellationToken);
 
-        public static Task HueLightSwitchAsync(IPhilipsHueClient client,
-                                               HueLightRequestModel model,
+        public static Task HueLightSwitchAsync(SmartContext context,
                                                bool switchOn,
+                                               string id,
                                                CancellationToken cancellationToken = default)
-            => client.SwitchLightAsync(model, switchOn, cancellationToken);
+            => context.MakeHueLightRequestModel(id).TriggerSwitchAsync(switchOn, cancellationToken);
+            //=> client.SwitchLightAsync(model, switchOn, cancellationToken);
 
     }
 }
