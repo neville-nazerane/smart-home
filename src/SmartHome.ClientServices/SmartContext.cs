@@ -39,6 +39,12 @@ namespace SmartHome.ClientServices
             public Task<HueModels.LightModel> GetLightAsync(string id, CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<HueModels.LightModel>($"philipsHue/light/{id}", cancellationToken);
 
+            public Task<IEnumerable<HueModels.MotionModel>> GetAllMotionSensorsAsync(CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<IEnumerable<HueModels.MotionModel>>("philipsHue/motions", cancellationToken);
+
+            public Task<HueModels.MotionModel> GetMotionSensorAsync(string id, CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<HueModels.MotionModel>($"philipsHue/motion/{id}", cancellationToken);
+
             public async Task SwitchLightAsync(string id, bool switchOn, CancellationToken cancellationToken = default)
             {
                 using var res = await _httpClient.PutAsync($"philipsHue/switchLight/{id}/{switchOn}", null, cancellationToken);

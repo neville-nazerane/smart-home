@@ -13,13 +13,18 @@
                     {
 
                         <p class="card-text">Philips Hue Light</p>
-
                         <button class="btn btn-sm @(lightModel.IsSwitchedOn ? "btn-success" : "btn-danger")"
                         @onclick="@(() => SmartContext.MakeRequest(lightModel).TriggerSwitchAsync(!lightModel.IsSwitchedOn))"></button>
 
                         break;
                     }
+                case HueModels.MotionModel motionModel:
+                    {
 
+                        <p class="card-text">Motion Sensor</p>
+                        <button class="btn btn-sm @(motionModel.IsMotionDetected ? "btn-success" : "btn-danger")"></button>
+                        break;
+                    }
             }
         </div>
     </div>

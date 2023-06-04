@@ -16,7 +16,9 @@ namespace SmartHome.WebAPI
             app.MapPost("/notifyDeviceChange", NotifyDeviceChangeAsync);
 
             app.MapGet("/philipsHue/lights", GetAllHueLightsAsync);
+            app.MapGet("/philipsHue/motions", GetAllHueLightsAsync);
             app.MapGet("/philipsHue/light/{id}", HueGetLightAsync);
+            app.MapGet("/philipsHue/motion/{id}", HueGetMotionAsync);
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
 
         }
@@ -30,6 +32,8 @@ namespace SmartHome.WebAPI
 
         public static Task<IEnumerable<HueModels.LightModel>> GetAllHueLightsAsync(IPhilipsHueClient client, CancellationToken cancellationToken = default)
             => client.GetAllLightsAsync(cancellationToken);
+        public static Task<IEnumerable<HueModels.MotionModel>> GetAllHueMotionAsync(IPhilipsHueClient client, CancellationToken cancellationToken = default)
+            => client.GetAllMotionSensorsAsync(cancellationToken);
 
         public static Task HueLightSwitchAsync(SmartContext context,
                                                bool switchOn,
@@ -41,6 +45,11 @@ namespace SmartHome.WebAPI
                                             string id,
                                             CancellationToken cancellationToken = default)
             => context.MakeHueLightRequestModel(id).GetAsync(cancellationToken);
+
+        public static Task<HueModels.MotionModel> HueGetMotionAsync(SmartContext context,
+                                                                    string id,
+                                                                    CancellationToken cancellationToken = default)
+            => context.MakeHueMotionRequestModel(id).GetAsync(cancellationToken);
 
         #endregion
 
