@@ -16,7 +16,7 @@ namespace SmartHome.WebAPI
             app.MapPost("/notifyDeviceChange", NotifyDeviceChangeAsync);
 
             app.MapGet("/philipsHue/lights", GetAllHueLightsAsync);
-            app.MapGet("/philipsHue/motions", GetAllHueLightsAsync);
+            app.MapGet("/philipsHue/motions", GetAllHueMotionAsync);
             app.MapGet("/philipsHue/light/{id}", HueGetLightAsync);
             app.MapGet("/philipsHue/motion/{id}", HueGetMotionAsync);
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
