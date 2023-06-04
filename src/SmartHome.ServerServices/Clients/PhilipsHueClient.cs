@@ -35,6 +35,8 @@ namespace SmartHome.ServerServices.Clients
         
         public static HttpClientHandler GetHandler() => new HueHandler();
 
+        #region Light
+        
         public async Task<IEnumerable<LightModel>> GetAllLightsAsync(CancellationToken cancellationToken = default)
         {
             var res = await _httpClient.GetFromJsonAsync<HueData<LightResponse>>("clip/v2/resource/light", cancellationToken);
@@ -59,17 +61,76 @@ namespace SmartHome.ServerServices.Clients
             return res.Data.SingleOrDefault().ToModel();
         }
 
+
+        #endregion
+
+
+        #region Motion Sensor
+        
+        public async Task<IEnumerable<MotionModel>> GetAllMotionSensorsAsync(CancellationToken cancellationToken = default)
+        {
+            var res = await _httpClient.GetFromJsonAsync<HueData<MotionResponse>>("clip/v2/resource/motion", cancellationToken);
+            var models = res.Data.Select(r => r.ToModel()).ToList();
+            var devices = await GetAllDevicesAsync(cancellationToken);
+            foreach (var model in models)
+            {
+                var device = devices.Single(d => d.Id == model.Id);
+                model.Name = device.Metadata.Name;
+            }
+            return models;
+        }
+
+        public async Task<MotionModel> GetMotionSensorAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var res = await _httpClient.GetFromJsonAsync<HueData<MotionResponse>>($"clip/v2/resource/motion/{id}", cancellationToken);
+            var model = res.Data.SingleOrDefault().ToModel();
+            var device = await GetDeviceAsync(id, cancellationToken);
+            model.Name = device.Metadata.Name;
+
+            return model;
+        }
+
+        #endregion
+
         public Task<HttpResponseMessage> StreamEventAsync(CancellationToken cancellationToken = default)
             => _httpClient.GetAsync("eventstream/clip/v2", cancellationToken);
 
 
+        #region Devices
+
+        async Task<IEnumerable<DeviceResponse>> GetAllDevicesAsync(CancellationToken cancellationToken = default)
+        {
+            var res = await _httpClient.GetFromJsonAsync<HueData<DeviceResponse>>("clip/v2/resource/device", cancellationToken);
+            return res.Data;
+        }
+
+        async Task<DeviceResponse> GetDeviceAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var res = await _httpClient.GetFromJsonAsync<HueData<DeviceResponse>>($"clip/v2/resource/device/{id}", cancellationToken);
+            return res.Data.SingleOrDefault();
+        }
+
+        #endregion
+
+
         #region models
+
 
         class HueData<TModel>
         {
 
             [JsonPropertyName("data")]
             public IEnumerable<TModel> Data { get; set; }
+
+        }
+
+        class DeviceResponse
+        {
+            [JsonPropertyName("id")]
+            public string Id { get; set; }
+
+            [JsonPropertyName("metadata")]
+            public Metadata Metadata { get; set; }
 
         }
 
@@ -116,7 +177,30 @@ namespace SmartHome.ServerServices.Clients
 
         }
 
+        class MotionResponse
+        {
 
+            [JsonPropertyName("id")]
+            public string Id { get; set; }
+
+            [JsonPropertyName("motion")]
+            public Motion_OnModel Motion { get; set; }
+
+            public MotionModel ToModel()
+                => new()
+                {
+                    Id = Id,
+                    IsMotionDetected = Motion.Motion
+                };
+
+        }
+
+        class Motion_OnModel
+        {
+
+            [JsonPropertyName("motion")]
+            public bool Motion { get; set; }
+        }
 
         #endregion
 
