@@ -1,4 +1,5 @@
-﻿using SmartHome.Models.ClientContracts;
+﻿using SmartHome.Models;
+using SmartHome.Models.ClientContracts;
 using SmartHome.Models.PhilipsHue;
 using SmartHome.ServerServices.Clients;
 using System;
@@ -17,11 +18,15 @@ namespace SmartHome.BackgroundProcessor.Services
     {
         private readonly ConcurrentQueue<HttpResponseMessage> _queue;
         private readonly ILogger<HueProcessor> _logger;
+        private readonly ApiConsumer _consumer;
         private readonly IPhilipsHueClient _philipsHueClient;
 
-        public HueProcessor(ILogger<HueProcessor> logger, IPhilipsHueClient philipsHueClient)
+        public HueProcessor(ILogger<HueProcessor> logger, 
+                            ApiConsumer consumer,
+                            IPhilipsHueClient philipsHueClient)
         {
             _logger = logger;
+            _consumer = consumer;
             _philipsHueClient = philipsHueClient;
 
             _queue = new();
@@ -69,7 +74,22 @@ namespace SmartHome.BackgroundProcessor.Services
 
         async Task HandleEventsAsync(IEnumerable<HueEventData> events)
         {
+            foreach (var e in events)
+            {
+                var model = new DeviceChangedNotify
+                {
+                    Id = e.Id,
+                };
+                switch (e.Type)
+                {
+                    case "light":
+                        model.Type = DeviceChangedNotify.DeviceType.HueLight;
+                        break;
+                }
 
+                if (model.Type != DeviceChangedNotify.DeviceType.None)
+                    await _consumer.NotifyDeviceChangeAsync(model);
+            }
         }
 
     }

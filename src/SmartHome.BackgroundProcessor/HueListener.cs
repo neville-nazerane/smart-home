@@ -22,7 +22,8 @@ namespace SmartHome.BackgroundProcessor
             var processor = scope.ServiceProvider.GetService<HueProcessor>();
             await Task.WhenAll(
                     processor.KeepListeningAsync(stoppingToken),
-                    processor.ProcessQueueAsync(stoppingToken));
+                    processor.ProcessQueueAsync(stoppingToken)
+            );
         }
 
     }
