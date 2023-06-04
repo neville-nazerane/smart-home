@@ -9,6 +9,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SmartHome.BackgroundProcessor.Services
 {
@@ -52,7 +53,10 @@ namespace SmartHome.BackgroundProcessor.Services
                     {
                         var data = await response.Content.ReadFromJsonAsync<IEnumerable<HueEvent>>(cancellationToken: cancellationToken);
                         response.Dispose();
-
+                        var events = data.Where(d => d.Type == "update")
+                                         .SelectMany(d => d.Data)
+                                         .ToList();
+                        await HandleEventsAsync(events);
                     }
                     else await Task.Delay(1000, cancellationToken);
                 }
@@ -63,7 +67,10 @@ namespace SmartHome.BackgroundProcessor.Services
             }
         }
 
+        async Task HandleEventsAsync(IEnumerable<HueEventData> events)
+        {
 
+        }
 
     }
 }
