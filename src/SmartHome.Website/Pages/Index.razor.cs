@@ -25,6 +25,7 @@ namespace SmartHome.Website.Pages
 
         private async void DeviceChanged(object sender, ChangeListener.DeviceChangedArgs e)
         {
+            Console.WriteLine($"the type {e.Info.Type} with ID {e.Info.Id}");
             DeviceModelBase updatedDevice = null;
             int i = 0; 
             for (; i < devices.Count; i++)
@@ -50,26 +51,7 @@ namespace SmartHome.Website.Pages
                 devices[i] = updatedDevice;
                 StateHasChanged();
             }
-
-
-            //var index = devices.FindIndex(d => DeviceEquals(d, e));
-            //var device = devices.ElementAtOrDefault(index);
-            //if (device is not null)
-            //{
-            //    await Context.MakeRequest(device).GetAsync();
-            //}
-            //Console.WriteLine($"A device has changed with ID {e.Info.Id} and type {e.Info.Type}");
         }
-
-        //Task UpdateDeviceIfExistAsync(DeviceModelBase device, ChangeListener.DeviceChangedArgs e)
-        //{
-        //    if (e.Info.Id != device.Id) return false;
-
-        //    if (device is HueModels.LightModel && e.Info.Type == DeviceChangedNotify.DeviceType.HueLight)
-        //        return true;
-
-        //    return false;
-        //}
 
     }
 }

@@ -17,7 +17,8 @@ namespace SmartHome.Models
         {
             None,
             HueLight,
-            HueMotion
+            HueMotion,
+            TouchSensor
         }
 
     }
