@@ -56,7 +56,7 @@ variables:
       RestartSec=10
       KillSignal=SIGINT
       SyslogIdentifier=${{ parameters.service.identifier }}
-      User=www-data
+      User=root
 
 
 
