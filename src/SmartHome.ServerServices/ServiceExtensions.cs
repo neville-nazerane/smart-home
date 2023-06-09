@@ -20,8 +20,7 @@ namespace SmartHome.ServerServices
             services.AddHttpClient<IPhilipsHueClient, PhilipsHueClient>(c => PhilipsHueClient.SetupClient(c, hueConfig["baseUrl"], hueConfig["key"]))
                     .ConfigurePrimaryHttpMessageHandler(PhilipsHueClient.GetHandler);
 
-            services.AddTransient<SmartContext>()
-                    .AddSingleton<IGpioService, GpioService>();
+            services.AddTransient<SmartContext>();
 
             return services;
         }

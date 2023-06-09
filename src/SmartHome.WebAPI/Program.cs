@@ -18,14 +18,10 @@ var app = builder.Build();
 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.MapGet("/", () => "Hello Smart Home");
-app.MapGet("/read", Read);
 
 app.MapHub<ChangeNotifyHub>("/hubs/changeNotify");
 
 app.MapAllEndpoints();
 
 await app.RunAsync();
-
-Task<bool> Read(IGpioService service) => service.GetBinaryReadAsync(4);
-
 
