@@ -4,7 +4,7 @@
 {
     @foreach (var deviceGrp in devices.Chunk(3))
     {
-        <div class="row">
+        <div class="row mt-4">
             @foreach (var device in deviceGrp)
             {
             <div class="col">
@@ -12,7 +12,6 @@
             </div>
             }
         </div>
-        @*<div><i>@device.Id</i>  <b>@device.Name</b> </div>*@
 
     }
 }
