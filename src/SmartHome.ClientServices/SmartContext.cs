@@ -7,24 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
+using SmartHome.ServerServices.Clients;
+using SmartHome.Models.Bond;
 
 namespace SmartHome.ClientServices
 {
     public class SmartContext : SmartContextBase
     {
-        private readonly HttpClient _httpClient;
         private readonly AllCLients _allClients;
 
         protected override IPhilipsHueClient PhilipsHueClient => _allClients;
+        protected override IBondClient BondClient => _allClients;
 
         public SmartContext(HttpClient httpClient) : base()
         {
-            _httpClient = httpClient;
             _allClients = new AllCLients(httpClient);
         }
 
 
-        class AllCLients : IPhilipsHueClient
+        class AllCLients : IPhilipsHueClient, IBondClient
         {
             private readonly HttpClient _httpClient;
 
@@ -50,6 +51,13 @@ namespace SmartHome.ClientServices
                 using var res = await _httpClient.PutAsync($"philipsHue/switchLight/{id}/{switchOn}", null, cancellationToken);
                 res.EnsureSuccessStatusCode();
             }
+
+            public Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<IEnumerable<CeilingFanModel>>("bond/ceilingFans", cancellationToken);
+
+            public Task<IEnumerable<RollerModel>> GetRollersAsync(CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<IEnumerable<RollerModel>>("bond/rollers", cancellationToken);
+
         }
 
     }

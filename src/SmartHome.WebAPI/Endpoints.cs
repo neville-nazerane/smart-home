@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SmartHome.Models;
+using SmartHome.Models.Bond;
 using SmartHome.Models.ClientContracts;
 using SmartHome.ServerServices;
+using SmartHome.ServerServices.Clients;
 using SmartHome.WebAPI.Hubs;
 using HueModels = SmartHome.Models.PhilipsHue;
 //using static SmartHome.Models.SmartContextBase;
@@ -21,9 +23,11 @@ namespace SmartHome.WebAPI
             app.MapGet("/philipsHue/motion/{id}", HueGetMotionAsync);
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
 
+            app.MapGet("/bond/ceilingFans", GetCeilingFansAsync);
+            app.MapGet("/bond/rollers", GetRollersAsync);
         }
 
-        public static Task NotifyDeviceChangeAsync(IHubContext<ChangeNotifyHub> hubContext,
+        static Task NotifyDeviceChangeAsync(IHubContext<ChangeNotifyHub> hubContext,
                                                    DeviceChangedNotify model,
                                                    CancellationToken cancellationToken = default)
             => hubContext.Clients.All.SendAsync("deviceChanged", model, cancellationToken);
@@ -50,6 +54,19 @@ namespace SmartHome.WebAPI
                                                                     string id,
                                                                     CancellationToken cancellationToken = default)
             => context.MakeHueMotionRequestModel(id).GetAsync(cancellationToken);
+
+        #endregion
+
+
+        #region Bond
+
+        static Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(IBondClient bondClient,
+                                                                      CancellationToken cancellationToken = default)
+            => bondClient.GetCeilingFansAsync(cancellationToken);
+
+        static Task<IEnumerable<RollerModel>> GetRollersAsync(IBondClient bondClient,
+                                                              CancellationToken cancellationToken = default)
+            => bondClient.GetRollersAsync(cancellationToken); 
 
         #endregion
 

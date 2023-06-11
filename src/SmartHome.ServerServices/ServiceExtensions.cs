@@ -18,7 +18,10 @@ namespace SmartHome.ServerServices
 
             var hueConfig = configuration.GetSection("hue");
             services.AddHttpClient<IPhilipsHueClient, PhilipsHueClient>(c => PhilipsHueClient.SetupClient(c, hueConfig["baseUrl"], hueConfig["key"]))
-                    .ConfigurePrimaryHttpMessageHandler(PhilipsHueClient.GetHandler);
+                    .ConfigurePrimaryHttpMessageHandler(PhilipsHueClient.CreateHandler);
+
+            var bondConfig = configuration.GetSection("bond");
+            services.AddHttpClient<IBondClient, BondClient>(c => BondClient.SetupClient(c, bondConfig["baseUrl"], bondConfig["token"]));
 
             services.AddTransient<SmartContext>();
 

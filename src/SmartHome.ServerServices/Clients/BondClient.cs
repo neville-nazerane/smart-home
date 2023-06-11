@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SmartHome.ServerServices.Clients
 {
-    public class BondClient
+    public class BondClient : IBondClient
     {
         private readonly HttpClient _client;
 
@@ -38,39 +38,6 @@ namespace SmartHome.ServerServices.Clients
             client.BaseAddress = new Uri(baseUrl);
             client.DefaultRequestHeaders.Add("BOND-Token", token);
             return client;
-        }
-
-        public async Task<IEnumerable<object>> GetAllDevicesAsync(CancellationToken cancellationToken = default)
-        {
-            var result = new List<object>();
-            var deviceIds = await _client.GetFromJsonAsync<List<string>>("v2/devices", DeviceIdsJsonOptions, cancellationToken);
-            foreach (var deviceId in deviceIds)
-            {
-                var info = await _client.GetFromJsonAsync<DeviceInfo>($"v2/devices/{deviceId}", cancellationToken);
-                void FillUpBaseModel(DeviceModelBase model)
-                {
-                    model.Id = deviceId;
-                    model.Name = info.Name;
-                }
-                switch (info.Type)
-                {
-                    case "CF":
-                        var fan = new CeilingFanModel();
-                        FillUpBaseModel(fan);
-                        await FillupCFanStateAsync(fan, cancellationToken);
-                        result.Add(fan);
-                        break;
-
-                    case "MS":
-                        var roller = new RollerModel();
-                        FillUpBaseModel(roller);
-                        await FillupRollerStateAsync(roller, cancellationToken);
-                        result.Add(roller);
-                        break;
-                }
-            }
-
-            return result;
         }
 
         public async Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(CancellationToken cancellationToken = default)
@@ -105,7 +72,7 @@ namespace SmartHome.ServerServices.Clients
             return result;
         }
 
-        async IAsyncEnumerable<DeviceInfo> GetAllDeviceInfosAsync([EnumeratorCancellation]CancellationToken cancellationToken = default)
+        async IAsyncEnumerable<DeviceInfo> GetAllDeviceInfosAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var deviceIds = await _client.GetFromJsonAsync<List<string>>("v2/devices", DeviceIdsJsonOptions, cancellationToken);
             foreach (var deviceId in deviceIds)
