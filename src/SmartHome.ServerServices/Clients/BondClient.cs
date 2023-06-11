@@ -40,6 +40,8 @@ namespace SmartHome.ServerServices.Clients
             return client;
         }
 
+        public string GetIp() => _client.BaseAddress.Host;
+
         public async Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(CancellationToken cancellationToken = default)
         {
             var result = new List<CeilingFanModel>();
