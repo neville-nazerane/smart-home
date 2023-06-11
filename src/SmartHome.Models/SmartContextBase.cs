@@ -1,4 +1,5 @@
 ﻿using SmartHome.Models.ClientContracts;
+using SmartHome.ServerServices.Clients;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,8 +15,8 @@ namespace SmartHome.Models
     {
 
         protected abstract IPhilipsHueClient PhilipsHueClient { get; }
+        protected abstract IBondClient BondClient { get; }
 
-        //protected abstract IEnumerable<HueModels.LightModel> GetAllPhilipsHueLightsAsync();
 
         public async Task<IEnumerable<DeviceModelBase>> FetchAllDevicesAsync(CancellationToken cancellationToken = default)
         {
@@ -25,6 +26,11 @@ namespace SmartHome.Models
             result.AddRange(hueDevices);
             var motionDevices = await PhilipsHueClient.GetAllMotionSensorsAsync(cancellationToken);
             result.AddRange(motionDevices);
+
+            var bondFans = await BondClient.GetCeilingFansAsync(cancellationToken);
+            result.AddRange(bondFans);
+            var bondRollers = await BondClient.GetRollersAsync(cancellationToken);
+            result.AddRange(bondRollers);
 
             return result.OrderBy(r => r.Name).ToList();
         }
@@ -38,6 +44,7 @@ namespace SmartHome.Models
         public HueMotionRequestModel MakeHueMotionRequestModel(string id) => new(this, id);
 
         #endregion
+
 
 
         #region Request Models

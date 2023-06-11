@@ -1,4 +1,5 @@
 ﻿@using HueModels = SmartHome.Models.PhilipsHue
+@using BondModels = SmartHome.Models.Bond
 
 @if (DeviceModel is not null)
 {
@@ -12,7 +13,7 @@
                 case HueModels.LightModel lightModel:
                     {
 
-                        <p class="card-text">Philips Hue Light</p>
+                        <p class="card-title">Philips Hue Light</p>
                         <button class="btn btn-sm @(lightModel.IsSwitchedOn ? "btn-success" : "btn-danger")"
                         @onclick="@(() => SmartContext.MakeRequest(lightModel).TriggerSwitchAsync(!lightModel.IsSwitchedOn))"></button>
 
@@ -21,8 +22,25 @@
                 case HueModels.MotionModel motionModel:
                     {
 
-                        <p class="card-text">Motion Sensor</p>
+                        <p class="card-title">Motion Sensor</p>
                         <button class="btn btn-sm @(motionModel.IsMotionDetected ? "btn-success" : "btn-danger")"></button>
+                        break;
+                    }
+                case BondModels.CeilingFanModel fanModel:
+                    {
+                        <p class="card-title">Celing Fan</p>
+                        <div class="btn-group" role="group" aria-label="Fan Control">
+                            <button type="button" class="btn btn-primary">◁</button>
+                            <span class="btn bg-primary text-white">@fanModel.Speed</span>
+                            <button type="button" class="btn btn-primary">▷</button>
+                        </div>
+
+                        break;
+                    }
+                case BondModels.RollerModel roller:
+                    {
+                        <p class="card-title">Motion Sensor</p>
+                        <button class="btn btn-sm @(roller.IsOpen ? "btn-success" : "btn-danger")"></button>
                         break;
                     }
             }

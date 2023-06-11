@@ -18,7 +18,8 @@ namespace SmartHome.Models
             None,
             HueLight,
             HueMotion,
-            TouchSensor
+            TouchSensor,
+            BondDevice
         }
 
     }

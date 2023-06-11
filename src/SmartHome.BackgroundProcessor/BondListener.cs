@@ -1,18 +1,20 @@
-﻿using SmartHome.BackgroundProcessor.Services;
-using SmartHome.ServerServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using SmartHome.BackgroundProcessor.Services;
 
 namespace SmartHome.BackgroundProcessor
 {
-    public class HueListener : BackgroundService
+    public class BondListener : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public HueListener(IServiceProvider serviceProvider) 
+        public BondListener(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -20,13 +22,19 @@ namespace SmartHome.BackgroundProcessor
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await using var scope = _serviceProvider.CreateAsyncScope();
-            var processor = scope.ServiceProvider.GetService<HueProcessor>();
+            var processor = scope.ServiceProvider.GetService<BondProcessor>();
 
             await Task.WhenAll(
                     processor.KeepListeningAsync(stoppingToken),
                     processor.ProcessQueueAsync(stoppingToken)
             );
         }
+
+
+        //async Task StartListeningAsync(string baseAddress, CancellationToken cancellationToken = default)
+        //{
+
+        //}
 
     }
 }

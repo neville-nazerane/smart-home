@@ -33,7 +33,7 @@ namespace SmartHome.ServerServices.Clients
         }
 
         
-        public static HttpClientHandler GetHandler() => new HueHandler();
+        public static HttpClientHandler CreateHandler() => new HueHandler();
 
         #region Light
         

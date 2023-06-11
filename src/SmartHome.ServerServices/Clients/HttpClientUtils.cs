@@ -13,5 +13,7 @@ namespace SmartHome.ServerServices.Clients
         public static Task<HttpResponseMessage> StreamEventAsync(this IPhilipsHueClient client, CancellationToken cancellationToken = default)
             => ((PhilipsHueClient)client).StreamEventAsync(cancellationToken);
 
+        public static string GetIp(this IBondClient client) => ((BondClient) client).GetIp();
+
     }
 }
