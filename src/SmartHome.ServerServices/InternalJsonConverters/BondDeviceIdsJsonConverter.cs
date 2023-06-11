@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SmartHome.ServerServices.InternalJsonConverters
 {
-    public class BondDeviceIds : JsonConverter<List<string>>
+    public class BondDeviceIdsJsonConverter : JsonConverter<List<string>>
     {
         public override List<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -22,7 +23,7 @@ namespace SmartHome.ServerServices.Clients
         static BondClient()
         {
             DeviceIdsJsonOptions = new();
-            DeviceIdsJsonOptions.Converters.Add(new BondDeviceIds());
+            DeviceIdsJsonOptions.Converters.Add(new BondDeviceIdsJsonConverter());
         }
 
         public BondClient(HttpClient client)
@@ -38,9 +39,6 @@ namespace SmartHome.ServerServices.Clients
             client.DefaultRequestHeaders.Add("BOND-Token", token);
             return client;
         }
-
-        private async Task<IEnumerable<string>> GetAllDeviceIdsAsync(CancellationToken cancellationToken = default)
-            => await _client.GetFromJsonAsync<List<string>>("v2/devices", DeviceIdsJsonOptions, cancellationToken);
 
         public async Task<IEnumerable<object>> GetAllDevicesAsync(CancellationToken cancellationToken = default)
         {
@@ -75,6 +73,49 @@ namespace SmartHome.ServerServices.Clients
             return result;
         }
 
+        public async Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(CancellationToken cancellationToken = default)
+        {
+            var result = new List<CeilingFanModel>();
+            var infos = GetAllDeviceInfosAsync(cancellationToken);
+            await foreach (var info in infos)
+            {
+                if (info.Type == "CF")
+                {
+                    var model = FillUpBaseModel(info, new CeilingFanModel());
+                    await FillupCFanStateAsync(model, cancellationToken);
+                    result.Add(model);
+                }
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<RollerModel>> GetRollersAsync(CancellationToken cancellationToken = default)
+        {
+            var result = new List<RollerModel>();
+            var infos = GetAllDeviceInfosAsync(cancellationToken);
+            await foreach (var info in infos)
+            {
+                if (info.Type == "MS")
+                {
+                    var model = FillUpBaseModel(info, new RollerModel());
+                    await FillupRollerStateAsync(model, cancellationToken);
+                    result.Add(model);
+                }
+            }
+            return result;
+        }
+
+        async IAsyncEnumerable<DeviceInfo> GetAllDeviceInfosAsync([EnumeratorCancellation]CancellationToken cancellationToken = default)
+        {
+            var deviceIds = await _client.GetFromJsonAsync<List<string>>("v2/devices", DeviceIdsJsonOptions, cancellationToken);
+            foreach (var deviceId in deviceIds)
+            {
+                var info = await _client.GetFromJsonAsync<DeviceInfo>($"v2/devices/{deviceId}", cancellationToken);
+                info.Id = deviceId;
+                yield return info;
+            }
+        }
+
         async Task FillupCFanStateAsync(CeilingFanModel fan, CancellationToken cancellationToken = default)
         {
             var state = await _client.GetFromJsonAsync<CFanState>($"v2/devices/{fan.Id}/state", cancellationToken);
@@ -86,6 +127,16 @@ namespace SmartHome.ServerServices.Clients
             var state = await _client.GetFromJsonAsync<RollerState>($"v2/devices/{roller.Id}/state", cancellationToken);
             roller.IsOpen = state.Open == 1;
         }
+
+
+        static TModel FillUpBaseModel<TModel>(DeviceInfo info, TModel model)
+            where TModel : DeviceModelBase
+        {
+            model.Id = info.Id;
+            model.Name = info.Name;
+            return model;
+        }
+
 
         class RollerState
         {
@@ -108,6 +159,9 @@ namespace SmartHome.ServerServices.Clients
 
         class DeviceInfo
         {
+
+            [JsonIgnore]
+            public string Id { get; set; }
 
             [JsonPropertyName("name")]
             public string Name { get; set; }
