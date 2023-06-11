@@ -11,7 +11,6 @@ using System.Threading;
 using System.Text.Json;
 using SmartHome.BackgroundProcessor.Exceptions;
 using System.Collections.Concurrent;
-using SmartHome.Models.PhilipsHue;
 using SmartHome.Models;
 
 namespace SmartHome.BackgroundProcessor.Services
