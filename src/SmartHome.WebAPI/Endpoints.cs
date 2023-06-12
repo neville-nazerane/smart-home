@@ -26,6 +26,8 @@ namespace SmartHome.WebAPI
 
             app.MapGet("/bond/ceilingFans", GetCeilingFansAsync);
             app.MapGet("/bond/ceilingFan/{id}", GetCeilingFanAsync);
+            app.MapPut("/bond/ceilingFan/{id}/increase", IncreaseFanAsync);
+            app.MapPut("/bond/ceilingFan/{id}/decrease", DecreaseFanAsync);
             app.MapGet("/bond/rollers", GetRollersAsync);
             app.MapGet("/bond/roller/{id}", GetRollerAsync);
         }
@@ -49,8 +51,8 @@ namespace SmartHome.WebAPI
             => client.SwitchLightAsync(id, switchOn, cancellationToken);
 
         public static Task<HueModels.LightModel> HueGetLightAsync(IPhilipsHueClient client, 
-                                            string id,
-                                            CancellationToken cancellationToken = default)
+                                                                    string id,
+                                                                    CancellationToken cancellationToken = default)
             => client.GetLightAsync(id, cancellationToken);
 
         public static Task<HueModels.MotionModel> HueGetMotionAsync(IPhilipsHueClient client,
@@ -60,7 +62,16 @@ namespace SmartHome.WebAPI
 
         #endregion
 
+
+
         #region Bond
+
+
+        static Task DecreaseFanAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
+            => bondClient.DecreaseFanAsync(id, cancellationToken);
+
+        static Task IncreaseFanAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
+            => bondClient.IncreaseFanAsync(id, cancellationToken);
 
         static Task<CeilingFanModel> GetCeilingFanAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
             => bondClient.GetCeilingFanAsync(id, cancellationToken);

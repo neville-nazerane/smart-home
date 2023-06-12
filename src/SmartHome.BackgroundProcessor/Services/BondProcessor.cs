@@ -45,7 +45,7 @@ namespace SmartHome.BackgroundProcessor.Services
                 }
                 catch (Exception ex)
                 {
-                    if (ex is not TaskCanceledException)
+                    if (ex is not TaskCanceledException && ex is not OperationCanceledException)
                         _logger.LogError(ex, "Failed bond UDP processing");
                 }
             }

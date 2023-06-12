@@ -36,12 +36,12 @@ namespace SmartHome.Website.Pages
 
                 if (device is HueModels.LightModel lightModel && e.Info.Type == DeviceChangedNotify.DeviceType.HueLight)
                 {
-                    updatedDevice = await Context.MakeRequest(lightModel).GetAsync();
+                    updatedDevice = await Context.Request(lightModel).GetAsync();
                     break;
                 }
                 else if (device is HueModels.MotionModel motionModel && e.Info.Type == DeviceChangedNotify.DeviceType.HueMotion)
                 {
-                    updatedDevice = await Context.MakeRequest(motionModel).GetAsync();
+                    updatedDevice = await Context.Request(motionModel).GetAsync();
                     break;
                 }
                 
@@ -50,10 +50,10 @@ namespace SmartHome.Website.Pages
                     switch (device)
                     {
                         case BondModels.CeilingFanModel fan:
-                            updatedDevice = await Context.MakeRequest(fan).GetAsync();
+                            updatedDevice = await Context.Request(fan).GetAsync();
                             break;
                         case BondModels.RollerModel roller:
-                            updatedDevice = await Context.MakeRequest(roller).GetAsync();
+                            updatedDevice = await Context.Request(roller).GetAsync();
                             break;
                     }
                 }

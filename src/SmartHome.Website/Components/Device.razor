@@ -15,7 +15,7 @@
 
                         <p class="card-title">Philips Hue Light</p>
                         <button class="btn btn-sm @(lightModel.IsSwitchedOn ? "btn-success" : "btn-danger")"
-                        @onclick="@(() => SmartContext.MakeRequest(lightModel).TriggerSwitchAsync(!lightModel.IsSwitchedOn))"></button>
+                        @onclick="@(() => SmartContext.Request(lightModel).TriggerSwitchAsync(!lightModel.IsSwitchedOn))"></button>
 
                         break;
                     }
@@ -30,9 +30,15 @@
                     {
                         <p class="card-title">Celing Fan</p>
                         <div class="btn-group" role="group" aria-label="Fan Control">
-                            <button type="button" class="btn btn-primary">◁</button>
+                            <button type="button" class="btn btn-primary"
+                                    @onclick=@(() => SmartContext.Request(fanModel).DecreaseAsync())>
+                                ◁
+                            </button>
                             <span class="btn bg-primary text-white">@fanModel.Speed</span>
-                            <button type="button" class="btn btn-primary">▷</button>
+                            <button type="button" class="btn btn-primary"
+                            @onclick=@(() => SmartContext.Request(fanModel).IncreaseAsync())>
+                                ▷
+                            </button>
                         </div>
 
                         break;

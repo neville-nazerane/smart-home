@@ -38,16 +38,16 @@ namespace SmartHome.Models
 
         #region Philips Hue
 
-        public HueLightRequestModel MakeRequest(HueModels.LightModel model) => new(this, model.Id);
+        public HueLightRequestModel Request(HueModels.LightModel model) => new(this, model.Id);
 
-        public HueMotionRequestModel MakeRequest(HueModels.MotionModel model) => new(this, model.Id);
+        public HueMotionRequestModel Request(HueModels.MotionModel model) => new(this, model.Id);
 
         #endregion
 
 
-        public BondCeilingFanRequestModel MakeRequest(BondModels.CeilingFanModel model) => new(this, model.Id);
+        public BondCeilingFanRequestModel Request(BondModels.CeilingFanModel model) => new(this, model.Id);
 
-        public BondRollerRequestModel MakeRequest(BondModels.RollerModel model) => new(this, model.Id);
+        public BondRollerRequestModel Request(BondModels.RollerModel model) => new(this, model.Id);
 
 
         #region Request Models
@@ -104,6 +104,12 @@ namespace SmartHome.Models
 
             public Task<BondModels.CeilingFanModel> GetAsync(CancellationToken cancellationToken = default)
                 => _client.GetCeilingFanAsync(Id, cancellationToken);
+
+            public Task DecreaseAsync(CancellationToken cancellationToken = default)
+                => _client.DecreaseFanAsync(Id, cancellationToken);
+
+            public Task IncreaseAsync(CancellationToken cancellationToken = default)
+                => _client.IncreaseFanAsync(Id, cancellationToken);
 
         }
 
