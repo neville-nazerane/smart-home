@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
@@ -42,20 +43,15 @@ namespace SmartHome.ServerServices.Clients
 
         public string GetIp() => _client.BaseAddress.Host;
 
+
+        #region Fan
+        
         public async Task<CeilingFanModel> GetCeilingFanAsync(string id, CancellationToken cancellationToken = default)
         {
             var info = await GetDeviceInfoAsync(id, cancellationToken);
             var fan = FillUpBaseModel(info, new CeilingFanModel());
             await FillupCFanStateAsync(fan, cancellationToken);
             return fan;
-        }
-
-        public async Task<RollerModel> GetRollerAsync(string id, CancellationToken cancellationToken = default)
-        {
-            var info = await GetDeviceInfoAsync(id, cancellationToken);
-            var roller = FillUpBaseModel(info, new RollerModel());
-            await FillupRollerStateAsync(roller, cancellationToken);
-            return roller;
         }
 
         public async Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(CancellationToken cancellationToken = default)
@@ -74,6 +70,57 @@ namespace SmartHome.ServerServices.Clients
             return result;
         }
 
+        async Task FillupCFanStateAsync(CeilingFanModel fan, CancellationToken cancellationToken = default)
+        {
+            var state = await GetFanStateAsync(fan.Id, cancellationToken);
+            fan.Speed = (short)(state.Power * state.Speed);
+        }
+
+        public async Task DecreaseFanAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var state = await GetFanStateAsync(id, cancellationToken);
+            int targetSpeed = (state.Power * state.Speed) - 1;
+            if (targetSpeed == 0)
+                await _client.PutAsJsonAsync($"/v2/devices/{id}/actions/TurnOff", new { }, cancellationToken);
+            else if (targetSpeed > 0)
+            {
+                var model = new FanSpeedRequest
+                {
+                    Argument = (short)targetSpeed
+                };
+                await _client.PutAsJsonAsync($"/v2/devices/{id}/actions/SetSpeed", model, cancellationToken);
+            }
+        }
+
+        public async Task IncreaseFanAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var state = await GetFanStateAsync(id, cancellationToken);
+            int targetSpeed = (state.Power * state.Speed) + 1;
+            if (targetSpeed < 4)
+            {
+                var model = new FanSpeedRequest
+                {
+                    Argument = (short)targetSpeed
+                };
+                await _client.PutAsJsonAsync($"/v2/devices/{id}/actions/SetSpeed", model, cancellationToken);
+            }
+        }
+
+        Task<CFanState> GetFanStateAsync(string id, CancellationToken cancellationToken) => _client.GetFromJsonAsync<CFanState>($"v2/devices/{id}/state", cancellationToken);
+
+
+        #endregion
+
+        #region Roller
+
+        public async Task<RollerModel> GetRollerAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var info = await GetDeviceInfoAsync(id, cancellationToken);
+            var roller = FillUpBaseModel(info, new RollerModel());
+            await FillupRollerStateAsync(roller, cancellationToken);
+            return roller;
+        }
+
         public async Task<IEnumerable<RollerModel>> GetRollersAsync(CancellationToken cancellationToken = default)
         {
             var result = new List<RollerModel>();
@@ -89,6 +136,14 @@ namespace SmartHome.ServerServices.Clients
             }
             return result;
         }
+
+        async Task FillupRollerStateAsync(RollerModel roller, CancellationToken cancellationToken = default)
+        {
+            var state = await _client.GetFromJsonAsync<RollerState>($"v2/devices/{roller.Id}/state", cancellationToken);
+            roller.IsOpen = state.Open == 1;
+        }
+
+        #endregion
 
         async IAsyncEnumerable<DeviceInfo> GetAllDeviceInfosAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
@@ -107,18 +162,6 @@ namespace SmartHome.ServerServices.Clients
             return res;
         }
 
-        async Task FillupCFanStateAsync(CeilingFanModel fan, CancellationToken cancellationToken = default)
-        {
-            var state = await _client.GetFromJsonAsync<CFanState>($"v2/devices/{fan.Id}/state", cancellationToken);
-            fan.Speed = (short)(state.Power * state.Speed);
-        }
-
-        async Task FillupRollerStateAsync(RollerModel roller, CancellationToken cancellationToken = default)
-        {
-            var state = await _client.GetFromJsonAsync<RollerState>($"v2/devices/{roller.Id}/state", cancellationToken);
-            roller.IsOpen = state.Open == 1;
-        }
-
 
         static TModel FillUpBaseModel<TModel>(DeviceInfo info, TModel model)
             where TModel : DeviceModelBase
@@ -134,6 +177,12 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("open")]
             public byte Open { get; set; }
 
+        }
+
+        class FanSpeedRequest
+        {
+            [JsonPropertyName("argument")]
+            public short Argument { get; set; }
         }
 
         class CFanState
