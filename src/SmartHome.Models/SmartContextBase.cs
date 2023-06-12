@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using HueModels = SmartHome.Models.PhilipsHue;
+using BondModels = SmartHome.Models.Bond;
 
 namespace SmartHome.Models
 {
@@ -37,14 +38,16 @@ namespace SmartHome.Models
 
         #region Philips Hue
 
-        public HueLightRequestModel MakeRequest(HueModels.LightModel model) => MakeHueLightRequestModel(model.Id);
-        public HueLightRequestModel MakeHueLightRequestModel(string id) => new(this, id);
+        public HueLightRequestModel MakeRequest(HueModels.LightModel model) => new(this, model.Id);
 
-        public HueMotionRequestModel MakeRequest(HueModels.MotionModel model) => MakeHueMotionRequestModel(model.Id);
-        public HueMotionRequestModel MakeHueMotionRequestModel(string id) => new(this, id);
+        public HueMotionRequestModel MakeRequest(HueModels.MotionModel model) => new(this, model.Id);
 
         #endregion
 
+
+        public BondCeilingFanRequestModel MakeRequest(BondModels.CeilingFanModel model) => new(this, model.Id);
+
+        public BondRollerRequestModel MakeRequest(BondModels.RollerModel model) => new(this, model.Id);
 
 
         #region Request Models
@@ -84,6 +87,40 @@ namespace SmartHome.Models
 
             public Task<HueModels.LightModel> GetAsync(CancellationToken cancellationToken = default)
                => _client.GetLightAsync(Id, cancellationToken);
+
+        }
+
+        public class BondCeilingFanRequestModel
+        {
+            private readonly IBondClient _client;
+
+            public string Id { get; }
+
+            public BondCeilingFanRequestModel(SmartContextBase source, string id)
+            {
+                _client = source.BondClient;
+                Id = id;
+            }
+
+            public Task<BondModels.CeilingFanModel> GetAsync(CancellationToken cancellationToken = default)
+                => _client.GetCeilingFanAsync(Id, cancellationToken);
+
+        }
+
+        public class BondRollerRequestModel
+        {
+            private readonly IBondClient _client;
+
+            public string Id { get; }
+
+            public BondRollerRequestModel(SmartContextBase source, string id)
+            {
+                _client = source.BondClient;
+                Id = id;
+            }
+
+            public Task<BondModels.RollerModel> GetAsync(CancellationToken cancellationToken = default)
+                => _client.GetRollerAsync(Id, cancellationToken);
 
         }
 

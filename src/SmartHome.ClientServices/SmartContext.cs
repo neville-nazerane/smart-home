@@ -58,6 +58,12 @@ namespace SmartHome.ClientServices
             public Task<IEnumerable<RollerModel>> GetRollersAsync(CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<IEnumerable<RollerModel>>("bond/rollers", cancellationToken);
 
+            public Task<CeilingFanModel> GetCeilingFanAsync(string id, CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<CeilingFanModel>($"bond/ceilingFan/{id}", cancellationToken);
+
+            public Task<RollerModel> GetRollerAsync(string id, CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<RollerModel>($"bond/roller/{id}", cancellationToken);
+
         }
 
     }

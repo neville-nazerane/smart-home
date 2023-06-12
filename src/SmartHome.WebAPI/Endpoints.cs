@@ -5,6 +5,7 @@ using SmartHome.Models.ClientContracts;
 using SmartHome.ServerServices;
 using SmartHome.ServerServices.Clients;
 using SmartHome.WebAPI.Hubs;
+using System.Reflection.Metadata;
 using HueModels = SmartHome.Models.PhilipsHue;
 //using static SmartHome.Models.SmartContextBase;
 
@@ -24,7 +25,9 @@ namespace SmartHome.WebAPI
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
 
             app.MapGet("/bond/ceilingFans", GetCeilingFansAsync);
+            app.MapGet("/bond/ceilingFan/{id}", GetCeilingFanAsync);
             app.MapGet("/bond/rollers", GetRollersAsync);
+            app.MapGet("/bond/roller/{id}", GetRollerAsync);
         }
 
         static Task NotifyDeviceChangeAsync(IHubContext<ChangeNotifyHub> hubContext,
@@ -39,30 +42,35 @@ namespace SmartHome.WebAPI
         public static Task<IEnumerable<HueModels.MotionModel>> GetAllHueMotionAsync(IPhilipsHueClient client, CancellationToken cancellationToken = default)
             => client.GetAllMotionSensorsAsync(cancellationToken);
 
-        public static Task HueLightSwitchAsync(SmartContext context,
+        public static Task HueLightSwitchAsync(IPhilipsHueClient client,
                                                bool switchOn,
                                                string id,
                                                CancellationToken cancellationToken = default)
-            => context.MakeHueLightRequestModel(id).TriggerSwitchAsync(switchOn, cancellationToken);
+            => client.SwitchLightAsync(id, switchOn, cancellationToken);
 
-        public static Task<HueModels.LightModel> HueGetLightAsync(SmartContext context, 
+        public static Task<HueModels.LightModel> HueGetLightAsync(IPhilipsHueClient client, 
                                             string id,
                                             CancellationToken cancellationToken = default)
-            => context.MakeHueLightRequestModel(id).GetAsync(cancellationToken);
+            => client.GetLightAsync(id, cancellationToken);
 
-        public static Task<HueModels.MotionModel> HueGetMotionAsync(SmartContext context,
+        public static Task<HueModels.MotionModel> HueGetMotionAsync(IPhilipsHueClient client,
                                                                     string id,
                                                                     CancellationToken cancellationToken = default)
-            => context.MakeHueMotionRequestModel(id).GetAsync(cancellationToken);
+            => client.GetMotionSensorAsync(id, cancellationToken);
 
         #endregion
 
-
         #region Bond
+
+        static Task<CeilingFanModel> GetCeilingFanAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
+            => bondClient.GetCeilingFanAsync(id, cancellationToken);
 
         static Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(IBondClient bondClient,
                                                                       CancellationToken cancellationToken = default)
             => bondClient.GetCeilingFansAsync(cancellationToken);
+
+        static Task<RollerModel> GetRollerAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
+            => bondClient.GetRollerAsync(id, cancellationToken);
 
         static Task<IEnumerable<RollerModel>> GetRollersAsync(IBondClient bondClient,
                                                               CancellationToken cancellationToken = default)
