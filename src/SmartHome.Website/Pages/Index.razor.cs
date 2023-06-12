@@ -4,6 +4,7 @@ using SmartHome.Models;
 using SmartHome.Website.Utilities;
 
 using HueModels = SmartHome.Models.PhilipsHue;
+using BondModels = SmartHome.Models.Bond;
 
 namespace SmartHome.Website.Pages
 {
@@ -43,8 +44,22 @@ namespace SmartHome.Website.Pages
                     updatedDevice = await Context.MakeRequest(motionModel).GetAsync();
                     break;
                 }
-
+                
+                if (e.Info.Type == DeviceChangedNotify.DeviceType.BondDevice)
+                {
+                    switch (device)
+                    {
+                        case BondModels.CeilingFanModel fan:
+                            updatedDevice = await Context.MakeRequest(fan).GetAsync();
+                            break;
+                        case BondModels.RollerModel roller:
+                            updatedDevice = await Context.MakeRequest(roller).GetAsync();
+                            break;
+                    }
+                }
             }
+
+
 
             if (updatedDevice is not null)
             {

@@ -42,6 +42,22 @@ namespace SmartHome.ServerServices.Clients
 
         public string GetIp() => _client.BaseAddress.Host;
 
+        public async Task<CeilingFanModel> GetCeilingFanAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var info = await GetDeviceInfoAsync(id, cancellationToken);
+            var fan = FillUpBaseModel(info, new CeilingFanModel());
+            await FillupCFanStateAsync(fan, cancellationToken);
+            return fan;
+        }
+
+        public async Task<RollerModel> GetRollerAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var info = await GetDeviceInfoAsync(id, cancellationToken);
+            var roller = FillUpBaseModel(info, new RollerModel());
+            await FillupRollerStateAsync(roller, cancellationToken);
+            return roller;
+        }
+
         public async Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(CancellationToken cancellationToken = default)
         {
             var result = new List<CeilingFanModel>();
@@ -79,10 +95,16 @@ namespace SmartHome.ServerServices.Clients
             var deviceIds = await _client.GetFromJsonAsync<List<string>>("v2/devices", DeviceIdsJsonOptions, cancellationToken);
             foreach (var deviceId in deviceIds)
             {
-                var info = await _client.GetFromJsonAsync<DeviceInfo>($"v2/devices/{deviceId}", cancellationToken);
-                info.Id = deviceId;
+                var info = await GetDeviceInfoAsync(deviceId, cancellationToken);
                 yield return info;
             }
+        }
+
+        private async Task<DeviceInfo> GetDeviceInfoAsync(string deviceId, CancellationToken cancellationToken)
+        {
+            var res = await _client.GetFromJsonAsync<DeviceInfo>($"v2/devices/{deviceId}", cancellationToken);
+            res.Id = deviceId;
+            return res;
         }
 
         async Task FillupCFanStateAsync(CeilingFanModel fan, CancellationToken cancellationToken = default)
