@@ -65,10 +65,10 @@ namespace SmartHome.ClientServices
                 => _httpClient.GetFromJsonAsync<RollerModel>($"bond/roller/{id}", cancellationToken);
 
             public Task DecreaseFanAsync(string id, CancellationToken cancellationToken = default)
-                => _httpClient.PutAsync($"bond/roller/{id}/decrease", null, cancellationToken);
+                => _httpClient.PutAsync($"bond/ceilingFans/{id}/decrease", null, cancellationToken);
 
             public Task IncreaseFanAsync(string id, CancellationToken cancellationToken = default)
-                => _httpClient.PutAsync($"bond/roller/{id}/increase", null, cancellationToken);
+                => _httpClient.PutAsync($"bond/ceilingFans/{id}/increase", null, cancellationToken);
 
         }
 
