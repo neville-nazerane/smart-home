@@ -57,6 +57,8 @@ namespace SmartHome.Website.Pages
                             break;
                     }
                 }
+
+                if (updatedDevice is not null) break;
             }
 
 
