@@ -81,14 +81,14 @@ namespace SmartHome.ServerServices.Clients
             var state = await GetFanStateAsync(id, cancellationToken);
             int targetSpeed = (state.Power * state.Speed) - 1;
             if (targetSpeed == 0)
-                await _client.PutAsJsonAsync($"/v2/devices/{id}/actions/TurnOff", new { }, cancellationToken);
+                await RunActionAsync(id, "TurnOff", cancellationToken);
             else if (targetSpeed > 0)
             {
                 var model = new FanSpeedRequest
                 {
                     Argument = (short)targetSpeed
                 };
-                await _client.PutAsJsonAsync($"/v2/devices/{id}/actions/SetSpeed", model, cancellationToken);
+                await RunActionAsync(id, "SetSpeed", model, cancellationToken);
             }
         }
 
@@ -102,7 +102,7 @@ namespace SmartHome.ServerServices.Clients
                 {
                     Argument = (short)targetSpeed
                 };
-                await _client.PutAsJsonAsync($"/v2/devices/{id}/actions/SetSpeed", model, cancellationToken);
+                await RunActionAsync(id, "SetSpeed", model, cancellationToken);
             }
         }
 
@@ -144,6 +144,21 @@ namespace SmartHome.ServerServices.Clients
         }
 
         #endregion
+
+        Task RunActionAsync(string deviceId, string action, CancellationToken cancellationToken = default)
+            => RunActionCoreAsync(deviceId, action, "{}", cancellationToken);
+
+        Task RunActionAsync<TData>(string deviceId, string action, TData data, CancellationToken cancellationToken = default)
+            => RunActionCoreAsync(deviceId, action, JsonSerializer.Serialize(data), cancellationToken);
+
+
+
+        async Task RunActionCoreAsync(string deviceId, string action, string data, CancellationToken cancellationToken = default)
+        {
+            var content = new StringContent(data, Encoding.UTF8, "application/json");
+            using var res = await _client.PutAsync($"/v2/devices/{deviceId}/actions/{action}", content, cancellationToken);
+            res.EnsureSuccessStatusCode();
+        }
 
         async IAsyncEnumerable<DeviceInfo> GetAllDeviceInfosAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
