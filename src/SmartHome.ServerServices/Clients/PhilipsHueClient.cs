@@ -136,6 +136,57 @@ namespace SmartHome.ServerServices.Clients
 
         }
 
+        static string ConvertColorObjectToHex(ColorObject colorObject)
+        {
+            double normalizedRed = colorObject.Color.XY.X;
+            double normalizedGreen = colorObject.Color.XY.Y;
+            double normalizedBlue = colorObject.Color.Gamut.Blue.Y;
+
+            // Convert the normalized RGB values to the range 0-255
+            int red = (int)(normalizedRed * 255);
+            int green = (int)(normalizedGreen * 255);
+            int blue = (int)(normalizedBlue * 255);
+
+            // Create the hex color string
+            string hexColor = $"#{red:X2}{green:X2}{blue:X2}";
+
+            return hexColor;
+        }
+
+        static ColorObject ConvertHexToColorObject(string hexColor)
+        {
+            // Remove the '#' character if present
+            if (hexColor.StartsWith("#"))
+                hexColor = hexColor[1..];
+
+            // Parse the hexadecimal color values
+            int red = int.Parse(hexColor[0..2], System.Globalization.NumberStyles.HexNumber);
+            int green = int.Parse(hexColor[2..4], System.Globalization.NumberStyles.HexNumber);
+            int blue = int.Parse(hexColor[4..6], System.Globalization.NumberStyles.HexNumber);
+
+            // Normalize the RGB values to the range 0-1
+            double normalizedRed = red / 255.0;
+            double normalizedGreen = green / 255.0;
+            double normalizedBlue = blue / 255.0;
+
+            // Create the ColorObject with the converted values
+            var colorObject = new ColorObject
+            {
+                Color = new ColorInfo
+                {
+                    XY = new XYCoordinates { X = normalizedRed, Y = normalizedGreen },
+                    Gamut = new GamutCoordinates
+                    {
+                        Red = new XYCoordinates { X = normalizedRed, Y = normalizedGreen },
+                        Green = new XYCoordinates { X = normalizedGreen, Y = normalizedBlue },
+                        Blue = new XYCoordinates { X = normalizedBlue, Y = normalizedRed }
+                    },
+                    GamutType = "C"
+                }
+            };
+
+            return colorObject;
+        }
 
         #region Models
 
@@ -238,6 +289,47 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("motion")]
             public bool Motion { get; set; }
         }
+
+
+        public class XYCoordinates
+        {
+            [JsonPropertyName("x")]
+            public double X { get; set; }
+
+            [JsonPropertyName("y")]
+            public double Y { get; set; }
+        }
+
+        public class GamutCoordinates
+        {
+            [JsonPropertyName("red")]
+            public XYCoordinates Red { get; set; }
+
+            [JsonPropertyName("green")]
+            public XYCoordinates Green { get; set; }
+
+            [JsonPropertyName("blue")]
+            public XYCoordinates Blue { get; set; }
+        }
+
+        public class ColorInfo
+        {
+            [JsonPropertyName("xy")]
+            public XYCoordinates XY { get; set; }
+
+            [JsonPropertyName("gamut")]
+            public GamutCoordinates Gamut { get; set; }
+
+            [JsonPropertyName("gamut_type")]
+            public string GamutType { get; set; }
+        }
+
+        public class ColorObject
+        {
+            [JsonPropertyName("color")]
+            public ColorInfo Color { get; set; }
+        }
+
 
         #endregion
 
