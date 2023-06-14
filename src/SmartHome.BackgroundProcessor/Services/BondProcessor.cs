@@ -39,7 +39,7 @@ namespace SmartHome.BackgroundProcessor.Services
                                                 TimeSpan.FromSeconds(2),
                                                 TimeSpan.FromSeconds(10),
                                                 cancellationToken);
-            await foreach (int count in loop)
+            await foreach (int _ in loop)
             {
                 try
                 {

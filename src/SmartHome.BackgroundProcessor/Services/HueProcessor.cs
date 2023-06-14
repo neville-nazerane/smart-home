@@ -1,4 +1,5 @@
-﻿using SmartHome.Models;
+﻿using SmartHome.BackgroundProcessor.Util;
+using SmartHome.Models;
 using SmartHome.Models.ClientContracts;
 using SmartHome.Models.PhilipsHue;
 using SmartHome.ServerServices.Clients;
@@ -34,7 +35,11 @@ namespace SmartHome.BackgroundProcessor.Services
 
         public async Task KeepListeningAsync(CancellationToken cancellationToken = default)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            var loop = InfinityUtil.BeyondAsync(25,
+                                                TimeSpan.FromSeconds(2),
+                                                TimeSpan.FromSeconds(10),
+                                                cancellationToken);
+            await foreach (var _ in loop)
             {
                 try
                 {

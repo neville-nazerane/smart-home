@@ -15,7 +15,7 @@ IHost host = Host.CreateDefaultBuilder(args)
                 });
         
         services
-                //.AddHostedService<HueListener>()
+                .AddHostedService<HueListener>()
                 .AddHostedService<BondListener>();
     })
     .Build();
