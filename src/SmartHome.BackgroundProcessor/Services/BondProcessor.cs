@@ -43,8 +43,6 @@ namespace SmartHome.BackgroundProcessor.Services
             {
                 try
                 {
-                    await Console.Out.WriteLineAsync(count + "Running...");
-                    throw new Exception("I don't wanna work");
                     using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
                     cts.CancelAfter(TimeSpan.FromMinutes(5));
 
