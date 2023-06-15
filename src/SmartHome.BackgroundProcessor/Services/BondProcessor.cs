@@ -12,6 +12,7 @@ using System.Text.Json;
 using SmartHome.BackgroundProcessor.Exceptions;
 using System.Collections.Concurrent;
 using SmartHome.Models;
+using SmartHome.BackgroundProcessor.Util;
 
 namespace SmartHome.BackgroundProcessor.Services
 {
@@ -34,7 +35,11 @@ namespace SmartHome.BackgroundProcessor.Services
 
         public async Task KeepListeningAsync(CancellationToken cancellationToken = default)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            var loop = InfinityUtil.BeyondAsync(5, 
+                                                TimeSpan.FromSeconds(2),
+                                                TimeSpan.FromSeconds(10),
+                                                cancellationToken);
+            await foreach (int _ in loop)
             {
                 try
                 {

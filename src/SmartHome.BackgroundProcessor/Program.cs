@@ -14,7 +14,8 @@ IHost host = Host.CreateDefaultBuilder(args)
                     c.BaseAddress = new(configs["smarthomeEndpoint"]);
                 });
         
-        services.AddHostedService<HueListener>()
+        services
+                .AddHostedService<HueListener>()
                 .AddHostedService<BondListener>();
     })
     .Build();
