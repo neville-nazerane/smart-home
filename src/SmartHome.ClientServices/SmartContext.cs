@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Net.Http.Json;
 using SmartHome.ServerServices.Clients;
 using SmartHome.Models.Bond;
+using System.Diagnostics;
 
 namespace SmartHome.ClientServices
 {
@@ -70,6 +71,12 @@ namespace SmartHome.ClientServices
             public Task IncreaseFanAsync(string id, CancellationToken cancellationToken = default)
                 => _httpClient.PutAsync($"bond/ceilingFan/{id}/increase", null, cancellationToken);
 
+            public async Task SetLightColorAsync(string id, string colorHex, CancellationToken cancellationToken = default)
+            {
+                colorHex = colorHex.Replace("#", string.Empty);
+                using var res = await _httpClient.PutAsync($"philipsHue/color/{id}/{colorHex}", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
         }
 
     }

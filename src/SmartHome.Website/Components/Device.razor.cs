@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SmartHome.ClientServices;
 using SmartHome.Models;
+using HueModels = SmartHome.Models.PhilipsHue;
 
 namespace SmartHome.Website.Components
 {
@@ -12,6 +13,12 @@ namespace SmartHome.Website.Components
 
         [Inject]
         public SmartContext SmartContext { get; set; }
+
+        Task HueColorSetAsync(HueModels.LightModel model, ChangeEventArgs args)
+        {
+            string color = (string)args.Value;
+            return SmartContext.Request(model).SetColorAsync(color);
+        }
 
     }
 }

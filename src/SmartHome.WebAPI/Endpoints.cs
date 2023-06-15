@@ -23,6 +23,7 @@ namespace SmartHome.WebAPI
             app.MapGet("/philipsHue/light/{id}", HueGetLightAsync);
             app.MapGet("/philipsHue/motion/{id}", HueGetMotionAsync);
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
+            app.MapPut("/philipsHue/color/{id}/{colorHex}", HueLightColorAsync);
 
             app.MapGet("/bond/ceilingFans", GetCeilingFansAsync);
             app.MapGet("/bond/ceilingFan/{id}", GetCeilingFanAsync);
@@ -50,7 +51,13 @@ namespace SmartHome.WebAPI
                                                CancellationToken cancellationToken = default)
             => client.SwitchLightAsync(id, switchOn, cancellationToken);
 
-        public static Task<HueModels.LightModel> HueGetLightAsync(IPhilipsHueClient client, 
+        public static Task HueLightColorAsync(IPhilipsHueClient client,
+                                               string colorHex,
+                                               string id,
+                                               CancellationToken cancellationToken = default)
+            => client.SetLightColorAsync(id, $"#{colorHex}", cancellationToken);
+
+        public static Task<HueModels.LightModel> HueGetLightAsync(IPhilipsHueClient client,
                                                                     string id,
                                                                     CancellationToken cancellationToken = default)
             => client.GetLightAsync(id, cancellationToken);
@@ -85,7 +92,7 @@ namespace SmartHome.WebAPI
 
         static Task<IEnumerable<RollerModel>> GetRollersAsync(IBondClient bondClient,
                                                               CancellationToken cancellationToken = default)
-            => bondClient.GetRollersAsync(cancellationToken); 
+            => bondClient.GetRollersAsync(cancellationToken);
 
         #endregion
 

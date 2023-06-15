@@ -55,6 +55,15 @@ namespace SmartHome.ServerServices.Clients
             return _httpClient.PutAsJsonAsync($"/clip/v2/resource/light/{id}", model, cancellationToken);
         }
 
+        public Task SetLightColorAsync(string id, string colorHex, CancellationToken cancellationToken = default)
+        {
+            var model = new ColorModel
+            {
+                Color = ConvertHexToColorObject(colorHex)
+            };
+            return _httpClient.PutAsJsonAsync($"/clip/v2/resource/light/{id}", model, cancellationToken);
+        }
+
         public async Task<LightModel> GetLightAsync(string id, CancellationToken cancellationToken = default)
         {
             var res = await _httpClient.GetFromJsonAsync<HueData<LightResponse>>($"clip/v2/resource/light/{id}", cancellationToken);
@@ -136,11 +145,12 @@ namespace SmartHome.ServerServices.Clients
 
         }
 
-        static string ConvertColorObjectToHex(ColorObject colorObject)
+        static string ConvertColorObjectToHex(ColorInfo colorObject)
         {
-            double normalizedRed = colorObject.Color.XY.X;
-            double normalizedGreen = colorObject.Color.XY.Y;
-            double normalizedBlue = colorObject.Color.Gamut.Blue.Y;
+            if (colorObject is null) return null;
+            double normalizedRed = colorObject.XY.X;
+            double normalizedGreen = colorObject.XY.Y;
+            double normalizedBlue = colorObject.Gamut.Blue.Y;
 
             // Convert the normalized RGB values to the range 0-255
             int red = (int)(normalizedRed * 255);
@@ -153,7 +163,7 @@ namespace SmartHome.ServerServices.Clients
             return hexColor;
         }
 
-        static ColorObject ConvertHexToColorObject(string hexColor)
+        static ColorInfo ConvertHexToColorObject(string hexColor)
         {
             // Remove the '#' character if present
             if (hexColor.StartsWith("#"))
@@ -170,19 +180,16 @@ namespace SmartHome.ServerServices.Clients
             double normalizedBlue = blue / 255.0;
 
             // Create the ColorObject with the converted values
-            var colorObject = new ColorObject
+            var colorObject = new ColorInfo
             {
-                Color = new ColorInfo
+                XY = new XYCoordinates { X = normalizedRed, Y = normalizedGreen },
+                Gamut = new GamutCoordinates
                 {
-                    XY = new XYCoordinates { X = normalizedRed, Y = normalizedGreen },
-                    Gamut = new GamutCoordinates
-                    {
-                        Red = new XYCoordinates { X = normalizedRed, Y = normalizedGreen },
-                        Green = new XYCoordinates { X = normalizedGreen, Y = normalizedBlue },
-                        Blue = new XYCoordinates { X = normalizedBlue, Y = normalizedRed }
-                    },
-                    GamutType = "C"
-                }
+                    Red = new XYCoordinates { X = normalizedRed, Y = normalizedGreen },
+                    Green = new XYCoordinates { X = normalizedGreen, Y = normalizedBlue },
+                    Blue = new XYCoordinates { X = normalizedBlue, Y = normalizedRed }
+                },
+                GamutType = "C"
             };
 
             return colorObject;
@@ -243,12 +250,16 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("metadata")]
             public Metadata Metadata { get; set; }
 
+            [JsonPropertyName("color")]
+            public ColorInfo Color { get; set; }
+
             public LightModel ToModel()
                 => new()
                 {
                     Id = Id,
                     IsSwitchedOn = On.On,
-                    Name = Metadata.Name
+                    Name = Metadata.Name,
+                    ColorHex = ConvertColorObjectToHex(Color),
                 };
         }
 
@@ -290,6 +301,13 @@ namespace SmartHome.ServerServices.Clients
             public bool Motion { get; set; }
         }
 
+        class ColorModel
+        {
+            [JsonPropertyName("color")]
+            public ColorInfo Color { get; set; }
+
+        }
+
 
         public class XYCoordinates
         {
@@ -323,13 +341,6 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("gamut_type")]
             public string GamutType { get; set; }
         }
-
-        public class ColorObject
-        {
-            [JsonPropertyName("color")]
-            public ColorInfo Color { get; set; }
-        }
-
 
         #endregion
 

@@ -45,10 +45,13 @@ namespace SmartHome.Models
         #endregion
 
 
+        #region Bond
+
         public BondCeilingFanRequestModel Request(BondModels.CeilingFanModel model) => new(this, model.Id);
 
         public BondRollerRequestModel Request(BondModels.RollerModel model) => new(this, model.Id);
 
+        #endregion
 
         #region Request Models
 
@@ -85,8 +88,13 @@ namespace SmartHome.Models
             public Task TriggerSwitchAsync(bool switchOn, CancellationToken cancellationToken = default)
                 => _client.SwitchLightAsync(Id, switchOn, cancellationToken);
 
+            public Task SetColorAsync(string colorHex, CancellationToken cancellationToken = default)
+                => _client.SetLightColorAsync(Id, colorHex, cancellationToken);
+
             public Task<HueModels.LightModel> GetAsync(CancellationToken cancellationToken = default)
                => _client.GetLightAsync(Id, cancellationToken);
+
+
 
         }
 
