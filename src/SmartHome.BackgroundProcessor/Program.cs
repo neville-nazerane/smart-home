@@ -9,6 +9,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddAllServer(configs)
                 .AddTransient<HueProcessor>()
                 .AddTransient<BondProcessor>()
+                .AddSingleton<ListenerQueue>()
                 .AddHttpClient<ApiConsumer>(c =>
                 {
                     c.BaseAddress = new(configs["smarthomeEndpoint"]);
@@ -16,6 +17,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         
         services
                 .AddHostedService<HueListener>()
+                .AddHostedService<MainListener>()
                 .AddHostedService<BondListener>();
     })
     .Build();

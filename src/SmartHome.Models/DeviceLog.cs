@@ -18,5 +18,8 @@ namespace SmartHome.Models
         [Required]
         public DateTime? OccurredOn { get; set; }
 
+        [Required]
+        public DeviceType? DeviceType { get; set; }
+
     }
 }
