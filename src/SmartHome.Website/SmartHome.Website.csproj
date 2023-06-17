@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
-  </ItemGroup>
+  </ItemGroup> c
 
   <ItemGroup>
     <Folder Include="wwwroot\js\" />

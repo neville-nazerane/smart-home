@@ -6,13 +6,12 @@
 
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">@DeviceModel.Name</h5>
+            <h5 class="card-title">@DeviceModel.Name <i>(@DeviceModel.Id)</i> </h5>
 
             @switch (DeviceModel)
             {
                 case HueModels.LightModel lightModel:
                     {
-
                         <p class="card-title">Philips Hue Light</p>
                         <button class="btn btn-sm @(lightModel.IsSwitchedOn ? "btn-success" : "btn-danger")"
                                 @onclick="@(() => SmartContext.Request(lightModel).TriggerSwitchAsync(!lightModel.IsSwitchedOn))"></button>
