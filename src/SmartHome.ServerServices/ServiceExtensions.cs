@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartHome.Models.ClientContracts;
 using SmartHome.ServerServices.Clients;
@@ -25,7 +26,20 @@ namespace SmartHome.ServerServices
 
             services.AddTransient<SmartContext>();
 
+            var dbFile = $"{configuration["global:dataPath"]}/data.db";
+            services.AddDbContext<AppDbContext>(c => c.UseSqlite($"Data Source={dbFile}", 
+                                                o => o.MigrationsAssembly("SmartHome.ServerServices")));
+
             return services;
+        }
+
+        public static async Task InitServicesAsync(this IServiceProvider serviceProvider)
+        {
+            await using var scope = serviceProvider.CreateAsyncScope();
+            var sp = scope.ServiceProvider;
+
+            var dbContext = sp.GetService<AppDbContext>();
+            await dbContext.Database.MigrateAsync();
         }
 
     }

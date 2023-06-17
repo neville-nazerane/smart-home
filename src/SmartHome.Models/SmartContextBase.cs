@@ -55,15 +55,19 @@ namespace SmartHome.Models
 
         #region Request Models
 
-        public class HueMotionRequestModel
+        public class HueMotionRequestModel : IListenableDevice
         {
 
             private readonly IPhilipsHueClient _client;
 
             public string Id { get; }
 
+            public DeviceType DeviceType { get; }
+
             public HueMotionRequestModel(SmartContextBase context, string id)
             {
+                DeviceType = DeviceType.HueMotion;
+
                 _client = context.PhilipsHueClient;
                 Id = id;
             }

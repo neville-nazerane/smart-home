@@ -23,5 +23,7 @@ app.MapHub<ChangeNotifyHub>("/hubs/changeNotify");
 
 app.MapAllEndpoints();
 
+await app.Services.InitServicesAsync();
+
 await app.RunAsync();
 

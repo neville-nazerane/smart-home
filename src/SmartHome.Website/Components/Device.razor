@@ -6,16 +6,24 @@
 
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">@DeviceModel.Name</h5>
+            <h5 class="card-title" @ondblclick=@(() => isIdShown = !isIdShown)>
+                @if (isIdShown)
+                {
+                    <sub>(@DeviceModel.Id)</sub>
+                }
+                else
+                {
+                    @DeviceModel.Name
+                }
+            </h5>
 
             @switch (DeviceModel)
             {
                 case HueModels.LightModel lightModel:
                     {
-
                         <p class="card-title">Philips Hue Light</p>
                         <button class="btn btn-sm @(lightModel.IsSwitchedOn ? "btn-success" : "btn-danger")"
-                                @onclick="@(() => SmartContext.Request(lightModel).TriggerSwitchAsync(!lightModel.IsSwitchedOn))"></button>
+                        @onclick="@(() => SmartContext.Request(lightModel).TriggerSwitchAsync(!lightModel.IsSwitchedOn))"></button>
                         <input type="color" value=@lightModel.ColorHex @onchange=@(e => HueColorSetAsync(lightModel, e)) />
 
                         break;
@@ -32,7 +40,7 @@
                         <p class="card-title">Celing Fan</p>
                         <div class="btn-group" role="group" aria-label="Fan Control">
                             <button type="button" class="btn btn-primary"
-                                    @onclick=@(() => SmartContext.Request(fanModel).DecreaseAsync())>
+                            @onclick=@(() => SmartContext.Request(fanModel).DecreaseAsync())>
                                 ◁
                             </button>
                             <span class="btn bg-primary text-white">@fanModel.Speed</span>
