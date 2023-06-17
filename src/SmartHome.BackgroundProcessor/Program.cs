@@ -20,4 +20,6 @@ IHost host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
+await host.Services.InitServicesAsync();
+
 await host.RunAsync();
