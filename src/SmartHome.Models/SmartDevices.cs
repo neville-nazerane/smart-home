@@ -14,7 +14,10 @@ namespace SmartHome.Models
         public SmartDevices(SmartContextBase context)
         {
             _context = context;
+            InitDevices();
         }
+
+        partial void InitDevices();
 
     }
 }
