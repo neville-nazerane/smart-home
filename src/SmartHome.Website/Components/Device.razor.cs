@@ -8,6 +8,8 @@ namespace SmartHome.Website.Components
     public partial class Device
     {
 
+        bool isIdShown = false;
+
         [Parameter]
         public DeviceModelBase DeviceModel { get; set; }
 
