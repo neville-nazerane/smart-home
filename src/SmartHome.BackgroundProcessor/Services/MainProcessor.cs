@@ -1,4 +1,5 @@
-﻿using SmartHome.ServerServices;
+﻿using SmartHome.Models;
+using SmartHome.ServerServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,13 @@ namespace SmartHome.BackgroundProcessor.Services
             {
                 try
                 {
+                    string name = SmartDevices.GetListeningDeviceName(device.Id, device.DeviceType);
                     await _dbContext.DeviceLogs.AddAsync(new()
                     {
                         DeviceId = device.Id,
                         OccurredOn = DateTime.UtcNow,
-                        DeviceType = device.DeviceType
+                        DeviceType = device.DeviceType,
+                        Name = name,
                     }, cancellationToken);
                     await _dbContext.SaveChangesAsync(cancellationToken);
                 }

@@ -30,17 +30,10 @@ namespace SmartHome.ClientServices
             _httpClient = httpClient;
         }
 
-        public override async IAsyncEnumerable<DeviceLog> GetListeningLogsAsync(int pageNumber,
+        public override Task<IEnumerable<DeviceLog>> GetListeningLogsAsync(int pageNumber,
                                                                                 int pageSize,
-                                                                                [EnumeratorCancellation] CancellationToken cancellationToken = default)
-        {
-            using var res = await _httpClient.GetAsync($"listeningLogs?pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken);
-            res.EnsureSuccessStatusCode();
-            using var stream = await res.Content.ReadAsStreamAsync(cancellationToken);
-
-            await foreach (var log in JsonSerializer.DeserializeAsyncEnumerable<DeviceLog>(stream, cancellationToken: cancellationToken))
-                yield return log;
-        }
+                                                                                CancellationToken cancellationToken = default)
+            => _httpClient.GetFromJsonAsync<IEnumerable<DeviceLog>>($"listeningLogs?pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken);
 
         class AllCLients : IPhilipsHueClient, IBondClient
         {

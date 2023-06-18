@@ -39,7 +39,7 @@ namespace SmartHome.WebAPI
                                                    CancellationToken cancellationToken = default)
             => hubContext.Clients.All.SendAsync("deviceChanged", model, cancellationToken);
 
-        static IAsyncEnumerable<DeviceLog> GetListeningLogsAsync(SmartContext context,
+        static Task<IEnumerable<DeviceLog>> GetListeningLogsAsync(SmartContext context,
                                                           int pageNumber,
                                                           int pageSize,
                                                           CancellationToken cancellationToken = default)

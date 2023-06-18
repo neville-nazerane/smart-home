@@ -7,15 +7,14 @@ namespace SmartHome.Website.Pages
     public partial class ListenedLogs
     {
 
-        private readonly List<DeviceLog> logs = new();
+        private IEnumerable<DeviceLog> logs;
 
         [Inject]
         public SmartContext SmartContext { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            await foreach (var log in SmartContext.GetListeningLogsAsync(50, 1))
-                logs.Add(log);
+            logs = await SmartContext.GetListeningLogsAsync(1, 50);
         }
 
     }
