@@ -17,6 +17,7 @@ namespace SmartHome.WebAPI
         public static void MapAllEndpoints(this WebApplication app)
         {
             app.MapPost("/notifyDeviceChange", NotifyDeviceChangeAsync);
+            app.MapGet("/listeningLogs", GetListeningLogsAsync);
 
             app.MapGet("/philipsHue/lights", GetAllHueLightsAsync);
             app.MapGet("/philipsHue/motions", GetAllHueMotionAsync);
@@ -37,6 +38,12 @@ namespace SmartHome.WebAPI
                                                    DeviceChangedNotify model,
                                                    CancellationToken cancellationToken = default)
             => hubContext.Clients.All.SendAsync("deviceChanged", model, cancellationToken);
+
+        static IAsyncEnumerable<DeviceLog> GetListeningLogsAsync(SmartContext context,
+                                                          int pageNumber,
+                                                          int pageSize,
+                                                          CancellationToken cancellationToken = default)
+            => context.GetListeningLogsAsync(pageNumber, pageSize, cancellationToken);
 
         #region Philips Hue
 
@@ -68,7 +75,6 @@ namespace SmartHome.WebAPI
             => client.GetMotionSensorAsync(id, cancellationToken);
 
         #endregion
-
 
 
         #region Bond

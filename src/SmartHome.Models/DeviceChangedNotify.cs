@@ -13,14 +13,5 @@ namespace SmartHome.Models
 
         public DeviceType Type { get; set; }
 
-        public enum DeviceType
-        {
-            None,
-            HueLight,
-            HueMotion,
-            TouchSensor,
-            BondDevice
-        }
-
     }
 }

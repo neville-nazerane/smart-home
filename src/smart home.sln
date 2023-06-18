@@ -5,15 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.WebAPI", "SmartHome.WebAPI\SmartHome.WebAPI.csproj", "{946D27E3-EE41-4AB4-9082-35354D46AD0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Models", "SmartHome.Models\SmartHome.Models.csproj", "{01A5230B-F4FA-4ECE-8864-D9A164B7F088}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.Models", "SmartHome.Models\SmartHome.Models.csproj", "{01A5230B-F4FA-4ECE-8864-D9A164B7F088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.ServerServices", "SmartHome.ServerServices\SmartHome.ServerServices.csproj", "{69908AA6-9F57-47FE-B401-0D5AA1095BE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.ServerServices", "SmartHome.ServerServices\SmartHome.ServerServices.csproj", "{69908AA6-9F57-47FE-B401-0D5AA1095BE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.ClientServices", "SmartHome.ClientServices\SmartHome.ClientServices.csproj", "{EBD2565B-E91E-4AD9-B9F2-EC26450C88BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.ClientServices", "SmartHome.ClientServices\SmartHome.ClientServices.csproj", "{EBD2565B-E91E-4AD9-B9F2-EC26450C88BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Website", "SmartHome.Website\SmartHome.Website.csproj", "{045535D2-770F-45A0-9A27-C3A35C96FC0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.Website", "SmartHome.Website\SmartHome.Website.csproj", "{045535D2-770F-45A0-9A27-C3A35C96FC0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.BackgroundProcessor", "SmartHome.BackgroundProcessor\SmartHome.BackgroundProcessor.csproj", "{8A71F343-44FD-43F3-B0DA-31284D70BD35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.BackgroundProcessor", "SmartHome.BackgroundProcessor\SmartHome.BackgroundProcessor.csproj", "{8A71F343-44FD-43F3-B0DA-31284D70BD35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

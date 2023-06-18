@@ -20,14 +20,17 @@ namespace SmartHome.BackgroundProcessor.Services
         private readonly ConcurrentQueue<HttpResponseMessage> _queue;
         private readonly ILogger<HueProcessor> _logger;
         private readonly ApiConsumer _consumer;
+        private readonly ListenerQueue _listenerQueue;
         private readonly IPhilipsHueClient _philipsHueClient;
 
         public HueProcessor(ILogger<HueProcessor> logger, 
                             ApiConsumer consumer,
+                            ListenerQueue listenerQueue,
                             IPhilipsHueClient philipsHueClient)
         {
             _logger = logger;
             _consumer = consumer;
+            _listenerQueue = listenerQueue;
             _philipsHueClient = philipsHueClient;
 
             _queue = new();
@@ -66,7 +69,7 @@ namespace SmartHome.BackgroundProcessor.Services
                         var events = data.Where(d => d.Type == "update")
                                          .SelectMany(d => d.Data)
                                          .ToList();
-                        await HandleEventsAsync(events);
+                        HandleEvents(events);
                     }
                     else await Task.Delay(1000, cancellationToken);
                 }
@@ -77,26 +80,26 @@ namespace SmartHome.BackgroundProcessor.Services
             }
         }
 
-        async Task HandleEventsAsync(IEnumerable<HueEventData> events)
+        void HandleEvents(IEnumerable<HueEventData> events)
         {
             foreach (var e in events)
             {
-                var model = new DeviceChangedNotify
+                var model = new ListenedDevice
                 {
                     Id = e.Id,
                 };
                 switch (e.Type)
                 {
                     case "light":
-                        model.Type = DeviceChangedNotify.DeviceType.HueLight;
+                        model.DeviceType = DeviceType.HueLight;
                         break;
                     case "motion":
-                        model.Type = DeviceChangedNotify.DeviceType.HueMotion;
+                        model.DeviceType = DeviceType.HueMotion;
                         break;
                 }
 
-                if (model.Type != DeviceChangedNotify.DeviceType.None)
-                    await _consumer.NotifyDeviceChangeAsync(model);
+                //if (model.Type != DeviceType.None)
+                //    await _consumer.NotifyDeviceChangeAsync(model);
             }
         }
 

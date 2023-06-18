@@ -1,0 +1,28 @@
+﻿@page "/listenedLogs"
+
+@if (logs is not null){
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Device ID</th>
+                <th scope="col">Occurred On</th>
+                <th scope="col">Device Type</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in logs)
+            {
+                <tr>
+                    <td>@log.Id</td>
+                    <td>@log.DeviceId</td>
+                    <td>@log.OccurredOn?.ToString("MM/dd/yyyy HH:mm:ss")</td>
+                    <td>@log.DeviceType</td>
+                    <td>@log.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
