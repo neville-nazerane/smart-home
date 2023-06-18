@@ -34,18 +34,18 @@ namespace SmartHome.Website.Pages
                 var device = devices[i];
                 if (device.Id != e.Info.Id) continue;
 
-                if (device is HueModels.LightModel lightModel && e.Info.Type == DeviceChangedNotify.DeviceType.HueLight)
+                if (device is HueModels.LightModel lightModel && e.Info.Type == DeviceType.HueLight)
                 {
                     updatedDevice = await Context.Request(lightModel).GetAsync();
                     break;
                 }
-                else if (device is HueModels.MotionModel motionModel && e.Info.Type == DeviceChangedNotify.DeviceType.HueMotion)
+                else if (device is HueModels.MotionModel motionModel && e.Info.Type == DeviceType.HueMotion)
                 {
                     updatedDevice = await Context.Request(motionModel).GetAsync();
                     break;
                 }
                 
-                if (e.Info.Type == DeviceChangedNotify.DeviceType.BondDevice)
+                if (e.Info.Type == DeviceType.BondDevice)
                 {
                     switch (device)
                     {
