@@ -44,20 +44,18 @@ namespace SmartHome.Website.Pages
                     updatedDevice = await Context.Request(motionModel).GetAsync();
                     break;
                 }
-                
-                if (e.Info.Type == DeviceType.BondDevice)
+                else if (device is BondModels.CeilingFanModel fanModel && e.Info.Type == DeviceType.BondFan)
                 {
-                    switch (device)
-                    {
-                        case BondModels.CeilingFanModel fan:
-                            updatedDevice = await Context.Request(fan).GetAsync();
-                            break;
-                        case BondModels.RollerModel roller:
-                            updatedDevice = await Context.Request(roller).GetAsync();
-                            break;
-                    }
+                    updatedDevice = await Context.Request(fanModel).GetAsync();
+                    break;
+                }
+                else if (device is BondModels.RollerModel rollerModel && e.Info.Type == DeviceType.BondRoller)
+                {
+                    updatedDevice = await Context.Request(rollerModel).GetAsync();
+                    break;
                 }
 
+                // retain index i to update devices
                 if (updatedDevice is not null) break;
             }
 

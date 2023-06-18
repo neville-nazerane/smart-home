@@ -106,8 +106,18 @@ namespace SmartHome.ServerServices.Clients
             }
         }
 
-        Task<CFanState> GetFanStateAsync(string id, CancellationToken cancellationToken) => _client.GetFromJsonAsync<CFanState>($"v2/devices/{id}/state", cancellationToken);
+        Task<CFanState> GetFanStateAsync(string id, CancellationToken cancellationToken = default) => _client.GetFromJsonAsync<CFanState>($"v2/devices/{id}/state", cancellationToken);
 
+        public async Task<DeviceType> GetDeviceTypeAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var info = await GetDeviceInfoAsync(id, cancellationToken);
+            return info.Type switch
+            {
+                "CF" => DeviceType.BondFan,
+                "MS" => DeviceType.BondRoller,
+                _ => DeviceType.None,
+            };
+        }
 
         #endregion
 

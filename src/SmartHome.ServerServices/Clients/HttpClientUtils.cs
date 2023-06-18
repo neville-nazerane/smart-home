@@ -1,4 +1,5 @@
-﻿using SmartHome.Models.ClientContracts;
+﻿using SmartHome.Models;
+using SmartHome.Models.ClientContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace SmartHome.ServerServices.Clients
             => ((PhilipsHueClient)client).StreamEventAsync(cancellationToken);
 
         public static string GetIp(this IBondClient client) => ((BondClient) client).GetIp();
+
+        public static Task<DeviceType> GetDeviceTypeAsync(this IBondClient client, string id, CancellationToken cancellationToken = default) 
+            => ((BondClient) client).GetDeviceTypeAsync(id, cancellationToken);
 
     }
 }

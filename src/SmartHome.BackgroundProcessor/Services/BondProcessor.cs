@@ -19,6 +19,8 @@ namespace SmartHome.BackgroundProcessor.Services
     internal class BondProcessor
     {
         private const int PORT = 30007;
+        private static readonly ConcurrentDictionary<string, DeviceType> deviceTypeMappings = new();
+        private static readonly SemaphoreSlim deviceTypeMappingsLock = new(1, 1);
 
         private readonly ConcurrentQueue<UdpData> _queue;
         private readonly ILogger<BondProcessor> _logger;
@@ -100,7 +102,7 @@ namespace SmartHome.BackgroundProcessor.Services
                         if (parts.FirstOrDefault() == "devices" && parts.ElementAtOrDefault(2) == "actions")
                         {
                             string id = parts[1];
-                            HandleDeviceTriggeredById(id);
+                            await HandleDeviceTriggeredByIdAsync(id);
                         }
 
                     }
@@ -113,14 +115,36 @@ namespace SmartHome.BackgroundProcessor.Services
             }
         }
 
-        void HandleDeviceTriggeredById(string id)
+        async ValueTask HandleDeviceTriggeredByIdAsync(string id)
         {
             var model = new ListenedDevice
             {
                 Id = id,
-                DeviceType = DeviceType.BondDevice
+                DeviceType = await GetDeviceTypeAsync(id)
             };
             _listenerQueue.Enqueue(model);
+        }
+
+        async ValueTask<DeviceType> GetDeviceTypeAsync(string id)
+        {
+            if (deviceTypeMappings.TryGetValue(id, out var value))
+                return value;
+            await deviceTypeMappingsLock.WaitAsync();
+
+            try
+            {
+                if (!deviceTypeMappings.TryGetValue(id, out value))
+                {
+                    value = await _bondClient.GetDeviceTypeAsync(id);
+                    deviceTypeMappings[id] = value;
+                }
+            }
+            finally
+            {
+                deviceTypeMappingsLock.Release();
+            }
+
+            return value;
         }
 
         class UdpData
