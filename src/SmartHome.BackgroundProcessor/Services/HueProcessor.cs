@@ -98,6 +98,9 @@ namespace SmartHome.BackgroundProcessor.Services
                         break;
                 }
 
+                if (model.DeviceType != DeviceType.None)
+                    _listenerQueue.Enqueue(model);
+
                 //if (model.Type != DeviceType.None)
                 //    await _consumer.NotifyDeviceChangeAsync(model);
             }

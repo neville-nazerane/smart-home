@@ -9,6 +9,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddAllServer(configs)
                 .AddTransient<HueProcessor>()
                 .AddTransient<BondProcessor>()
+                .AddTransient<MainProcessor>()
                 .AddSingleton<ListenerQueue>()
                 .AddHttpClient<ApiConsumer>(c =>
                 {
