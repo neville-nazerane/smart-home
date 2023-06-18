@@ -11,6 +11,7 @@ IHost host = Host.CreateDefaultBuilder(args)
                 .AddTransient<BondProcessor>()
                 .AddTransient<MainProcessor>()
                 .AddSingleton<ListenerQueue>()
+                .AddTransient<DbProcesses>()
                 .AddHttpClient<ApiConsumer>(c =>
                 {
                     c.BaseAddress = new(configs["smarthomeEndpoint"]);
