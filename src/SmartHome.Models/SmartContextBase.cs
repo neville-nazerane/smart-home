@@ -42,6 +42,10 @@ namespace SmartHome.Models
             return result.OrderBy(r => r.Name).ToList();
         }
 
+        public abstract IAsyncEnumerable<DeviceLog> GetListeningLogsAsync(int pageNumber, 
+                                                                          int pageSize,
+                                                                          CancellationToken cancellationToken = default);
+
         #region Philips Hue
 
         public HueLightRequestModel Request(HueModels.LightModel model) => new(this, model.Id);
@@ -56,6 +60,8 @@ namespace SmartHome.Models
         public BondCeilingFanRequestModel Request(BondModels.CeilingFanModel model) => new(this, model.Id);
 
         public BondRollerRequestModel Request(BondModels.RollerModel model) => new(this, model.Id);
+
+
 
         #endregion
 

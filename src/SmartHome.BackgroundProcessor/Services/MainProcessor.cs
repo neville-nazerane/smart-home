@@ -12,12 +12,14 @@ namespace SmartHome.BackgroundProcessor.Services
         private readonly ListenerQueue _queue;
         private readonly AppDbContext _dbContext;
         private readonly ILogger<MainProcessor> _logger;
+        private readonly ApiConsumer _apiConsumer;
 
-        public MainProcessor(ListenerQueue queue, AppDbContext dbContext, ILogger<MainProcessor> logger)
+        public MainProcessor(ListenerQueue queue, AppDbContext dbContext, ILogger<MainProcessor> logger, ApiConsumer apiConsumer)
         {
             _queue = queue;
             _dbContext = dbContext;
             _logger = logger;
+            _apiConsumer = apiConsumer;
         }
 
         public async Task KeepRunningAsync(CancellationToken cancellationToken = default)

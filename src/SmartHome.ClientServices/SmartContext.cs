@@ -10,12 +10,16 @@ using System.Net.Http.Json;
 using SmartHome.ServerServices.Clients;
 using SmartHome.Models.Bond;
 using System.Diagnostics;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
+using System.Runtime.CompilerServices;
 
 namespace SmartHome.ClientServices
 {
     public class SmartContext : SmartContextBase
     {
         private readonly AllCLients _allClients;
+        private readonly HttpClient _httpClient;
 
         protected override IPhilipsHueClient PhilipsHueClient => _allClients;
         protected override IBondClient BondClient => _allClients;
@@ -23,8 +27,20 @@ namespace SmartHome.ClientServices
         public SmartContext(HttpClient httpClient) : base()
         {
             _allClients = new AllCLients(httpClient);
+            _httpClient = httpClient;
         }
 
+        public override async IAsyncEnumerable<DeviceLog> GetListeningLogsAsync(int pageNumber,
+                                                                                int pageSize,
+                                                                                [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            using var res = await _httpClient.GetAsync($"listeningLogs?pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken);
+            res.EnsureSuccessStatusCode();
+            using var stream = await res.Content.ReadAsStreamAsync(cancellationToken);
+
+            await foreach (var log in JsonSerializer.DeserializeAsyncEnumerable<DeviceLog>(stream, cancellationToken: cancellationToken))
+                yield return log;
+        }
 
         class AllCLients : IPhilipsHueClient, IBondClient
         {
@@ -78,6 +94,7 @@ namespace SmartHome.ClientServices
                 res.EnsureSuccessStatusCode();
             }
         }
+
 
     }
 }
