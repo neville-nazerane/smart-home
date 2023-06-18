@@ -7,7 +7,7 @@ namespace SmartHome.Website.Pages
     public partial class ListenedLogs
     {
 
-        private List<DeviceLog> logs = new();
+        private readonly List<DeviceLog> logs = new();
 
         [Inject]
         public SmartContext SmartContext { get; set; }
