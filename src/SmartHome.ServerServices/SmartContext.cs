@@ -34,6 +34,7 @@ namespace SmartHome.ServerServices
             => _dbContext.DeviceLogs
                            .Skip((pageNumber - 1) * pageSize)
                            .Take(pageSize)
+                           .OrderByDescending(l => l.OccurredOn)
                            .AsAsyncEnumerable();
 
     }
