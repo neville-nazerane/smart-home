@@ -10,5 +10,8 @@ namespace SmartHome.Models
     {
         None = 0,
         HueMotion = 1,
+        HueLight = 2,
+        TouchSensor = 3,
+        BondDevice = 4
     }
 }

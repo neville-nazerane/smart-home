@@ -21,5 +21,8 @@ namespace SmartHome.Models
         [Required]
         public DeviceType? DeviceType { get; set; }
 
+        [MaxLength(200)]
+        public string Name { get; set; }
+
     }
 }

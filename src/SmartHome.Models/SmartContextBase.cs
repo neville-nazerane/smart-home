@@ -15,9 +15,15 @@ namespace SmartHome.Models
     public abstract class SmartContextBase
     {
 
+        public SmartDevices Devices { get; }
+
         protected abstract IPhilipsHueClient PhilipsHueClient { get; }
         protected abstract IBondClient BondClient { get; }
 
+        public SmartContextBase()
+        {
+            Devices = new(this);    
+        }
 
         public async Task<IEnumerable<DeviceModelBase>> FetchAllDevicesAsync(CancellationToken cancellationToken = default)
         {

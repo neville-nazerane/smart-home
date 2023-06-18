@@ -24,12 +24,14 @@ namespace SmartHome.BackgroundProcessor.Services
         private readonly ILogger<BondProcessor> _logger;
         private readonly IBondClient _bondClient;
         private readonly ApiConsumer _apiConsumer;
+        private readonly ListenerQueue _listenerQueue;
 
-        public BondProcessor(ILogger<BondProcessor> logger, IBondClient bondClient, ApiConsumer apiConsumer)
+        public BondProcessor(ILogger<BondProcessor> logger, IBondClient bondClient, ApiConsumer apiConsumer, ListenerQueue listenerQueue)
         {
             _logger = logger;
             _bondClient = bondClient;
             _apiConsumer = apiConsumer;
+            _listenerQueue = listenerQueue;
             _queue = new();
         }
 
@@ -98,7 +100,7 @@ namespace SmartHome.BackgroundProcessor.Services
                         if (parts.FirstOrDefault() == "devices" && parts.ElementAtOrDefault(2) == "actions")
                         {
                             string id = parts[1];
-                            await HandleDeviceTriggeredByIdAsync(id);
+                            HandleDeviceTriggeredById(id);
                         }
 
                     }
@@ -111,14 +113,14 @@ namespace SmartHome.BackgroundProcessor.Services
             }
         }
 
-        async Task HandleDeviceTriggeredByIdAsync(string id)
+        void HandleDeviceTriggeredById(string id)
         {
-            var model = new DeviceChangedNotify
+            var model = new ListenedDevice
             {
                 Id = id,
-                Type = DeviceChangedNotify.DeviceType.BondDevice
+                DeviceType = DeviceType.BondDevice
             };
-            await _apiConsumer.NotifyDeviceChangeAsync(model);
+            _listenerQueue.Enqueue(model);
         }
 
         class UdpData
