@@ -80,7 +80,7 @@ namespace SmartHome.Models
             {
                 DeviceType = DeviceType.HueMotion;
 
-                _client = context.PhilipsHueClient;
+                _client = context?.PhilipsHueClient;
                 Id = id;
             }
 
