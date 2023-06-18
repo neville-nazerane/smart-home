@@ -97,7 +97,7 @@ namespace SmartHome.Models
 
             public HueLightRequestModel(SmartContextBase source, string id)
             {
-                _client = source.PhilipsHueClient;
+                _client = source?.PhilipsHueClient;
                 Id = id;
             }
 
@@ -122,7 +122,7 @@ namespace SmartHome.Models
 
             public BondCeilingFanRequestModel(SmartContextBase source, string id)
             {
-                _client = source.BondClient;
+                _client = source?.BondClient;
                 Id = id;
             }
 
@@ -145,7 +145,7 @@ namespace SmartHome.Models
 
             public BondRollerRequestModel(SmartContextBase source, string id)
             {
-                _client = source.BondClient;
+                _client = source?.BondClient;
                 Id = id;
             }
 
