@@ -42,7 +42,7 @@ namespace SmartHome.Models
             return result.OrderBy(r => r.Name).ToList();
         }
 
-        public abstract IAsyncEnumerable<DeviceLog> GetListeningLogsAsync(int pageNumber, 
+        public abstract Task<IEnumerable<DeviceLog>> GetListeningLogsAsync(int pageNumber, 
                                                                           int pageSize,
                                                                           CancellationToken cancellationToken = default);
 
