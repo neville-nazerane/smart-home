@@ -29,6 +29,16 @@ namespace SmartHome.BackgroundProcessor.Services
             {
                 try
                 {
+                    await _apiConsumer.NotifyDeviceChangeAsync(device, cancellationToken);
+                } 
+                catch (Exception ex)
+                {
+                    if (cancellationToken.IsCancellationRequested) throw;
+                    _logger.LogError(ex, "Failed notifying device change (signalR)");
+                }
+
+                try
+                {
                     string name = SmartDevices.GetListeningDeviceName(device.Id, device.DeviceType);
                     await _dbContext.DeviceLogs.AddAsync(new()
                     {

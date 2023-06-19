@@ -31,7 +31,7 @@ namespace SmartHome.ClientServices
 
         void SetupListeners()
         {
-            _connection.On<DeviceChangedNotify>("deviceChanged", 
+            _connection.On<ListenedDevice>("deviceChanged", 
                                                 d => OnDeviceChanged?.Invoke(this, new()
                                                 {
                                                     Info = d
@@ -40,7 +40,7 @@ namespace SmartHome.ClientServices
 
         public class DeviceChangedArgs : EventArgs
         {
-            public DeviceChangedNotify Info { get; set; }
+            public ListenedDevice Info { get; set; }
         }
 
     }

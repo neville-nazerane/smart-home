@@ -35,8 +35,8 @@ namespace SmartHome.WebAPI
         }
 
         static Task NotifyDeviceChangeAsync(IHubContext<ChangeNotifyHub> hubContext,
-                                                   DeviceChangedNotify model,
-                                                   CancellationToken cancellationToken = default)
+                                            ListenedDevice model,
+                                            CancellationToken cancellationToken = default)
             => hubContext.Clients.All.SendAsync("deviceChanged", model, cancellationToken);
 
         static Task<IEnumerable<DeviceLog>> GetListeningLogsAsync(SmartContext context,

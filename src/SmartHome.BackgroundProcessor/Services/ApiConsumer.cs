@@ -17,7 +17,7 @@ namespace SmartHome.BackgroundProcessor.Services
             _client = client;
         }
 
-        public async Task NotifyDeviceChangeAsync(DeviceChangedNotify device, 
+        public async Task NotifyDeviceChangeAsync(ListenedDevice device, 
                                                   CancellationToken cancellationToken = default)
         {
             using var res = await _client.PostAsJsonAsync("notifyDeviceChange", device, cancellationToken);

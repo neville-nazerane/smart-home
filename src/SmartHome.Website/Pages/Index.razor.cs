@@ -26,7 +26,7 @@ namespace SmartHome.Website.Pages
 
         private async void DeviceChanged(object sender, ChangeListener.DeviceChangedArgs e)
         {
-            Console.WriteLine($"the type {e.Info.Type} with ID {e.Info.Id}");
+            Console.WriteLine($"the type {e.Info.DeviceType} with ID {e.Info.Id}");
             DeviceModelBase updatedDevice = null;
             int i = 0; 
             for (; i < devices.Count; i++)
@@ -34,22 +34,22 @@ namespace SmartHome.Website.Pages
                 var device = devices[i];
                 if (device.Id != e.Info.Id) continue;
 
-                if (device is HueModels.LightModel lightModel && e.Info.Type == DeviceType.HueLight)
+                if (device is HueModels.LightModel lightModel && e.Info.DeviceType == DeviceType.HueLight)
                 {
                     updatedDevice = await Context.Request(lightModel).GetAsync();
                     break;
                 }
-                else if (device is HueModels.MotionModel motionModel && e.Info.Type == DeviceType.HueMotion)
+                else if (device is HueModels.MotionModel motionModel && e.Info.DeviceType == DeviceType.HueMotion)
                 {
                     updatedDevice = await Context.Request(motionModel).GetAsync();
                     break;
                 }
-                else if (device is BondModels.CeilingFanModel fanModel && e.Info.Type == DeviceType.BondFan)
+                else if (device is BondModels.CeilingFanModel fanModel && e.Info.DeviceType == DeviceType.BondFan)
                 {
                     updatedDevice = await Context.Request(fanModel).GetAsync();
                     break;
                 }
-                else if (device is BondModels.RollerModel rollerModel && e.Info.Type == DeviceType.BondRoller)
+                else if (device is BondModels.RollerModel rollerModel && e.Info.DeviceType == DeviceType.BondRoller)
                 {
                     updatedDevice = await Context.Request(rollerModel).GetAsync();
                     break;
