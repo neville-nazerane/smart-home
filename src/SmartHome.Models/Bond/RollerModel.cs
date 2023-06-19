@@ -11,5 +11,10 @@ namespace SmartHome.Models.Bond
 
         public bool IsOpen { get; set; }
 
+        public RollerModel() : base(DeviceType.BondRoller)
+        {
+            
+        }
+
     }
 }

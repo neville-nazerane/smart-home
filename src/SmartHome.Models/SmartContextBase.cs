@@ -22,7 +22,7 @@ namespace SmartHome.Models
 
         public SmartContextBase()
         {
-            Devices = new(this);    
+            Devices = new(this);
         }
 
         public async Task<IEnumerable<DeviceModelBase>> FetchAllDevicesAsync(CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ namespace SmartHome.Models
             return result.OrderBy(r => r.Name).ToList();
         }
 
-        public abstract Task<IEnumerable<DeviceLog>> GetListeningLogsAsync(int pageNumber, 
+        public abstract Task<IEnumerable<DeviceLog>> GetListeningLogsAsync(int pageNumber,
                                                                           int pageSize,
                                                                           CancellationToken cancellationToken = default);
 
@@ -67,21 +67,14 @@ namespace SmartHome.Models
 
         #region Request Models
 
-        public class HueMotionRequestModel : IListenableDevice
+        public class HueMotionRequestModel : RequestableDeviceBase
         {
 
             private readonly IPhilipsHueClient _client;
 
-            public string Id { get; }
-
-            public DeviceType DeviceType { get; }
-
-            public HueMotionRequestModel(SmartContextBase context, string id)
+            public HueMotionRequestModel(SmartContextBase context, string id) : base(id, DeviceType.HueMotion)
             {
-                DeviceType = DeviceType.HueMotion;
-
                 _client = context?.PhilipsHueClient;
-                Id = id;
             }
 
             public Task<HueModels.MotionModel> GetAsync(CancellationToken cancellationToken = default)
@@ -89,16 +82,13 @@ namespace SmartHome.Models
 
         }
 
-        public class HueLightRequestModel
+        public class HueLightRequestModel : RequestableDeviceBase
         {
             private readonly IPhilipsHueClient _client;
 
-            public string Id { get; }
-
-            public HueLightRequestModel(SmartContextBase source, string id)
+            public HueLightRequestModel(SmartContextBase source, string id) : base(id, DeviceType.HueLight)
             {
                 _client = source?.PhilipsHueClient;
-                Id = id;
             }
 
             public Task TriggerSwitchAsync(bool switchOn, CancellationToken cancellationToken = default)
@@ -114,16 +104,14 @@ namespace SmartHome.Models
 
         }
 
-        public class BondCeilingFanRequestModel
+        public class BondCeilingFanRequestModel : RequestableDeviceBase
         {
             private readonly IBondClient _client;
 
-            public string Id { get; }
 
-            public BondCeilingFanRequestModel(SmartContextBase source, string id)
+            public BondCeilingFanRequestModel(SmartContextBase source, string id) : base(id, DeviceType.BondFan)
             {
                 _client = source?.BondClient;
-                Id = id;
             }
 
             public Task<BondModels.CeilingFanModel> GetAsync(CancellationToken cancellationToken = default)
@@ -137,16 +125,13 @@ namespace SmartHome.Models
 
         }
 
-        public class BondRollerRequestModel
+        public class BondRollerRequestModel : RequestableDeviceBase
         {
             private readonly IBondClient _client;
 
-            public string Id { get; }
-
-            public BondRollerRequestModel(SmartContextBase source, string id)
+            public BondRollerRequestModel(SmartContextBase source, string id) : base(id, DeviceType.BondRoller)
             {
                 _client = source?.BondClient;
-                Id = id;
             }
 
             public Task<BondModels.RollerModel> GetAsync(CancellationToken cancellationToken = default)
