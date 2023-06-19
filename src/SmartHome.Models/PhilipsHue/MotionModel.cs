@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 namespace SmartHome.Models.PhilipsHue
 {
     public class MotionModel : DeviceModelBase
-    {
 
+    {
         public bool IsMotionDetected { get; set; }
+
+        public MotionModel() : base(DeviceType.HueMotion)
+        {
+        }
 
     }
 }

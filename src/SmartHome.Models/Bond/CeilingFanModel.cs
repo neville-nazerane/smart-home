@@ -11,5 +11,9 @@ namespace SmartHome.Models.Bond
 
         public short Speed { get; set; }
 
+        public CeilingFanModel(): base(DeviceType.BondFan)
+        {
+
+        }
     }
 }

@@ -20,10 +20,10 @@ namespace SmartHome.Models
 
             _listeningDevices = typeof(SmartDevices)
                                             .GetProperties()
-                                            .Where(p => p.PropertyType.IsAssignableTo(typeof(IListenableDevice)))
+                                            .Where(p => p.PropertyType.IsAssignableTo(typeof(RequestableDeviceBase)))
                                             .Select(p =>
                                             {
-                                                var obj = (IListenableDevice) p.GetValue(dummyDevices);
+                                                var obj = (RequestableDeviceBase) p.GetValue(dummyDevices);
                                                 return new ListeningDeviceInfo
                                                 {
                                                     Id = obj.Id,
