@@ -106,7 +106,7 @@ namespace SmartHome.BackgroundProcessor.Services
                         }
 
                     }
-                    else await Task.Delay(1000, cancellationToken);
+                    else await Task.Delay(500, cancellationToken);
                 }
                 catch (Exception ex)
                 {

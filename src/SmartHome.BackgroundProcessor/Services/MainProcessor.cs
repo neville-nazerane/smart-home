@@ -40,6 +40,7 @@ namespace SmartHome.BackgroundProcessor.Services
                 try
                 {
                     string name = SmartDevices.GetListeningDeviceName(device.Id, device.DeviceType);
+                    if (name is null) continue;
                     await _dbContext.DeviceLogs.AddAsync(new()
                     {
                         DeviceId = device.Id,

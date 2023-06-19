@@ -18,7 +18,6 @@ namespace SmartHome.BackgroundProcessor
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-
             await using var scope = _serviceProvider.CreateAsyncScope();
             var service = scope.ServiceProvider.GetService<MainProcessor>();
             await service.KeepRunningAsync(stoppingToken);
