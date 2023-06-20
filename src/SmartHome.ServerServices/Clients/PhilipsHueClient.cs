@@ -289,7 +289,8 @@ namespace SmartHome.ServerServices.Clients
                 => new()
                 {
                     Id = Id,
-                    IsMotionDetected = Motion.Motion
+                    IsMotionDetected = Motion.Motion,
+                    LastChanged = Motion.MotionReport.Changed
                 };
 
         }
@@ -299,6 +300,18 @@ namespace SmartHome.ServerServices.Clients
 
             [JsonPropertyName("motion")]
             public bool Motion { get; set; }
+
+            [JsonPropertyName("motion_report")]
+            public MotionReport MotionReport { get; set; }
+
+        }
+
+        class MotionReport
+        {
+            
+            [JsonPropertyName("changed")]
+            public DateTime Changed { get; set; }
+
         }
 
         class ColorModel

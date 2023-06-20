@@ -9,8 +9,6 @@ namespace SmartHome.ServerServices.Automation
 {
     public partial class AutomationService
     {
-        private readonly Func<ListenedDevice, CancellationToken, Task> onDeviceListened;
-
         private readonly AppDbContext _dbContext;
         private readonly SmartContext _smartContext;
 
@@ -20,11 +18,6 @@ namespace SmartHome.ServerServices.Automation
         {
             _dbContext = dbContext;
             _smartContext = smartContext;
-        }
-
-        public async Task DeviceListenedAsync(ListenedDevice device, CancellationToken cancellationToken)
-        {
-            await OnDeviceListenedAsync(device, cancellationToken);
         }
 
         public async Task LogListenedAsync(ListenedDevice device, string name, string state)
