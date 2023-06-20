@@ -33,9 +33,9 @@ namespace SmartHome.ServerServices
                                                                              int pageSize,
                                                                              CancellationToken cancellationToken = default)
             => await _dbContext.DeviceLogs
+                                .OrderByDescending(l => l.OccurredOn)
                                 .Skip((pageNumber - 1) * pageSize)
                                 .Take(pageSize)
-                                .OrderByDescending(l => l.OccurredOn)
                                 .ToListAsync(cancellationToken);
 
     }
