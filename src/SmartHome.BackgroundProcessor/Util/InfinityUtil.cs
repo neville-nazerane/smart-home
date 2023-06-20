@@ -10,20 +10,29 @@ namespace SmartHome.BackgroundProcessor.Util
     internal static class InfinityUtil
     {
 
-        internal static async IAsyncEnumerable<int> BeyondAsync(int limit, 
-                                                               TimeSpan errorRateLimit,
-                                                               TimeSpan retrySpacing,
-                                                               CancellationToken cancellationToken = default)
+        /// <summary>
+        /// If enumerable is used <paramref name="limitBeforePause"/> within a period of <paramref name="limitTimeWindow"/>,
+        /// the loop pauses for <paramref name="pauseTime"/> 
+        /// </summary>
+        /// <param name="limitBeforePause"></param>
+        /// <param name="limitTimeWindow"></param>
+        /// <param name="pauseTime"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        internal static async IAsyncEnumerable<int> BeyondAsync(int limitBeforePause,
+                                                                TimeSpan limitTimeWindow,
+                                                                TimeSpan pauseTime,
+                                                                [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             int count = 1;
             DateTime firstTimestamp = DateTime.Now;
             while (!cancellationToken.IsCancellationRequested)
             {
                 count++;
-                if (count > limit && (DateTime.Now - firstTimestamp) < errorRateLimit)
+                if (count > limitBeforePause && (DateTime.Now - firstTimestamp) < limitTimeWindow)
                 {
                     count = 0;
-                    await Task.Delay(retrySpacing, cancellationToken);
+                    await Task.Delay(pauseTime, cancellationToken);
                     firstTimestamp = DateTime.Now;
                 }
 

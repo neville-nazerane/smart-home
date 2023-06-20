@@ -22,24 +22,24 @@ namespace SmartHome.BackgroundProcessor.Services
         private static readonly ConcurrentDictionary<string, DeviceType> deviceTypeMappings = new();
         private static readonly SemaphoreSlim deviceTypeMappingsLock = new(1, 1);
 
-        private readonly ConcurrentQueue<UdpData> _queue;
+        private readonly BackgroundQueue<UdpData> _queue;
         private readonly ILogger<BondProcessor> _logger;
         private readonly IBondClient _bondClient;
         private readonly ApiConsumer _apiConsumer;
-        private readonly ListenerQueue _listenerQueue;
+        private readonly MainProcessor _mainProcessor;
 
-        public BondProcessor(ILogger<BondProcessor> logger, IBondClient bondClient, ApiConsumer apiConsumer, ListenerQueue listenerQueue)
+        public BondProcessor(ILogger<BondProcessor> logger, IBondClient bondClient, ApiConsumer apiConsumer, MainProcessor mainProcessor)
         {
             _logger = logger;
             _bondClient = bondClient;
             _apiConsumer = apiConsumer;
-            _listenerQueue = listenerQueue;
+            _mainProcessor = mainProcessor;
             _queue = new();
         }
 
         public async Task KeepListeningAsync(CancellationToken cancellationToken = default)
         {
-            var loop = InfinityUtil.BeyondAsync(5, 
+            var loop = InfinityUtil.BeyondAsync(5,
                                                 TimeSpan.FromSeconds(2),
                                                 TimeSpan.FromSeconds(10),
                                                 cancellationToken);
@@ -49,7 +49,6 @@ namespace SmartHome.BackgroundProcessor.Services
                 {
                     using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
                     cts.CancelAfter(TimeSpan.FromMinutes(5));
-
                     await RunUDPAsync(cts.Token);
                 }
                 catch (Exception ex)
@@ -91,22 +90,17 @@ namespace SmartHome.BackgroundProcessor.Services
 
         public async Task ProcessQueueAsync(CancellationToken cancellationToken = default)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            await foreach (var data in _queue.KeepDequeuingAsync(500, cancellationToken))
             {
                 try
                 {
-                    if (_queue.TryDequeue(out var data) && data.UrlPath is not null)
+                    var parts = data.UrlPath.Split("/");
+
+                    if (parts.FirstOrDefault() == "devices" && parts.ElementAtOrDefault(2) == "actions")
                     {
-                        var parts = data.UrlPath.Split("/");
-
-                        if (parts.FirstOrDefault() == "devices" && parts.ElementAtOrDefault(2) == "actions")
-                        {
-                            string id = parts[1];
-                            await HandleDeviceTriggeredByIdAsync(id);
-                        }
-
+                        string id = parts[1];
+                        await HandleDeviceTriggeredByIdAsync(id);
                     }
-                    else await Task.Delay(500, cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -115,14 +109,14 @@ namespace SmartHome.BackgroundProcessor.Services
             }
         }
 
-        async ValueTask HandleDeviceTriggeredByIdAsync(string id)
+        async Task HandleDeviceTriggeredByIdAsync(string id)
         {
             var model = new ListenedDevice
             {
                 Id = id,
                 DeviceType = await GetDeviceTypeAsync(id)
             };
-            _listenerQueue.Enqueue(model);
+            await _mainProcessor.ListenAsync(model);
         }
 
         async ValueTask<DeviceType> GetDeviceTypeAsync(string id)

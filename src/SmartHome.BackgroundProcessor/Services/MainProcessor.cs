@@ -10,54 +10,48 @@ namespace SmartHome.BackgroundProcessor.Services
 {
     public class MainProcessor
     {
-        private readonly ListenerQueue _queue;
-        private readonly AppDbContext _dbContext;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<MainProcessor> _logger;
         private readonly ApiConsumer _apiConsumer;
 
-        public MainProcessor(ListenerQueue queue, AppDbContext dbContext, ILogger<MainProcessor> logger, ApiConsumer apiConsumer)
+        public MainProcessor(IServiceProvider serviceProvider, ILogger<MainProcessor> logger, ApiConsumer apiConsumer)
         {
-            _queue = queue;
-            _dbContext = dbContext;
+            _serviceProvider = serviceProvider;
             _logger = logger;
             _apiConsumer = apiConsumer;
         }
 
-        public async Task KeepRunningAsync(CancellationToken cancellationToken = default)
+        public Task ListenAsync(ListenedDevice device, CancellationToken cancellationToken = default)
         {
-            await foreach (var device in _queue.KeepDequeuingAsync(cancellationToken))
-            {
-                try
-                {
-                    await _apiConsumer.NotifyDeviceChangeAsync(device, cancellationToken);
-                } 
-                catch (Exception ex)
-                {
-                    if (cancellationToken.IsCancellationRequested) throw;
-                    _logger.LogError(ex, "Failed notifying device change (signalR)");
-                }
+            return Task.WhenAll(
+                PushToSignalRAsync(device, cancellationToken),
+                TryRunAutomationAsync(device, cancellationToken)
+            );
+        }
 
-                try
-                {
-                    string name = SmartDevices.GetListeningDeviceName(device.Id, device.DeviceType);
-                    if (name is null) continue;
-                    await _dbContext.DeviceLogs.AddAsync(new()
-                    {
-                        DeviceId = device.Id,
-                        OccurredOn = DateTime.UtcNow,
-                        DeviceType = device.DeviceType,
-                        Name = name,
-                    }, cancellationToken);
-                    await _dbContext.SaveChangesAsync(cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    if (cancellationToken.IsCancellationRequested) throw;
-                    _logger.LogError(ex, "Failed logging device");
-                }
+        async Task TryRunAutomationAsync(ListenedDevice device, CancellationToken cancellationToken = default)
+        {
+            string name = SmartDevices.GetListeningDeviceName(device.Id, device.DeviceType);
+            if (name is not null)
+            {
+                await using var scope = _serviceProvider.CreateAsyncScope();
+                var service = scope.ServiceProvider.GetService<AutomationService>();
+                await service.DeviceListenedAsync(device, cancellationToken);
             }
         }
 
-
+        Task PushToSignalRAsync(ListenedDevice device, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return _apiConsumer.NotifyDeviceChangeAsync(device, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                if (cancellationToken.IsCancellationRequested) throw;
+                _logger.LogError(ex, "Failed notifying device change (signalR)");
+                return Task.CompletedTask;
+            }
+        }
     }
 }
