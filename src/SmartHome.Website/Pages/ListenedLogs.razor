@@ -5,9 +5,10 @@
         <thead>
             <tr>
                 <th scope="col">Device ID</th>
-                <th scope="col">Occurred On</th>
-                <th scope="col">Device Type</th>
                 <th scope="col">Name</th>
+                <th scope="col">Device Type</th>
+                <th scope="col">Occurred On</th>
+                <th scope="col">State</th>
             </tr>
         </thead>
         <tbody>
@@ -15,9 +16,10 @@
             {
                 <tr>
                     <td>@log.DeviceId</td>
-                    <td>@log.LoggedOn?.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
-                    <td>@log.DeviceType</td>
                     <td>@log.Name</td>
+                    <td>@log.DeviceType</td>
+                    <td>@log.LoggedOn?.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</td>
+                    <td>@log.State</td>
                 </tr>
             }
         </tbody>
