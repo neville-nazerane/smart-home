@@ -1,5 +1,5 @@
 ﻿using SmartHome.Models;
-using SmartHome.ServerServices;
+using SmartHome.ServerServices.Automation;
 using System;
 using System.Collections.Generic;
 using System.Linq;

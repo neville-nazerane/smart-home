@@ -94,7 +94,7 @@ namespace SmartHome.BackgroundProcessor.Services
             {
                 try
                 {
-                    var parts = data.UrlPath.Split("/");
+                    var parts = data.UrlPath?.Split("/");
 
                     if (parts.FirstOrDefault() == "devices" && parts.ElementAtOrDefault(2) == "actions")
                     {
