@@ -17,6 +17,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         
                             services
                                     .AddHostedService<HueListener>()
+                                    .AddHostedService<DbCleanupWorker>()
                                     .AddHostedService<BondListener>();
                         })
                         .Build();
