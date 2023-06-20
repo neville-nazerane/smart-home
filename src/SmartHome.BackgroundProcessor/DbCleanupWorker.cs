@@ -27,7 +27,6 @@ namespace SmartHome.BackgroundProcessor
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
 
                 try
                 {
@@ -45,7 +44,7 @@ namespace SmartHome.BackgroundProcessor
                 {
                     _logger.LogError(ex, "Failed hourly db process");
                 }
-
+                await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
             }
         }
 
