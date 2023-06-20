@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartHome.BackgroundProcessor.Services
+namespace SmartHome.BackgroundProcessor.Util
 {
     public class BackgroundQueue<T>
     {
@@ -18,7 +18,7 @@ namespace SmartHome.BackgroundProcessor.Services
 
         public void Enqueue(T item) => _queue.Enqueue(item);
 
-        public async IAsyncEnumerable<T> KeepDequeuingAsync([EnumeratorCancellation]CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<T> KeepDequeuingAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
