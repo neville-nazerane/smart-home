@@ -37,7 +37,7 @@ namespace SmartHome.BackgroundProcessor
                     var timeBreak = DateTime.UtcNow.AddHours(-1);
 
                     await db.DeviceLogs
-                                   .Where(l => l.OccurredOn < timeBreak)
+                                   .Where(l => l.LoggedOn < timeBreak)
                                    .ExecuteDeleteAsync(cancellationToken);
                 }
                 catch (Exception ex)

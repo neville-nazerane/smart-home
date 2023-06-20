@@ -35,7 +35,7 @@ namespace SmartHome.ServerServices
             => await _dbContext.DeviceLogs
                                 .Skip((pageNumber - 1) * pageSize)
                                 .Take(pageSize)
-                                .OrderByDescending(l => l.OccurredOn)
+                                .OrderByDescending(l => l.LoggedOn)
                                 .ToListAsync(cancellationToken);
 
     }

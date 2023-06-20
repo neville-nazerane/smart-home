@@ -17,14 +17,15 @@ namespace SmartHome.ServerServices.Clients
     {
         private readonly HttpClient _httpClient;
 
+
         public PhilipsHueClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
         public static HttpClient SetupClient(HttpClient client,
-                                  string baseUrl,
-                                  string applicationKey)
+                                             string baseUrl,
+                                             string applicationKey)
         {
             client.BaseAddress = new Uri(baseUrl);
             client.Timeout = Timeout.InfiniteTimeSpan;
@@ -69,7 +70,6 @@ namespace SmartHome.ServerServices.Clients
             var res = await _httpClient.GetFromJsonAsync<HueData<LightResponse>>($"clip/v2/resource/light/{id}", cancellationToken);
             return res.Data.SingleOrDefault().ToModel();
         }
-
 
         #endregion
 
