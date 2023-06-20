@@ -24,10 +24,11 @@ namespace SmartHome.ServerServices
             var bondConfig = configuration.GetSection("bond");
             services.AddHttpClient<IBondClient, BondClient>(c => BondClient.SetupClient(c, bondConfig["baseUrl"], bondConfig["token"]));
 
-            services.AddTransient<SmartContext>();
+            services.AddTransient<SmartContext>()
+                    .AddTransient<AutomationService>();
 
             var dbFile = $"{configuration["global:dataPath"]}/data.db";
-            services.AddDbContext<AppDbContext>(c => c.UseSqlite($"Data Source={dbFile}", 
+            services.AddDbContext<AppDbContext>(c => c.UseSqlite($"Data Source={dbFile}",
                                                 o => o.MigrationsAssembly("SmartHome.ServerServices")));
 
             return services;

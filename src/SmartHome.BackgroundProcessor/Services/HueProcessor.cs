@@ -17,20 +17,20 @@ namespace SmartHome.BackgroundProcessor.Services
 {
     internal class HueProcessor
     {
-        private readonly ConcurrentQueue<HttpResponseMessage> _queue;
+        private readonly BackgroundQueue<HttpResponseMessage> _queue;
         private readonly ILogger<HueProcessor> _logger;
         private readonly ApiConsumer _consumer;
-        private readonly ListenerQueue _listenerQueue;
+        private readonly MainProcessor _mainProcessor;
         private readonly IPhilipsHueClient _philipsHueClient;
 
         public HueProcessor(ILogger<HueProcessor> logger, 
                             ApiConsumer consumer,
-                            ListenerQueue listenerQueue,
+                            MainProcessor mainProcessor,
                             IPhilipsHueClient philipsHueClient)
         {
             _logger = logger;
             _consumer = consumer;
-            _listenerQueue = listenerQueue;
+            _mainProcessor = mainProcessor;
             _philipsHueClient = philipsHueClient;
 
             _queue = new();
@@ -58,20 +58,16 @@ namespace SmartHome.BackgroundProcessor.Services
 
         public async Task ProcessQueueAsync(CancellationToken cancellationToken = default)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            await foreach (var response in _queue.KeepDequeuingAsync(1000, cancellationToken))
             {
                 try
                 {
-                    if (_queue.TryDequeue(out var response))
-                    {
-                        var data = await response.Content.ReadFromJsonAsync<IEnumerable<HueEvent>>(cancellationToken: cancellationToken);
-                        response.Dispose();
-                        var events = data.Where(d => d.Type == "update")
-                                         .SelectMany(d => d.Data)
-                                         .ToList();
-                        HandleEvents(events);
-                    }
-                    else await Task.Delay(500, cancellationToken);
+                    var data = await response.Content.ReadFromJsonAsync<IEnumerable<HueEvent>>(cancellationToken: cancellationToken);
+                    response.Dispose();
+                    var events = data.Where(d => d.Type == "update")
+                                     .SelectMany(d => d.Data)
+                                     .ToList();
+                    await HandleEventsAsync(events, cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -80,7 +76,7 @@ namespace SmartHome.BackgroundProcessor.Services
             }
         }
 
-        void HandleEvents(IEnumerable<HueEventData> events)
+        Task HandleEventsAsync(IEnumerable<HueEventData> events, CancellationToken cancellationToken = default)
         {
             foreach (var e in events)
             {
@@ -99,11 +95,10 @@ namespace SmartHome.BackgroundProcessor.Services
                 }
 
                 if (model.DeviceType != DeviceType.None)
-                    _listenerQueue.Enqueue(model);
-
-                //if (model.Type != DeviceType.None)
-                //    await _consumer.NotifyDeviceChangeAsync(model);
+                    return _mainProcessor.ListenAsync(model, cancellationToken);
             }
+            return Task.CompletedTask;
+
         }
 
     }
