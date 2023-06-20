@@ -9,9 +9,24 @@ namespace SmartHome.ServerServices
 {
     public class AutomationService
     {
-        public Task DeviceListenedAsync(ListenedDevice device, CancellationToken cancellationToken)
+        private readonly AppDbContext _dbContext;
+
+        public AutomationService(AppDbContext dbContext)
         {
-            return Task.CompletedTask;
+            _dbContext = dbContext;
+        }
+
+        public async Task DeviceListenedAsync(ListenedDevice device, CancellationToken cancellationToken)
+        {
+            string name = SmartDevices.GetListeningDeviceName(device.Id, device.DeviceType);
+            await _dbContext.DeviceLogs.AddAsync(new()
+            {
+                DeviceId = device.Id,
+                DeviceType = device.DeviceType,
+                OccurredOn = DateTime.UtcNow,
+                Name = name
+            }, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
