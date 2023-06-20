@@ -12,14 +12,15 @@ namespace SmartHome.ServerServices.Automation
     public partial class AutomationService
     {
 
-
-
-        async Task OnDeviceListenedAsync(ListenedDevice device, CancellationToken cancellationToken)
+        public async Task OnDeviceListenedAsync(ListenedDevice device, CancellationToken cancellationToken = default)
         {
             // closet sensor turn on closet
             await VerifyClosetMotionSensorAsync(device);
 
         }
+
+        public Task OnMinuiteTimerAsync(CancellationToken cancellationToken = default) 
+            => Task.WhenAll(ClosetMinuiteCheckAsync(cancellationToken));
 
         async ValueTask VerifyClosetMotionSensorAsync(ListenedDevice device)
         {
@@ -30,6 +31,19 @@ namespace SmartHome.ServerServices.Automation
 
                 if (motion.IsMotionDetected)
                     await _smartContext.Devices.ClosetLight.TriggerSwitchAsync(true);
+            }
+        }
+
+        async Task ClosetMinuiteCheckAsync(CancellationToken cancellationToken = default)
+        {
+            var motion = await Devices.ClosetMotionSensor.GetAsync(cancellationToken);
+            if (!motion.IsMotionDetected)
+            {
+                int lastNonMotionMins = (DateTime.UtcNow - motion.LastChanged.ToUniversalTime()).Minutes;
+                if (lastNonMotionMins > 5)
+                {
+                    await Devices.ClosetLight.TriggerSwitchAsync(false, cancellationToken);
+                }
             }
         }
 

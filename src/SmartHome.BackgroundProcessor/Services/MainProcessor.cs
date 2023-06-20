@@ -36,7 +36,7 @@ namespace SmartHome.BackgroundProcessor.Services
             {
                 await using var scope = _serviceProvider.CreateAsyncScope();
                 var service = scope.ServiceProvider.GetService<AutomationService>();
-                await service.DeviceListenedAsync(device, cancellationToken);
+                await service.OnDeviceListenedAsync(device, cancellationToken);
             }
         }
 
