@@ -41,6 +41,7 @@ namespace SmartHome.ServerServices
 
             var dbContext = sp.GetService<AppDbContext>();
             await dbContext.Database.MigrateAsync();
+            await dbContext.SeedScenesAsync();
         }
 
     }
