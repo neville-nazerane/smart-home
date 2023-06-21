@@ -73,9 +73,14 @@ namespace SmartHome.ServerServices.Clients
 
         #endregion
 
+        public async Task<ButtonModel> GetButtonAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var res = await _httpClient.GetFromJsonAsync<HueData<ButtonResponse>>($"clip/v2/resource/button/{id}", cancellationToken);
+            return res.Data.SingleOrDefault().ToModel();
+        }
 
         #region Motion Sensor
-        
+
         public async Task<IEnumerable<MotionModel>> GetAllMotionSensorsAsync(CancellationToken cancellationToken = default)
         {
             var res = await _httpClient.GetFromJsonAsync<HueData<MotionResponse>>("clip/v2/resource/motion", cancellationToken);
@@ -261,6 +266,45 @@ namespace SmartHome.ServerServices.Clients
                     Name = Metadata.Name,
                     ColorHex = ConvertColorObjectToHex(Color),
                 };
+        }
+
+        class ButtonResponse
+        {
+
+            [JsonPropertyName("id")]
+            public string Id { get; set; }
+
+            [JsonPropertyName("button")]
+            public ButtonButton Button { get; set; }
+
+            public ButtonModel ToModel()
+                => new()
+                {
+                    Id = Id,
+                    LastEvent = Button?.LastEvent,
+                    LastEventExecutedOn = Button?.ButtonReport?.Updated
+                };
+
+        }
+
+        class ButtonButton
+        {
+            
+            [JsonPropertyName("last_event")]
+            public string LastEvent { get; set; }
+
+            [JsonPropertyName("button_report")]
+            public ButtonReport ButtonReport { get; set; }
+
+        }
+
+
+        class ButtonReport
+        {
+
+            [JsonPropertyName("updated")]
+            public DateTime Updated { get; set; }
+
         }
 
         class Metadata

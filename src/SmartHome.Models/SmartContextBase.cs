@@ -65,7 +65,7 @@ namespace SmartHome.Models
 
         #endregion
 
-        #region Request Models
+        #region Hue Request Models
 
         public abstract class HueRequestBase : RequestableDeviceBase
         {
@@ -106,6 +106,23 @@ namespace SmartHome.Models
                => Client.GetLightAsync(Id, cancellationToken);
 
         }
+
+        public class HueButtonRequestModel : HueRequestBase
+        {
+
+            public HueButtonRequestModel(SmartContextBase context, string id) : base(context, id, DeviceType.HueButton)
+            {
+            }
+
+
+            public Task<HueModels.ButtonModel> GetAsync(CancellationToken cancellationToken = default)
+               => Client.GetButtonAsync(Id, cancellationToken);
+        }
+
+        #endregion
+
+
+        #region Bond Request Models
 
 
         public abstract class BondRequestBase : RequestableDeviceBase
