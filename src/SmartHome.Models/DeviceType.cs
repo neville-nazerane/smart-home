@@ -12,6 +12,7 @@ namespace SmartHome.Models
         HueMotion = 1,
         HueLight = 2,
         BondFan = 3,
-        BondRoller = 4
+        BondRoller = 4,
+        HueButton = 5
     }
 }
