@@ -22,5 +22,21 @@ namespace SmartHome.Models
 
         public bool Is(ListenedDevice listened) => DeviceType == listened.DeviceType && Id == listened.Id;
 
+        public static bool operator ==(RequestableDeviceBase self, ListenedDevice device)
+            => self.Is(device);
+
+        public static bool operator ==(ListenedDevice device, RequestableDeviceBase self)
+            => self.Is(device);
+
+        public static bool operator !=(ListenedDevice device, RequestableDeviceBase self)
+            => !self.Is(device);
+
+        public static bool operator !=(RequestableDeviceBase self, ListenedDevice device)
+            => !self.Is(device);
+
+        public override bool Equals(object obj) => base.Equals(obj);
+
+        public override int GetHashCode() => base.GetHashCode();
+
     }
 }

@@ -16,8 +16,8 @@ namespace SmartHome.ServerServices.Automation
             if (Devices.ClosetMotionSensor.Is(device))
             {
                 var motion = await Devices.ClosetMotionSensor.GetAsync();
-                await LogListenedAsync(device, nameof(Devices.ClosetMotionSensor), motion.IsMotionDetected ? "motion" : "no-motion");
-
+                await LogListenedAsync(device, motion.IsMotionDetected ? "motion" : "no-motion");
+                
                 if (motion.IsMotionDetected)
                     await _smartContext.Devices.ClosetLight.TriggerSwitchAsync(true);
             }
@@ -40,7 +40,7 @@ namespace SmartHome.ServerServices.Automation
         {
             if (Devices.HueClosetButton.Is(device))
             {
-                await LogListenedAsync(device, nameof(Devices.HueClosetButton), "pressed");
+                await LogListenedAsync(device, "pressed");
                 var light = await Devices.ClosetLight.GetAsync();
                 await Devices.ClosetLight.TriggerSwitchAsync(!light.IsSwitchedOn);
             }

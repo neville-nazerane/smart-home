@@ -20,14 +20,14 @@ namespace SmartHome.ServerServices.Automation
             _smartContext = smartContext;
         }
 
-        public async Task LogListenedAsync(ListenedDevice device, string name, string state)
+        public async Task LogListenedAsync(ListenedDevice device, string state)
         {
             await _dbContext.DeviceLogs.AddAsync(new()
             {
                 DeviceId = device.Id,
                 DeviceType = device.DeviceType,
                 LoggedOn = DateTime.UtcNow,
-                Name = name,
+                Name = SmartDevices.GetListeningDeviceName(device),
                 State = state
             });
             await _dbContext.SaveChangesAsync();
