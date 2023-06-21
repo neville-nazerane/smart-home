@@ -17,6 +17,7 @@ namespace SmartHome.ServerServices.Automation
             // closet sensor turn on closet
             await VerifyClosetMotionSensorAsync(device);
             await VerifyClosetButtonAsync(device);
+            await VerifyBedroomControlAsync(device);
 
         }
 

@@ -31,8 +31,7 @@ namespace SmartHome.BackgroundProcessor.Services
 
         async Task TryRunAutomationAsync(ListenedDevice device, CancellationToken cancellationToken = default)
         {
-            string name = SmartDevices.GetListeningDeviceName(device.Id, device.DeviceType);
-            if (name is not null)
+            if (SmartDevices.GetListeningDeviceName(device) is not null)
             {
                 await using var scope = _serviceProvider.CreateAsyncScope();
                 var service = scope.ServiceProvider.GetService<AutomationService>();

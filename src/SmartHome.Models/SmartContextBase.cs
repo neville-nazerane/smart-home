@@ -139,7 +139,6 @@ namespace SmartHome.Models
         public class BondCeilingFanRequestModel : BondRequestBase
         {
 
-
             public BondCeilingFanRequestModel(SmartContextBase source, string id) : base(source, id, DeviceType.BondFan)
             {
             }
