@@ -13,6 +13,7 @@ namespace SmartHome.ServerServices.Automation
         private readonly SmartContext _smartContext;
 
         private SmartDevices Devices => _smartContext?.Devices;
+        private IScenesService Scenes => _smartContext?.Scenes;
 
         public AutomationService(AppDbContext dbContext, SmartContext smartContext)
         {

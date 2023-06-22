@@ -56,7 +56,7 @@ namespace SmartHome.BackgroundProcessor.Services
 
         public async Task ProcessQueueAsync(CancellationToken cancellationToken = default)
         {
-            await foreach (var response in _queue.KeepDequeuingAsync(1000, cancellationToken))
+            await foreach (var response in _queue.KeepDequeuingAsync(100, cancellationToken))
             {
                 try
                 {
