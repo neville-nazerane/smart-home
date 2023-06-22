@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace SmartHome.ServerServices
 {
-    public class ScenesService
+    public class ScenesService : IScenesService
     {
 
         private readonly IServiceProvider _serviceProvider;
         private readonly AppDbContext _dbContext;
         private readonly ISignalRPusher _signalRPusher;
+
         SmartContext context;
         SmartContext Context => context ??= _serviceProvider.GetService<SmartContext>();
 
@@ -29,7 +30,7 @@ namespace SmartHome.ServerServices
             _signalRPusher = signalRPusher;
         }
 
-        public Task<bool> IsEnabledAsync(SceneName sceneName, CancellationToken cancellationToken = default) 
+        public Task<bool> IsEnabledAsync(SceneName sceneName, CancellationToken cancellationToken = default)
             => _dbContext.Scenes
                          .AsNoTracking()
                          .Where(s => s.Name == sceneName.ToString())
@@ -38,12 +39,15 @@ namespace SmartHome.ServerServices
 
         public async Task SetSceneEnabled(SceneName sceneName, bool isEnabled, CancellationToken cancellationToken = default)
         {
-            var scene =  await _dbContext.Scenes
+            var scene = await _dbContext.Scenes
                                          .SingleAsync(s => s.Name == sceneName.ToString(), cancellationToken);
             scene.Enabled = isEnabled;
             await _dbContext.SaveChangesAsync(cancellationToken);
-            
+
             await _signalRPusher.NotifySceneChangeAsync(scene, cancellationToken);
         }
+
+        public async Task<IEnumerable<Scene>> GetAllAsync(CancellationToken cancellationToken = default)
+            => await _dbContext.Scenes.ToListAsync(cancellationToken);
     }
 }

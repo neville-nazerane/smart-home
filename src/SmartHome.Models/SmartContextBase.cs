@@ -1,6 +1,4 @@
-﻿using SmartHome.Models.ClientContracts;
-using SmartHome.ServerServices.Clients;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,6 +7,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using HueModels = SmartHome.Models.PhilipsHue;
 using BondModels = SmartHome.Models.Bond;
+using SmartHome.Models.Contracts;
+using SmartHome.ServerServices;
 
 namespace SmartHome.Models
 {
@@ -18,7 +18,10 @@ namespace SmartHome.Models
         public SmartDevices Devices { get; }
 
         protected abstract IPhilipsHueClient PhilipsHueClient { get; }
+
         protected abstract IBondClient BondClient { get; }
+
+        public abstract IScenesService Scenes { get; }
 
         public SmartContextBase()
         {
@@ -46,7 +49,6 @@ namespace SmartHome.Models
                                                                           int pageSize,
                                                                           CancellationToken cancellationToken = default);
 
-        public abstract Task<IEnumerable<Scene>> GetScenesAsync(CancellationToken cancellationToken = default);
 
         #region Philips Hue
 

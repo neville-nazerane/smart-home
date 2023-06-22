@@ -13,6 +13,7 @@ using SmartHome.BackgroundProcessor.Exceptions;
 using System.Collections.Concurrent;
 using SmartHome.Models;
 using SmartHome.BackgroundProcessor.Util;
+using SmartHome.Models.Contracts;
 
 namespace SmartHome.BackgroundProcessor.Services
 {

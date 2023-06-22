@@ -1,5 +1,5 @@
 ﻿using SmartHome.Models;
-using SmartHome.Models.ClientContracts;
+using SmartHome.Models.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
