@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SmartHome.Models.ClientContracts;
+using SmartHome.Models.Contracts;
 using SmartHome.ServerServices.Automation;
 using SmartHome.ServerServices.Clients;
 using System;
@@ -26,7 +26,7 @@ namespace SmartHome.ServerServices
             services.AddHttpClient<IBondClient, BondClient>(c => BondClient.SetupClient(c, bondConfig["baseUrl"], bondConfig["token"]));
 
             services.AddScoped<SmartContext>()
-                    .AddScoped<ScenesService>()
+                    .AddScoped<IScenesService, ScenesService>()
                     .AddTransient<AutomationService>();
 
             var dbFile = $"{configuration["global:dataPath"]}/data.db";

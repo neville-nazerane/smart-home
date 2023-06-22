@@ -1,4 +1,4 @@
-﻿using SmartHome.Models.ClientContracts;
+﻿using SmartHome.Models.Contracts;
 using SmartHome.Models.PhilipsHue;
 using System;
 using System.Collections.Generic;

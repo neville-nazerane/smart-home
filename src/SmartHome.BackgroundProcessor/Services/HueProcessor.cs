@@ -1,6 +1,6 @@
 ﻿using SmartHome.BackgroundProcessor.Util;
 using SmartHome.Models;
-using SmartHome.Models.ClientContracts;
+using SmartHome.Models.Contracts;
 using SmartHome.Models.PhilipsHue;
 using SmartHome.ServerServices.Clients;
 using System;

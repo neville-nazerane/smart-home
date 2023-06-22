@@ -1,6 +1,6 @@
 ﻿using SmartHome.Models.Bond;
 
-namespace SmartHome.ServerServices.Clients
+namespace SmartHome.Models.Contracts
 {
     public interface IBondClient
     {

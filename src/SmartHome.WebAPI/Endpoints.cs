@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SmartHome.Models;
 using SmartHome.Models.Bond;
-using SmartHome.Models.ClientContracts;
+using SmartHome.Models.Contracts;
 using SmartHome.ServerServices;
-using SmartHome.ServerServices.Clients;
 using SmartHome.WebAPI.Hubs;
 using System.Reflection.Metadata;
 using HueModels = SmartHome.Models.PhilipsHue;
@@ -20,7 +19,10 @@ namespace SmartHome.WebAPI
             app.MapPost("/notifySceneChange", NotifySceneChangeAsync);
 
             app.MapGet("/listeningLogs", GetListeningLogsAsync);
+
             app.MapGet("/scenes", GetScenesAsync);
+            app.MapGet("/scene/{sceneName}", IsEnabledAsync);
+            app.MapPut("/scene/{sceneName}/{isEnabled}", SetSceneEnabled);
 
             app.MapGet("/philipsHue/lights", GetAllHueLightsAsync);
             app.MapGet("/philipsHue/motions", GetAllHueMotionAsync);
@@ -54,8 +56,25 @@ namespace SmartHome.WebAPI
                                                           CancellationToken cancellationToken = default)
             => context.GetListeningLogsAsync(pageNumber, pageSize, cancellationToken);
 
-        static Task<IEnumerable<Scene>> GetScenesAsync(SmartContext context, CancellationToken cancellationToken = default)
-            => context.GetScenesAsync(cancellationToken);
+
+        #region scenes
+
+        static Task<IEnumerable<Scene>> GetScenesAsync(IScenesService service, CancellationToken cancellationToken = default)
+            => service.GetAllAsync(cancellationToken);
+
+
+        static Task<bool> IsEnabledAsync(IScenesService service,
+                                         SceneName sceneName,
+                                         CancellationToken cancellationToken = default)
+            => service.IsEnabledAsync(sceneName, cancellationToken);
+
+        static Task SetSceneEnabled(IScenesService service,
+                                    SceneName sceneName,
+                                    bool isEnabled,
+                                    CancellationToken cancellationToken = default)
+            => service.SetSceneEnabled(sceneName, isEnabled, cancellationToken);
+
+        #endregion
 
         #region Philips Hue
 

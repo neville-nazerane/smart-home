@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static SmartHome.Models.SmartContextBase;
 
-namespace SmartHome.Models.ClientContracts
+namespace SmartHome.Models.Contracts
 {
     public interface IPhilipsHueClient
     {

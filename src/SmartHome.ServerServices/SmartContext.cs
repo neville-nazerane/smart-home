@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartHome.Models;
-using SmartHome.Models.ClientContracts;
+using SmartHome.Models.Contracts;
 using SmartHome.Models.PhilipsHue;
-using SmartHome.ServerServices.Clients;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,12 +19,16 @@ namespace SmartHome.ServerServices
 
         protected override IBondClient BondClient { get; }
 
+        public override IScenesService Scenes { get; }
+
         public SmartContext(IPhilipsHueClient philipsHueClient,
                             IBondClient bondClient,
+                            IScenesService scenesService,
                             AppDbContext dbContext) : base()
         {
             PhilipsHueClient = philipsHueClient;
             BondClient = bondClient;
+            Scenes = scenesService;
             _dbContext = dbContext;
         }
 
@@ -39,8 +42,7 @@ namespace SmartHome.ServerServices
                                 .Take(pageSize)
                                 .ToListAsync(cancellationToken);
 
-        public override async Task<IEnumerable<Scene>> GetScenesAsync(CancellationToken cancellationToken = default)
-            => await _dbContext.Scenes.ToListAsync(cancellationToken);
+
 
     }
 }

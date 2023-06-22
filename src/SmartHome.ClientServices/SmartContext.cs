@@ -1,5 +1,4 @@
 ﻿using SmartHome.Models;
-using SmartHome.Models.ClientContracts;
 using HueModels = SmartHome.Models.PhilipsHue;
 using BondModels = SmartHome.Models.Bond;
 using System;
@@ -8,11 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
-using SmartHome.ServerServices.Clients;
 using System.Diagnostics;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using System.Runtime.CompilerServices;
+using SmartHome.Models.Contracts;
+using SmartHome.ServerServices;
 
 namespace SmartHome.ClientServices
 {
@@ -23,6 +23,7 @@ namespace SmartHome.ClientServices
 
         protected override IPhilipsHueClient PhilipsHueClient => _allClients;
         protected override IBondClient BondClient => _allClients;
+        public override IScenesService Scenes => _allClients;
 
         public SmartContext(HttpClient httpClient) : base()
         {
@@ -35,10 +36,8 @@ namespace SmartHome.ClientServices
                                                                                 CancellationToken cancellationToken = default)
             => _httpClient.GetFromJsonAsync<IEnumerable<DeviceLog>>($"listeningLogs?pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken);
 
-        public override Task<IEnumerable<Scene>> GetScenesAsync(CancellationToken cancellationToken = default)
-            => _httpClient.GetFromJsonAsync<IEnumerable<Scene>>("scenes", cancellationToken);
 
-        class AllCLients : IPhilipsHueClient, IBondClient
+        class AllCLients : IPhilipsHueClient, IBondClient, IScenesService
         {
             private readonly HttpClient _httpClient;
 
@@ -98,6 +97,19 @@ namespace SmartHome.ClientServices
 
             public Task<HueModels.ButtonModel> GetButtonAsync(string id, CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<HueModels.ButtonModel>($"philipsHue/button/{id}", cancellationToken);
+
+            public Task<IEnumerable<Scene>> GetAllAsync(CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<IEnumerable<Scene>>("scenes", cancellationToken);
+
+            public Task<bool> IsEnabledAsync(SceneName sceneName, CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<bool>($"scene/{sceneName}", cancellationToken);
+
+            public async Task SetSceneEnabled(SceneName sceneName, bool isEnabled, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"scene/{sceneName}/{isEnabled}", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
 
         }
 

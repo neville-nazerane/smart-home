@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Configuration;
 using SmartHome.Models;
-using SmartHome.Models.ClientContracts;
 using SmartHome.ServerServices;
 using SmartHome.ServerServices.Clients;
 using SmartHome.WebAPI;

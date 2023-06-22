@@ -1,5 +1,6 @@
 ﻿using SmartHome.Models;
 using SmartHome.Models.Bond;
+using SmartHome.Models.Contracts;
 using SmartHome.ServerServices.InternalJsonConverters;
 using System;
 using System.Collections.Generic;
