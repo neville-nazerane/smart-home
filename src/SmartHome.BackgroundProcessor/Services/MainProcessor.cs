@@ -1,4 +1,5 @@
 ﻿using SmartHome.Models;
+using SmartHome.ServerServices;
 using SmartHome.ServerServices.Automation;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,9 @@ namespace SmartHome.BackgroundProcessor.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<MainProcessor> _logger;
-        private readonly SignalRPusher _apiConsumer;
+        private readonly ISignalRPusher _apiConsumer;
 
-        public MainProcessor(IServiceProvider serviceProvider, ILogger<MainProcessor> logger, SignalRPusher apiConsumer)
+        public MainProcessor(IServiceProvider serviceProvider, ILogger<MainProcessor> logger, ISignalRPusher apiConsumer)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
