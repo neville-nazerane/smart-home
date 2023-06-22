@@ -29,14 +29,18 @@ namespace SmartHome.ServerServices
             _dbContext = dbContext;
         }
 
+
         public override async Task<IEnumerable<DeviceLog>> GetListeningLogsAsync(int pageNumber,
                                                                              int pageSize,
                                                                              CancellationToken cancellationToken = default)
             => await _dbContext.DeviceLogs
+                                .OrderByDescending(l => l.LoggedOn)
                                 .Skip((pageNumber - 1) * pageSize)
                                 .Take(pageSize)
-                                .OrderByDescending(l => l.LoggedOn)
                                 .ToListAsync(cancellationToken);
+
+        public override async Task<IEnumerable<Scene>> GetScenesAsync(CancellationToken cancellationToken = default)
+            => await _dbContext.Scenes.ToListAsync(cancellationToken);
 
     }
 }

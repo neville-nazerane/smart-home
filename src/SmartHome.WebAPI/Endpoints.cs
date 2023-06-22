@@ -17,7 +17,9 @@ namespace SmartHome.WebAPI
         public static void MapAllEndpoints(this WebApplication app)
         {
             app.MapPost("/notifyDeviceChange", NotifyDeviceChangeAsync);
+
             app.MapGet("/listeningLogs", GetListeningLogsAsync);
+            app.MapGet("/scenes", GetScenesAsync);
 
             app.MapGet("/philipsHue/lights", GetAllHueLightsAsync);
             app.MapGet("/philipsHue/motions", GetAllHueMotionAsync);
@@ -45,6 +47,9 @@ namespace SmartHome.WebAPI
                                                           int pageSize,
                                                           CancellationToken cancellationToken = default)
             => context.GetListeningLogsAsync(pageNumber, pageSize, cancellationToken);
+
+        static Task<IEnumerable<Scene>> GetScenesAsync(SmartContext context, CancellationToken cancellationToken = default)
+            => context.GetScenesAsync(cancellationToken);
 
         #region Philips Hue
 
