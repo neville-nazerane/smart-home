@@ -12,7 +12,6 @@ namespace SmartHome.Website.Pages
         public SmartContext SmartContext { get; set; }
 
 
-        
         protected override async Task OnInitializedAsync()
         {
             scenes = await SmartContext.GetScenesAsync();

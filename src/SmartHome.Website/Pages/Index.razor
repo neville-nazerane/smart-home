@@ -1,8 +1,12 @@
 ﻿@page "/"
 
-@if (devices is not null)
+@if (devices is null)
 {
-    @foreach (var deviceGrp in devices.Chunk(3))
+    <Loader />
+}
+else
+{
+    foreach (var deviceGrp in devices.Chunk(3))
     {
         <div class="row mt-4">
             @foreach (var device in deviceGrp)

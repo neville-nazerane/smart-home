@@ -1,2 +1,19 @@
 ﻿@page "/scenes"
 
+@if (scenes is null)
+{
+    <Loader />
+}
+else
+    {
+        
+    <ul class="list-group">
+        @foreach (var scene in scenes)
+        {
+            var cssClass = "list-group-item text-center" + (scene.Enabled ? " active" : "");
+            <li class="@cssClass">@scene.Name</li>
+        }
+    </ul>
+}
+
+

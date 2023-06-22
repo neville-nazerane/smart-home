@@ -9,7 +9,10 @@ namespace SmartHome.Models
     public enum SceneName
     {
 
-
+        GoodNight, 
+        Snooze, 
+        Bedroom, 
+        FrontRoom
 
     }
 }
