@@ -54,8 +54,9 @@ namespace SmartHome.Models
 
         public HueMotionRequestModel Request(HueModels.MotionModel model) => new(this, model.Id);
 
-        #endregion
+        public HueButtonRequestModel Request(HueModels.ButtonModel model) => new(this, model.Id);
 
+        #endregion
 
         #region Bond
 
