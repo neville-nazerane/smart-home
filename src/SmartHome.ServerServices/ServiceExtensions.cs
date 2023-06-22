@@ -24,7 +24,7 @@ namespace SmartHome.ServerServices
             var bondConfig = configuration.GetSection("bond");
             services.AddHttpClient<IBondClient, BondClient>(c => BondClient.SetupClient(c, bondConfig["baseUrl"], bondConfig["token"]));
 
-            services.AddTransient<SmartContext>()
+            services.AddScoped<SmartContext>()
                     .AddTransient<AutomationService>();
 
             var dbFile = $"{configuration["global:dataPath"]}/data.db";
