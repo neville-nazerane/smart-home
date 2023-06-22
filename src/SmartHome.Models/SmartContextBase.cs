@@ -65,77 +65,104 @@ namespace SmartHome.Models
 
         #endregion
 
-        #region Request Models
+        #region Hue Request Models
 
-        public class HueMotionRequestModel : RequestableDeviceBase
+        public abstract class HueRequestBase : RequestableDeviceBase
+        {
+            private readonly SmartContextBase _context;
+            protected IPhilipsHueClient Client => _context.PhilipsHueClient;
+
+            public HueRequestBase(SmartContextBase context, string id, DeviceType deviceType) : base(id, deviceType)
+            {
+                _context = context;
+            }
+        }
+
+        public class HueMotionRequestModel : HueRequestBase
         {
 
-            private readonly IPhilipsHueClient _client;
-
-            public HueMotionRequestModel(SmartContextBase context, string id) : base(id, DeviceType.HueMotion)
+            public HueMotionRequestModel(SmartContextBase context, string id) : base(context, id, DeviceType.HueMotion)
             {
-                _client = context?.PhilipsHueClient;
             }
 
             public Task<HueModels.MotionModel> GetAsync(CancellationToken cancellationToken = default)
-                => _client.GetMotionSensorAsync(Id, cancellationToken);
+                => Client.GetMotionSensorAsync(Id, cancellationToken);
 
         }
 
-        public class HueLightRequestModel : RequestableDeviceBase
+        public class HueLightRequestModel : HueRequestBase
         {
-            private readonly IPhilipsHueClient _client;
-
-            public HueLightRequestModel(SmartContextBase source, string id) : base(id, DeviceType.HueLight)
+            public HueLightRequestModel(SmartContextBase context, string id) : base(context, id, DeviceType.HueLight)
             {
-                _client = source?.PhilipsHueClient;
             }
 
             public Task TriggerSwitchAsync(bool switchOn, CancellationToken cancellationToken = default)
-                => _client.SwitchLightAsync(Id, switchOn, cancellationToken);
+                => Client.SwitchLightAsync(Id, switchOn, cancellationToken);
 
             public Task SetColorAsync(string colorHex, CancellationToken cancellationToken = default)
-                => _client.SetLightColorAsync(Id, colorHex, cancellationToken);
+                => Client.SetLightColorAsync(Id, colorHex, cancellationToken);
 
             public Task<HueModels.LightModel> GetAsync(CancellationToken cancellationToken = default)
-               => _client.GetLightAsync(Id, cancellationToken);
-
-
+               => Client.GetLightAsync(Id, cancellationToken);
 
         }
 
-        public class BondCeilingFanRequestModel : RequestableDeviceBase
+        public class HueButtonRequestModel : HueRequestBase
         {
-            private readonly IBondClient _client;
 
-
-            public BondCeilingFanRequestModel(SmartContextBase source, string id) : base(id, DeviceType.BondFan)
+            public HueButtonRequestModel(SmartContextBase context, string id) : base(context, id, DeviceType.HueButton)
             {
-                _client = source?.BondClient;
+            }
+
+
+            public Task<HueModels.ButtonModel> GetAsync(CancellationToken cancellationToken = default)
+               => Client.GetButtonAsync(Id, cancellationToken);
+        }
+
+        #endregion
+
+
+        #region Bond Request Models
+
+
+        public abstract class BondRequestBase : RequestableDeviceBase
+        {
+            private readonly SmartContextBase _context;
+            protected IBondClient Client => _context.BondClient;
+
+            public BondRequestBase(SmartContextBase context, string id, DeviceType deviceType) : base(id, deviceType)
+            {
+                _context = context;
+            }
+        }
+
+        public class BondCeilingFanRequestModel : BondRequestBase
+        {
+
+            public BondCeilingFanRequestModel(SmartContextBase source, string id) : base(source, id, DeviceType.BondFan)
+            {
             }
 
             public Task<BondModels.CeilingFanModel> GetAsync(CancellationToken cancellationToken = default)
-                => _client.GetCeilingFanAsync(Id, cancellationToken);
+                => Client.GetCeilingFanAsync(Id, cancellationToken);
 
             public Task DecreaseAsync(CancellationToken cancellationToken = default)
-                => _client.DecreaseFanAsync(Id, cancellationToken);
+                => Client.DecreaseFanAsync(Id, cancellationToken);
 
             public Task IncreaseAsync(CancellationToken cancellationToken = default)
-                => _client.IncreaseFanAsync(Id, cancellationToken);
+                => Client.IncreaseFanAsync(Id, cancellationToken);
 
         }
 
-        public class BondRollerRequestModel : RequestableDeviceBase
+        public class BondRollerRequestModel : BondRequestBase
         {
-            private readonly IBondClient _client;
 
-            public BondRollerRequestModel(SmartContextBase source, string id) : base(id, DeviceType.BondRoller)
+            public BondRollerRequestModel(SmartContextBase source, string id) : base(source, id, DeviceType.BondRoller)
             {
-                _client = source?.BondClient;
             }
 
             public Task<BondModels.RollerModel> GetAsync(CancellationToken cancellationToken = default)
-                => _client.GetRollerAsync(Id, cancellationToken);
+                => Client.GetRollerAsync(Id, cancellationToken);
 
         }
 

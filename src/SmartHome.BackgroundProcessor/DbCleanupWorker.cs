@@ -27,7 +27,6 @@ namespace SmartHome.BackgroundProcessor
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
 
                 try
                 {
@@ -38,14 +37,14 @@ namespace SmartHome.BackgroundProcessor
                     var timeBreak = DateTime.UtcNow.AddHours(-1);
 
                     await db.DeviceLogs
-                                   .Where(l => l.OccurredOn < timeBreak)
+                                   .Where(l => l.LoggedOn < timeBreak)
                                    .ExecuteDeleteAsync(cancellationToken);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Failed hourly db process");
                 }
-
+                await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using SmartHome.Models;
 using SmartHome.Models.ClientContracts;
 using HueModels = SmartHome.Models.PhilipsHue;
+using BondModels = SmartHome.Models.Bond;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using SmartHome.ServerServices.Clients;
-using SmartHome.Models.Bond;
 using System.Diagnostics;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -62,23 +62,29 @@ namespace SmartHome.ClientServices
                 res.EnsureSuccessStatusCode();
             }
 
-            public Task<IEnumerable<CeilingFanModel>> GetCeilingFansAsync(CancellationToken cancellationToken = default)
-                => _httpClient.GetFromJsonAsync<IEnumerable<CeilingFanModel>>("bond/ceilingFans", cancellationToken);
+            public Task<IEnumerable<BondModels.CeilingFanModel>> GetCeilingFansAsync(CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<IEnumerable<BondModels.CeilingFanModel>>("bond/ceilingFans", cancellationToken);
 
-            public Task<IEnumerable<RollerModel>> GetRollersAsync(CancellationToken cancellationToken = default)
-                => _httpClient.GetFromJsonAsync<IEnumerable<RollerModel>>("bond/rollers", cancellationToken);
+            public Task<IEnumerable<BondModels.RollerModel>> GetRollersAsync(CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<IEnumerable<BondModels.RollerModel>>("bond/rollers", cancellationToken);
 
-            public Task<CeilingFanModel> GetCeilingFanAsync(string id, CancellationToken cancellationToken = default)
-                => _httpClient.GetFromJsonAsync<CeilingFanModel>($"bond/ceilingFan/{id}", cancellationToken);
+            public Task<BondModels.CeilingFanModel> GetCeilingFanAsync(string id, CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<BondModels.CeilingFanModel>($"bond/ceilingFan/{id}", cancellationToken);
 
-            public Task<RollerModel> GetRollerAsync(string id, CancellationToken cancellationToken = default)
-                => _httpClient.GetFromJsonAsync<RollerModel>($"bond/roller/{id}", cancellationToken);
+            public Task<BondModels.RollerModel> GetRollerAsync(string id, CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<BondModels.RollerModel>($"bond/roller/{id}", cancellationToken);
 
-            public Task DecreaseFanAsync(string id, CancellationToken cancellationToken = default)
-                => _httpClient.PutAsync($"bond/ceilingFan/{id}/decrease", null, cancellationToken);
+            public async Task DecreaseFanAsync(string id, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/decrease", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
 
-            public Task IncreaseFanAsync(string id, CancellationToken cancellationToken = default)
-                => _httpClient.PutAsync($"bond/ceilingFan/{id}/increase", null, cancellationToken);
+            public async Task IncreaseFanAsync(string id, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/increase", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
 
             public async Task SetLightColorAsync(string id, string colorHex, CancellationToken cancellationToken = default)
             {
@@ -86,6 +92,10 @@ namespace SmartHome.ClientServices
                 using var res = await _httpClient.PutAsync($"philipsHue/color/{id}/{colorHex}", null, cancellationToken);
                 res.EnsureSuccessStatusCode();
             }
+
+            public Task<HueModels.ButtonModel> GetButtonAsync(string id, CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<HueModels.ButtonModel>($"philipsHue/button/{id}", cancellationToken);
+
         }
 
 

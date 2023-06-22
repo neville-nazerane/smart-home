@@ -17,14 +17,15 @@ namespace SmartHome.ServerServices.Clients
     {
         private readonly HttpClient _httpClient;
 
+
         public PhilipsHueClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
         public static HttpClient SetupClient(HttpClient client,
-                                  string baseUrl,
-                                  string applicationKey)
+                                             string baseUrl,
+                                             string applicationKey)
         {
             client.BaseAddress = new Uri(baseUrl);
             client.Timeout = Timeout.InfiniteTimeSpan;
@@ -70,12 +71,16 @@ namespace SmartHome.ServerServices.Clients
             return res.Data.SingleOrDefault().ToModel();
         }
 
-
         #endregion
 
+        public async Task<ButtonModel> GetButtonAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var res = await _httpClient.GetFromJsonAsync<HueData<ButtonResponse>>($"clip/v2/resource/button/{id}", cancellationToken);
+            return res.Data.SingleOrDefault().ToModel();
+        }
 
         #region Motion Sensor
-        
+
         public async Task<IEnumerable<MotionModel>> GetAllMotionSensorsAsync(CancellationToken cancellationToken = default)
         {
             var res = await _httpClient.GetFromJsonAsync<HueData<MotionResponse>>("clip/v2/resource/motion", cancellationToken);
@@ -263,6 +268,45 @@ namespace SmartHome.ServerServices.Clients
                 };
         }
 
+        class ButtonResponse
+        {
+
+            [JsonPropertyName("id")]
+            public string Id { get; set; }
+
+            [JsonPropertyName("button")]
+            public ButtonButton Button { get; set; }
+
+            public ButtonModel ToModel()
+                => new()
+                {
+                    Id = Id,
+                    LastEvent = Button?.LastEvent,
+                    LastEventExecutedOn = Button?.ButtonReport?.Updated
+                };
+
+        }
+
+        class ButtonButton
+        {
+            
+            [JsonPropertyName("last_event")]
+            public string LastEvent { get; set; }
+
+            [JsonPropertyName("button_report")]
+            public ButtonReport ButtonReport { get; set; }
+
+        }
+
+
+        class ButtonReport
+        {
+
+            [JsonPropertyName("updated")]
+            public DateTime Updated { get; set; }
+
+        }
+
         class Metadata
         {
             [JsonPropertyName("name")]
@@ -289,7 +333,8 @@ namespace SmartHome.ServerServices.Clients
                 => new()
                 {
                     Id = Id,
-                    IsMotionDetected = Motion.Motion
+                    IsMotionDetected = Motion.Motion,
+                    LastChanged = Motion.MotionReport.Changed
                 };
 
         }
@@ -299,6 +344,18 @@ namespace SmartHome.ServerServices.Clients
 
             [JsonPropertyName("motion")]
             public bool Motion { get; set; }
+
+            [JsonPropertyName("motion_report")]
+            public MotionReport MotionReport { get; set; }
+
+        }
+
+        class MotionReport
+        {
+            
+            [JsonPropertyName("changed")]
+            public DateTime Changed { get; set; }
+
         }
 
         class ColorModel

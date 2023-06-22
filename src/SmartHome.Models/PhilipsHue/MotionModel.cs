@@ -10,6 +10,7 @@ namespace SmartHome.Models.PhilipsHue
 
     {
         public bool IsMotionDetected { get; set; }
+        public DateTime LastChanged { get; set; }
 
         public MotionModel() : base(DeviceType.HueMotion)
         {

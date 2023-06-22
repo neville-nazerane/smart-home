@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartHome.Models.ClientContracts;
+using SmartHome.ServerServices.Automation;
 using SmartHome.ServerServices.Clients;
 using System;
 using System.Collections.Generic;

@@ -16,7 +16,10 @@ namespace SmartHome.Models
         public string DeviceId { get; set; }
 
         [Required]
-        public DateTime? OccurredOn { get; set; }
+        public DateTime? LoggedOn { get; set; }
+
+        [MaxLength(20)]
+        public string State { get; set; }
 
         [Required]
         public DeviceType? DeviceType { get; set; }

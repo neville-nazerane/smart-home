@@ -92,6 +92,10 @@ namespace SmartHome.BackgroundProcessor.Services
                     case "motion":
                         model.DeviceType = DeviceType.HueMotion;
                         break;
+                    case "button":
+                        if (e.Button.LastEvent == "initial_press")
+                            model.DeviceType = DeviceType.HueButton;
+                        break;
                 }
 
                 if (model.DeviceType != DeviceType.None)
