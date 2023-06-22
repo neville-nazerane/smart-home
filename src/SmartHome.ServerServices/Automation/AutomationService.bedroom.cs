@@ -17,7 +17,8 @@ namespace SmartHome.ServerServices.Automation
                 await Devices.BedroomCeilingFan.IncreaseAsync();
             else if (device == control.DecreaseButton)
                 await Devices.BedroomCeilingFan.DecreaseAsync();
-
+            else if (device == control.OnOffButton)
+                await Scenes.SwitchAsync(SceneName.Bedroom);
         }
 
     }

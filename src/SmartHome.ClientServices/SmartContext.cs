@@ -110,6 +110,11 @@ namespace SmartHome.ClientServices
                 res.EnsureSuccessStatusCode();
             }
 
+            public async Task SwitchAsync(SceneName sceneName, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"scene/{sceneName}/switch", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
 
         }
 

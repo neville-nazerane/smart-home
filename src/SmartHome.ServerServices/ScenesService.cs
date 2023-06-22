@@ -30,6 +30,13 @@ namespace SmartHome.ServerServices
             _signalRPusher = signalRPusher;
         }
 
+        public async Task SwitchAsync(SceneName sceneName, CancellationToken cancellationToken = default)
+        {
+            await SetSceneEnabledAsync(sceneName,
+                                       !await IsEnabledAsync(sceneName, cancellationToken),
+                                       cancellationToken);
+        }
+
         public Task<bool> IsEnabledAsync(SceneName sceneName, CancellationToken cancellationToken = default)
             => _dbContext.Scenes
                          .AsNoTracking()

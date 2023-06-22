@@ -9,7 +9,7 @@ namespace SmartHome.BackgroundProcessor.Util
 {
     public class BackgroundQueue<T>
     {
-        private readonly ConcurrentQueue<T> _queue;
+        private readonly Queue<T> _queue;
 
         public BackgroundQueue()
         {

@@ -22,6 +22,7 @@ namespace SmartHome.WebAPI
 
             app.MapGet("/scenes", GetScenesAsync);
             app.MapGet("/scene/{sceneName}", IsEnabledAsync);
+            app.MapPut("/scene/{sceneName}/switch", SwitchSceneAsync);
             app.MapPut("/scene/{sceneName}/{isEnabled}", SetSceneEnabled);
 
             app.MapGet("/philipsHue/lights", GetAllHueLightsAsync);
@@ -62,6 +63,8 @@ namespace SmartHome.WebAPI
         static Task<IEnumerable<Scene>> GetScenesAsync(IScenesService service, CancellationToken cancellationToken = default)
             => service.GetAllAsync(cancellationToken);
 
+        static Task SwitchSceneAsync(IScenesService service, SceneName sceneName, CancellationToken cancellationToken = default)
+            => service.SwitchAsync(sceneName, cancellationToken);
 
         static Task<bool> IsEnabledAsync(IScenesService service,
                                          SceneName sceneName,
