@@ -10,7 +10,7 @@ IHost host = Host.CreateDefaultBuilder(args)
                                     .AddTransient<HueProcessor>()
                                     .AddTransient<BondProcessor>()
                                     .AddTransient<MainProcessor>()
-                                    .AddHttpClient<ApiConsumer>(c =>
+                                    .AddHttpClient<ISignalRPusher, SignalRPusher>(c =>
                                     {
                                         c.BaseAddress = new(configs["smarthomeEndpoint"]);
                                     });

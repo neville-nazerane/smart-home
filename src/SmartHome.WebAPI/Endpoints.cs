@@ -17,6 +17,7 @@ namespace SmartHome.WebAPI
         public static void MapAllEndpoints(this WebApplication app)
         {
             app.MapPost("/notifyDeviceChange", NotifyDeviceChangeAsync);
+            app.MapPost("/notifySceneChange", NotifySceneChangeAsync);
 
             app.MapGet("/listeningLogs", GetListeningLogsAsync);
             app.MapGet("/scenes", GetScenesAsync);
@@ -37,10 +38,15 @@ namespace SmartHome.WebAPI
             app.MapGet("/bond/roller/{id}", GetRollerAsync);
         }
 
-        static Task NotifyDeviceChangeAsync(IHubContext<ChangeNotifyHub> hubContext,
+        static Task NotifyDeviceChangeAsync(ISignalRPusher signalRPusher,
                                             ListenedDevice model,
                                             CancellationToken cancellationToken = default)
-            => hubContext.Clients.All.SendAsync("deviceChanged", model, cancellationToken);
+            => signalRPusher.NotifyDeviceChangeAsync(model, cancellationToken);
+
+        static Task NotifySceneChangeAsync(ISignalRPusher signalRPusher,
+                                           Scene scene,
+                                           CancellationToken cancellationToken = default)
+            => signalRPusher.NotifySceneChangeAsync(scene, cancellationToken);
 
         static Task<IEnumerable<DeviceLog>> GetListeningLogsAsync(SmartContext context,
                                                           int pageNumber,

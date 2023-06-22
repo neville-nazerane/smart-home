@@ -25,10 +25,10 @@ namespace SmartHome.BackgroundProcessor.Services
         private readonly BackgroundQueue<UdpData> _queue;
         private readonly ILogger<BondProcessor> _logger;
         private readonly IBondClient _bondClient;
-        private readonly ApiConsumer _apiConsumer;
+        private readonly SignalRPusher _apiConsumer;
         private readonly MainProcessor _mainProcessor;
 
-        public BondProcessor(ILogger<BondProcessor> logger, IBondClient bondClient, ApiConsumer apiConsumer, MainProcessor mainProcessor)
+        public BondProcessor(ILogger<BondProcessor> logger, IBondClient bondClient, SignalRPusher apiConsumer, MainProcessor mainProcessor)
         {
             _logger = logger;
             _bondClient = bondClient;

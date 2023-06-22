@@ -12,9 +12,9 @@ namespace SmartHome.BackgroundProcessor.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<MainProcessor> _logger;
-        private readonly ApiConsumer _apiConsumer;
+        private readonly SignalRPusher _apiConsumer;
 
-        public MainProcessor(IServiceProvider serviceProvider, ILogger<MainProcessor> logger, ApiConsumer apiConsumer)
+        public MainProcessor(IServiceProvider serviceProvider, ILogger<MainProcessor> logger, SignalRPusher apiConsumer)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
