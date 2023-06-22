@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using SmartHome.Models;
 using SmartHome.BackgroundProcessor.Util;
 using SmartHome.Models.Contracts;
+using SmartHome.ServerServices;
 
 namespace SmartHome.BackgroundProcessor.Services
 {
@@ -26,10 +27,10 @@ namespace SmartHome.BackgroundProcessor.Services
         private readonly BackgroundQueue<UdpData> _queue;
         private readonly ILogger<BondProcessor> _logger;
         private readonly IBondClient _bondClient;
-        private readonly SignalRPusher _apiConsumer;
+        private readonly ISignalRPusher _apiConsumer;
         private readonly MainProcessor _mainProcessor;
 
-        public BondProcessor(ILogger<BondProcessor> logger, IBondClient bondClient, SignalRPusher apiConsumer, MainProcessor mainProcessor)
+        public BondProcessor(ILogger<BondProcessor> logger, IBondClient bondClient, ISignalRPusher apiConsumer, MainProcessor mainProcessor)
         {
             _logger = logger;
             _bondClient = bondClient;

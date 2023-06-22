@@ -2,6 +2,7 @@
 using SmartHome.Models;
 using SmartHome.Models.Contracts;
 using SmartHome.Models.PhilipsHue;
+using SmartHome.ServerServices;
 using SmartHome.ServerServices.Clients;
 using System;
 using System.Collections.Concurrent;
@@ -19,17 +20,14 @@ namespace SmartHome.BackgroundProcessor.Services
     {
         private readonly BackgroundQueue<HttpResponseMessage> _queue;
         private readonly ILogger<HueProcessor> _logger;
-        private readonly SignalRPusher _consumer;
         private readonly MainProcessor _mainProcessor;
         private readonly IPhilipsHueClient _philipsHueClient;
 
         public HueProcessor(ILogger<HueProcessor> logger, 
-                            SignalRPusher consumer,
                             MainProcessor mainProcessor,
                             IPhilipsHueClient philipsHueClient)
         {
             _logger = logger;
-            _consumer = consumer;
             _mainProcessor = mainProcessor;
             _philipsHueClient = philipsHueClient;
 
