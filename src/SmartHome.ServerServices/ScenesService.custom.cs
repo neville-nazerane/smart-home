@@ -34,16 +34,22 @@ namespace SmartHome.ServerServices
         {
             await SetSceneEnabledAsync(SceneName.GoodNight, false);
             await SetSceneEnabledAsync(SceneName.Snooze, false);
-            await SetSceneEnabledAsync(SceneName.Computer, true);
+            await SetSceneEnabledAsync(SceneName.Computer, state);
 
             if (state)
             {
-
             }
         }
 
         async Task ComputerTriggeredAsync(bool state)
         {
+            await Devices.ComputerLightPlug.TriggerSwitchAsync(state);
+
+            await Devices.ComputerRightIris.TriggerSwitchAsync(state);
+            await Devices.ComputerLeftIris.TriggerSwitchAsync(state);
+
+            await Devices.ComputerRightBar.TriggerSwitchAsync(state);
+            await Devices.ComputerLeftBar.TriggerSwitchAsync(state);
         }
 
     }

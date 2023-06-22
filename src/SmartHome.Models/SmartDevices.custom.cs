@@ -16,14 +16,31 @@ namespace SmartHome.Models
 
         public HueLightRequestModel ClosetLight { get; private set; }
 
-        public HueDimmerSwitch BedroomControl { get; set; }
+        public HueDimmerSwitch BedroomControl { get; private set; }
 
-        public BondCeilingFanRequestModel BedroomCeilingFan { get; set; }
+        public BondCeilingFanRequestModel BedroomCeilingFan { get; private set; }
 
+
+
+        public HueLightRequestModel ComputerLightPlug { get; private set; }
+
+        public HueLightRequestModel ComputerLeftBar { get; private set; }
+
+        public HueLightRequestModel ComputerRightBar { get; private set; }
+
+        public HueLightRequestModel ComputerLeftIris { get; private set; }
+
+        public HueLightRequestModel ComputerRightIris { get; private set; }
 
 
         partial void InitDevices()
         {
+            ComputerLightPlug = new(_context, "56177214-d8b7-4d05-bb27-119538131e2f");
+            ComputerLeftBar = new(_context, "6980ed6c-d4fc-4e52-a2d2-8ff72b7bbb5e");
+            ComputerRightBar = new(_context, "14d8fd8b-f454-4dca-87aa-d9164bbe310c");
+            ComputerLeftIris = new(_context, "d7bf7254-f2d8-4d6f-8b29-1e5cebe3949d");
+            ComputerRightIris = new(_context, "4bf45461-f3de-4476-ba58-d5c2c31d5816");
+
             ClosetMotionSensor = new(_context, "c8cc0112-0f5f-4559-9d7e-11a6e01f85b2");
             ClosetLight = new(_context, "d5a8f6ad-951a-4f48-a937-4cb436100409");
             HueClosetButton = new(_context, "419bf6d0-02d5-4932-bc03-b761c9ecbb71");
