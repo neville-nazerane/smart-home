@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SmartHome.ServerServices
 {
-    public class ScenesService : IScenesService
+    public partial class ScenesService : IScenesService
     {
 
         private readonly IServiceProvider _serviceProvider;
@@ -45,6 +45,7 @@ namespace SmartHome.ServerServices
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             await _signalRPusher.NotifySceneChangeAsync(scene, cancellationToken);
+            await OnSceneChangedAsync(sceneName);
         }
 
         public async Task<IEnumerable<Scene>> GetAllAsync(CancellationToken cancellationToken = default)

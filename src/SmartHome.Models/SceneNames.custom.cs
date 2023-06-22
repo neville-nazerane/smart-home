@@ -12,7 +12,7 @@ namespace SmartHome.Models
         GoodNight, 
         Snooze, 
         Bedroom, 
-        FrontRoom
-
+        FrontRoom,
+        Computer
     }
 }
