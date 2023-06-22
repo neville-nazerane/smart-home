@@ -72,7 +72,7 @@ namespace SmartHome.WebAPI
                                     SceneName sceneName,
                                     bool isEnabled,
                                     CancellationToken cancellationToken = default)
-            => service.SetSceneEnabled(sceneName, isEnabled, cancellationToken);
+            => service.SetSceneEnabledAsync(sceneName, isEnabled, cancellationToken);
 
         #endregion
 

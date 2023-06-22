@@ -104,7 +104,7 @@ namespace SmartHome.ClientServices
             public Task<bool> IsEnabledAsync(SceneName sceneName, CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<bool>($"scene/{sceneName}", cancellationToken);
 
-            public async Task SetSceneEnabled(SceneName sceneName, bool isEnabled, CancellationToken cancellationToken = default)
+            public async Task SetSceneEnabledAsync(SceneName sceneName, bool isEnabled, CancellationToken cancellationToken = default)
             {
                 using var res = await _httpClient.PutAsync($"scene/{sceneName}/{isEnabled}", null, cancellationToken);
                 res.EnsureSuccessStatusCode();

@@ -38,7 +38,7 @@ namespace SmartHome.ClientServices
                                                     Info = d
                                                 }));
 
-            _connection.On<Scene>("deviceChanged",
+            _connection.On<Scene>("sceneChanged",
                                             s => OnSceneChanged?.Invoke(this, new()
                                             {
                                                 Scene = s

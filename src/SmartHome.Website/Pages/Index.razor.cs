@@ -63,7 +63,7 @@ namespace SmartHome.Website.Pages
 
         void InnerDispose()
         {
-            ChangeListener.OnDeviceChanged += DeviceChanged;
+            ChangeListener.OnDeviceChanged -= DeviceChanged;
         }
 
     }

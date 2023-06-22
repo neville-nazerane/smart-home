@@ -11,7 +11,7 @@ else
         @foreach (var scene in scenes)
         {
             var cssClass = "list-group-item text-center" + (scene.Enabled ? " active" : "");
-            <li class="@cssClass">@scene.Name</li>
+            <li class="@cssClass" @onclick=@(() => SwitchSceneAsync(scene))>@scene.Name</li>
         }
     </ul>
 }
