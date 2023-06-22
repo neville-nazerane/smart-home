@@ -5,11 +5,13 @@ using SmartHome.ServerServices;
 using SmartHome.ServerServices.Clients;
 using SmartHome.WebAPI;
 using SmartHome.WebAPI.Hubs;
+using SmartHome.WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var services = builder.Services;
 services.AddAllServer(configuration)
+        .AddTransient<ISignalRPusher, SignalRPusher>()
         .AddCors()
         .AddSignalR();
 

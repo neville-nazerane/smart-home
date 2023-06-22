@@ -19,12 +19,12 @@ namespace SmartHome.BackgroundProcessor.Services
     {
         private readonly BackgroundQueue<HttpResponseMessage> _queue;
         private readonly ILogger<HueProcessor> _logger;
-        private readonly ApiConsumer _consumer;
+        private readonly SignalRPusher _consumer;
         private readonly MainProcessor _mainProcessor;
         private readonly IPhilipsHueClient _philipsHueClient;
 
         public HueProcessor(ILogger<HueProcessor> logger, 
-                            ApiConsumer consumer,
+                            SignalRPusher consumer,
                             MainProcessor mainProcessor,
                             IPhilipsHueClient philipsHueClient)
         {

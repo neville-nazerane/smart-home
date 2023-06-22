@@ -14,6 +14,7 @@ namespace SmartHome.ClientServices
         private readonly HubConnection _connection;
 
         public event EventHandler<DeviceChangedArgs> OnDeviceChanged;
+        public event EventHandler<SceneChangedArgs> OnSceneChanged;
 
         public ChangeListener(string baseUrl)
         {
@@ -36,11 +37,23 @@ namespace SmartHome.ClientServices
                                                 {
                                                     Info = d
                                                 }));
+
+            _connection.On<Scene>("deviceChanged",
+                                            s => OnSceneChanged?.Invoke(this, new()
+                                            {
+                                                Scene = s
+                                            }));
+
         }
 
         public class DeviceChangedArgs : EventArgs
         {
             public ListenedDevice Info { get; set; }
+        }
+
+        public class SceneChangedArgs : EventArgs
+        {
+            public Scene Scene { get; set; }
         }
 
     }

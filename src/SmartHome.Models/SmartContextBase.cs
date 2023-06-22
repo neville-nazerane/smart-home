@@ -46,14 +46,17 @@ namespace SmartHome.Models
                                                                           int pageSize,
                                                                           CancellationToken cancellationToken = default);
 
+        public abstract Task<IEnumerable<Scene>> GetScenesAsync(CancellationToken cancellationToken = default);
+
         #region Philips Hue
 
         public HueLightRequestModel Request(HueModels.LightModel model) => new(this, model.Id);
 
         public HueMotionRequestModel Request(HueModels.MotionModel model) => new(this, model.Id);
 
-        #endregion
+        public HueButtonRequestModel Request(HueModels.ButtonModel model) => new(this, model.Id);
 
+        #endregion
 
         #region Bond
 

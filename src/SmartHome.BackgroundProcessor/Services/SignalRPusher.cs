@@ -1,4 +1,5 @@
 ﻿using SmartHome.Models;
+using SmartHome.ServerServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace SmartHome.BackgroundProcessor.Services
 {
-    public class ApiConsumer
+    public class SignalRPusher : ISignalRPusher
     {
         private readonly HttpClient _client;
 
-        public ApiConsumer(HttpClient client)
+        public SignalRPusher(HttpClient client)
         {
             _client = client;
         }
@@ -24,5 +25,10 @@ namespace SmartHome.BackgroundProcessor.Services
             res.EnsureSuccessStatusCode();
         }
 
+        public async Task NotifySceneChangeAsync(Scene scene, CancellationToken cancellationToken = default)
+        {
+            using var res = await _client.PostAsJsonAsync("notifySceneChange", scene, cancellationToken);
+            res.EnsureSuccessStatusCode();
+        }
     }
 }

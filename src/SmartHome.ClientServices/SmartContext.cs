@@ -35,6 +35,9 @@ namespace SmartHome.ClientServices
                                                                                 CancellationToken cancellationToken = default)
             => _httpClient.GetFromJsonAsync<IEnumerable<DeviceLog>>($"listeningLogs?pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken);
 
+        public override Task<IEnumerable<Scene>> GetScenesAsync(CancellationToken cancellationToken = default)
+            => _httpClient.GetFromJsonAsync<IEnumerable<Scene>>("scenes", cancellationToken);
+
         class AllCLients : IPhilipsHueClient, IBondClient
         {
             private readonly HttpClient _httpClient;
