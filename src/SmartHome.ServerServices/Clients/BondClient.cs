@@ -75,6 +75,7 @@ namespace SmartHome.ServerServices.Clients
         {
             var state = await GetFanStateAsync(fan.Id, cancellationToken);
             fan.Speed = (short)(state.Power * state.Speed);
+            fan.LightIsOn = state.Light == 1;
         }
 
         public async Task DecreaseFanAsync(string id, CancellationToken cancellationToken = default)
@@ -85,7 +86,7 @@ namespace SmartHome.ServerServices.Clients
                 await RunActionAsync(id, "TurnOff", cancellationToken);
             else if (targetSpeed > 0)
             {
-                var model = new FanSpeedRequest
+                var model = new BondRequest
                 {
                     Argument = (short)targetSpeed
                 };
@@ -99,13 +100,18 @@ namespace SmartHome.ServerServices.Clients
             int targetSpeed = (state.Power * state.Speed) + 1;
             if (targetSpeed < 4)
             {
-                var model = new FanSpeedRequest
+                var model = new BondRequest
                 {
                     Argument = (short)targetSpeed
                 };
                 await RunActionAsync(id, "SetSpeed", model, cancellationToken);
             }
         }
+
+        public Task TurnOnFanAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnOn", cancellationToken);
+        public Task TurnOffFanAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnOff", cancellationToken);
+        public Task TurnOnFanLightAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnLightOn", cancellationToken);
+        public Task TurnOffFanLightAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnLightOff", cancellationToken);
 
         Task<CFanState> GetFanStateAsync(string id, CancellationToken cancellationToken = default) => _client.GetFromJsonAsync<CFanState>($"v2/devices/{id}/state", cancellationToken);
 
@@ -205,7 +211,7 @@ namespace SmartHome.ServerServices.Clients
 
         }
 
-        class FanSpeedRequest
+        class BondRequest
         {
             [JsonPropertyName("argument")]
             public short Argument { get; set; }
@@ -214,13 +220,13 @@ namespace SmartHome.ServerServices.Clients
         class CFanState
         {
             [JsonPropertyName("power")]
-            public int Power { get; set; }
+            public byte Power { get; set; }
 
             [JsonPropertyName("speed")]
             public int Speed { get; set; }
 
             [JsonPropertyName("light")]
-            public int Light { get; set; }
+            public byte Light { get; set; }
         }
 
         class DeviceInfo
