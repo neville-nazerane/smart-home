@@ -48,6 +48,7 @@ namespace SmartHome.ServerServices
         {
             var scene = await _dbContext.Scenes
                                          .SingleAsync(s => s.Name == sceneName.ToString(), cancellationToken);
+            if (isEnabled == scene.Enabled) return;
             scene.Enabled = isEnabled;
             await _dbContext.SaveChangesAsync(cancellationToken);
 

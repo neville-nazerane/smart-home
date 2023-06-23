@@ -43,6 +43,7 @@ namespace SmartHome.ServerServices
             }
             else
             {
+                await Devices.ClosetLight.TriggerSwitchAsync(false);
                 await Devices.BedroomCeilingFan.TurnLightOffAsync();
                 await Devices.BedroomCeilingFan.TurnOffAsync();
             }
