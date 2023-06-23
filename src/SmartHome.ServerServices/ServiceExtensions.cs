@@ -19,11 +19,17 @@ namespace SmartHome.ServerServices
         {
 
             var hueConfig = configuration.GetSection("hue");
-            services.AddHttpClient<IPhilipsHueClient, PhilipsHueClient>(c => PhilipsHueClient.SetupClient(c, hueConfig["baseUrl"], hueConfig["key"]))
+            services.AddHttpClient<IPhilipsHueClient, PhilipsHueClient>(
+                            c => PhilipsHueClient.SetupClient(c, hueConfig["baseUrl"], hueConfig["key"]))
                     .ConfigurePrimaryHttpMessageHandler(PhilipsHueClient.CreateHandler);
 
             var bondConfig = configuration.GetSection("bond");
-            services.AddHttpClient<IBondClient, BondClient>(c => BondClient.SetupClient(c, bondConfig["baseUrl"], bondConfig["token"]));
+            services.AddHttpClient<IBondClient, BondClient>(
+                        c => BondClient.SetupClient(c, bondConfig["baseUrl"], bondConfig["token"]));
+
+            var smartConfgs = configuration.GetSection("smartthings");
+            services.AddHttpClient<ISmartThingsClient, SmartThingsClient>(
+                        c => SmartThingsClient.SetupClient(c, smartConfgs["PAT"]));
 
             services.AddScoped<SmartContext>()
                     .AddScoped<IScenesService, ScenesService>()

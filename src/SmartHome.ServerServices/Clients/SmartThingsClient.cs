@@ -25,10 +25,10 @@ namespace SmartHome.ServerServices.Clients
             client.Timeout = TimeSpan.FromSeconds(1);
         }
 
-        public Task<bool> ExecuteDeviceAsync(string deviceId, DeviceExecuteModel model, CancellationToken cancellationToken = default)
+        Task<bool> ExecuteDeviceAsync(string deviceId, DeviceExecuteModel model, CancellationToken cancellationToken = default)
             => ExecuteDeviceAsync(deviceId, new DeviceExecuteModel[] { model }, cancellationToken);
 
-        public async Task<bool> ExecuteDeviceAsync(string deviceId, DeviceExecuteModel[] models, CancellationToken cancellationToken = default)
+        async Task<bool> ExecuteDeviceAsync(string deviceId, DeviceExecuteModel[] models, CancellationToken cancellationToken = default)
         {
             try
             {
