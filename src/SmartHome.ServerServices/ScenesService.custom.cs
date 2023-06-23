@@ -38,6 +38,13 @@ namespace SmartHome.ServerServices
 
             if (state)
             {
+                await Devices.BedroomCeilingFan.TurnLightOnAsync();
+                await Devices.BedroomCeilingFan.TurnOnAsync();
+            }
+            else
+            {
+                await Devices.BedroomCeilingFan.TurnLightOffAsync();
+                await Devices.BedroomCeilingFan.TurnOffAsync();
             }
         }
 

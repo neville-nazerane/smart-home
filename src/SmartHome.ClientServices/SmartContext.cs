@@ -76,6 +76,31 @@ namespace SmartHome.ClientServices
             public Task<BondModels.RollerModel> GetRollerAsync(string id, CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<BondModels.RollerModel>($"bond/roller/{id}", cancellationToken);
 
+
+            public async Task TurnOffFanAsync(string id, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/off", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
+            public async Task TurnOffFanLightAsync(string id, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/lightOff", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
+            public async Task TurnOnFanAsync(string id, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/lightOn", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
+            public async Task TurnOnFanLightAsync(string id, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/on", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
             public async Task DecreaseFanAsync(string id, CancellationToken cancellationToken = default)
             {
                 using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/decrease", null, cancellationToken);
