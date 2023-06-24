@@ -10,9 +10,18 @@ namespace SmartHome.ServerServices.Automation
     public partial class AutomationService
     {
 
+        async ValueTask VerifyComputerButtonAsync(ListenedDevice device)
+        {
+            if (device == Devices.ComputerButton)
+            {
+                await LogListenedAsync(device, "pressed");
+                await Scenes.SwitchAsync(SceneName.Computer);
+            }
+        }
+
         async ValueTask VerifyBedroomControlAsync(ListenedDevice device)
         {
-            string action = "press";
+            string action = "pressed";
             var control = Devices.BedroomControl;
             if (device == control.IncreaseButton)
                 await Devices.BedroomCeilingFan.IncreaseAsync();
@@ -25,7 +34,7 @@ namespace SmartHome.ServerServices.Automation
                 var button = await control.HueButton.GetAsync();
                 if (button.LastEvent.Contains("long"))
                 {
-                    action = "long";
+                    action = "long pressed";
                     await Scenes.SetSceneEnabledAsync(SceneName.GoodNight, true);
                 }
                 else
@@ -33,6 +42,7 @@ namespace SmartHome.ServerServices.Automation
                     await Scenes.SetSceneEnabledAsync(SceneName.Snooze, true);
                 }
             }
+            else return;
 
             await LogListenedAsync(device, action);
         }

@@ -18,6 +18,7 @@ namespace SmartHome.ServerServices.Automation
             await VerifyClosetMotionSensorAsync(device);
             await VerifyClosetButtonAsync(device);
             await VerifyBedroomControlAsync(device);
+            await VerifyComputerButtonAsync(device);
 
         }
 
