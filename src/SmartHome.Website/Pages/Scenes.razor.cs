@@ -18,7 +18,7 @@ namespace SmartHome.Website.Pages
         protected override async Task OnInitializedAsync()
         {
             ChangeListener.OnSceneChanged += SceneChanged;
-            scenes = await SmartContext.Scenes.GetAllAsync().ToThatTypeAsync();
+            scenes = await SmartContext.Scenes.GetAllScenesAsync().ToThatTypeAsync();
         }
 
         Task SwitchSceneAsync(Scene scene)
