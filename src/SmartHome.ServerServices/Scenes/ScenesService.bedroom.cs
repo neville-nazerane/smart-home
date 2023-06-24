@@ -40,7 +40,17 @@ namespace SmartHome.ServerServices.Scenes
             await Devices.ComputerLeftBar.TriggerSwitchAsync(state);
         }
 
-
+        async Task GoodNightTriggeredAsync(bool state)
+        {
+            await SetSceneEnabledAsync(SceneName.FrontRoom, !state);
+            if (state)
+            {
+                await SetSceneEnabledAsync(SceneName.Computer, false);
+                await Devices.BedroomCeilingFan.TurnLightOffAsync();
+            }
+            else
+                await SetSceneEnabledAsync(SceneName.Bedroom, true);
+        }
 
     }
 }
