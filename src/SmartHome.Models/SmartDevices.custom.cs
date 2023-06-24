@@ -40,10 +40,12 @@ namespace SmartHome.Models
 
         public HueLightRequestModel ComputerRightIris { get; private set; }
 
+        public HueButtonRequestModel ComputerButton { get; set; }
+
 
         #endregion
 
-        
+
         #region Kitchen
 
         public SwitchBotRequestModel KitchenLight2 { get; set; }
@@ -60,6 +62,7 @@ namespace SmartHome.Models
             ComputerRightBar = new(_context, "14d8fd8b-f454-4dca-87aa-d9164bbe310c");
             ComputerLeftIris = new(_context, "d7bf7254-f2d8-4d6f-8b29-1e5cebe3949d");
             ComputerRightIris = new(_context, "4bf45461-f3de-4476-ba58-d5c2c31d5816");
+            ComputerButton = new(_context, "d5596781-7952-46f3-9b08-4d8d0110f940");
 
             ClosetMotionSensor = new(_context, "c8cc0112-0f5f-4559-9d7e-11a6e01f85b2");
             ClosetLight = new(_context, "d5a8f6ad-951a-4f48-a937-4cb436100409");
