@@ -3,6 +3,7 @@ using SmartHome.Models;
 using SmartHome.Models.Bond;
 using SmartHome.Models.Contracts;
 using SmartHome.ServerServices;
+using SmartHome.ServerServices.Clients;
 using SmartHome.WebAPI.Hubs;
 using System.Reflection.Metadata;
 using HueModels = SmartHome.Models.PhilipsHue;
@@ -43,6 +44,8 @@ namespace SmartHome.WebAPI
             app.MapPut("/bond/ceilingFan/{id}/lightOff", TurnOffFanLightAsync);
             app.MapGet("/bond/rollers", GetRollersAsync);
             app.MapGet("/bond/roller/{id}", GetRollerAsync);
+
+            app.MapPost("/smartthings/switchbot/{deviceId}/trigger/{isOn}", TriggerSwitchBotAsync);
         }
 
         static Task NotifyDeviceChangeAsync(ISignalRPusher signalRPusher,
@@ -120,7 +123,6 @@ namespace SmartHome.WebAPI
 
         #endregion
 
-
         #region Bond
 
 
@@ -156,6 +158,16 @@ namespace SmartHome.WebAPI
         static Task<IEnumerable<RollerModel>> GetRollersAsync(IBondClient bondClient,
                                                               CancellationToken cancellationToken = default)
             => bondClient.GetRollersAsync(cancellationToken);
+
+        #endregion
+
+        #region switch bot
+
+        static Task TriggerSwitchBotAsync(ISmartThingsClient client,
+                                           string deviceId,
+                                           bool isOn,
+                                           CancellationToken cancellationToken = default)
+            => client.TriggerSwitchBotAsync(deviceId, isOn, cancellationToken);
 
         #endregion
 

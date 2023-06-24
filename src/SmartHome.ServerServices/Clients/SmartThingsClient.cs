@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartHome.Models.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -23,6 +24,17 @@ namespace SmartHome.ServerServices.Clients
             client.BaseAddress = new Uri("https://api.smartthings.com/v1");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pat);
             client.Timeout = TimeSpan.FromSeconds(1);
+        }
+
+        public Task TriggerSwitchBotAsync(string deviceId, bool isOn, CancellationToken cancellationToken = default)
+        {
+            var model = new DeviceExecuteModel
+            {
+                Component = "main",
+                Capability = "switch",
+                Command = isOn ? "on" : "off"
+            };
+            return ExecuteDeviceAsync(deviceId, model, cancellationToken);
         }
 
         Task<bool> ExecuteDeviceAsync(string deviceId, DeviceExecuteModel model, CancellationToken cancellationToken = default)
