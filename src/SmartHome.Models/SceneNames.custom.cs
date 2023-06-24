@@ -13,6 +13,7 @@ namespace SmartHome.Models
         Snooze, 
         Bedroom, 
         FrontRoom,
-        Computer
+        Computer,
+        Kitchen
     }
 }

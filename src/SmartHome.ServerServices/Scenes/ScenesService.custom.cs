@@ -26,6 +26,10 @@ namespace SmartHome.ServerServices.Scenes
                     await BedroomTriggeredAsync(state);
                     break;
                 case SceneName.FrontRoom:
+                    await FrontRoomTriggerAsync(state);
+                    break;
+                case SceneName.Kitchen:
+                    await KitchenTriggerAsync(state);
                     break;
             }
         }

@@ -150,6 +150,12 @@ namespace SmartHome.Models
                 Four = new(context, hueButtonId);
             }
 
+            public static bool operator ==(ListenedDevice device, HueDial self)
+                => device == self.One || device == self.Two || device == self.Three || device == self.Four;
+
+            public static bool operator !=(ListenedDevice device, HueDial self)
+                => device != self.One && device != self.Two && device != self.Three && device != self.Four;
+
         }
 
         public class HueDimmerSwitch
@@ -172,6 +178,12 @@ namespace SmartHome.Models
                 HueButton = new(context, hueButtonId);
             }
 
+            public static bool operator ==(ListenedDevice device, HueDimmerSwitch self)
+                => device == self.OnOffButton || device == self.IncreaseButton || device == self.DecreaseButton || device == self.HueButton;
+
+            public static bool operator !=(ListenedDevice device, HueDimmerSwitch self)
+                => device != self.OnOffButton && device != self.IncreaseButton && device != self.DecreaseButton && device != self.HueButton;
+            
         }
 
     }

@@ -24,7 +24,7 @@ namespace SmartHome.ServerServices.Automation
             await VerifyBedroomMotionsAsync(device);
 
             // FRONT
-
+            await VerifyFrontDialAsync(device);
 
         }
 
