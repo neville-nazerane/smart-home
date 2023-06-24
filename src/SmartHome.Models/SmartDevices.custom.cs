@@ -53,10 +53,13 @@ namespace SmartHome.Models
 
         public HueMotionRequestModel FrontMotionSensor { get; private set; }
 
-        public HueDimmerSwitch FrontControl { get; set; }
+        public BondCeilingFanRequestModel FrontCeilingFan { get; private set; }
 
-        public BondCeilingFanRequestModel FrontCeilingFan { get; set; }
+        public HueLightRequestModel MiddleLight { get; set; }
 
+        public HueDimmerSwitch FrontControl { get; private set; }
+        
+        public HueDial FrontDial { get; private set; }
 
 
         #endregion
@@ -69,9 +72,10 @@ namespace SmartHome.Models
 
         public SwitchBotRequestModel KitchenLight1 { get; private set; }
 
-        public SwitchBotRequestModel InsectSwitch { get; set; }
+        public SwitchBotRequestModel InsectSwitch { get; private set; }
 
-        public HueLightRequestModel InsectPower { get; set; }
+        public HueLightRequestModel InsectPower { get; private set; }
+
 
         #endregion
 
@@ -115,7 +119,35 @@ namespace SmartHome.Models
                                "6e63013c-5b2e-42ef-b456-549a676c47de",
                                "4e329e07-2822-43c0-9a5e-a543141f8e12",
                                "f805f6c1-1fe5-4301-814d-0d93b85a086f");
+            FrontDial = new(_context,
+                            "4c7244ad-f79b-49df-9071-29513953f89d",
+                            "e5d1f28c-68fe-4507-ac8f-50066552aff3",
+                            "912e79bb-de5e-49ba-892d-370757841ba9",
+                            "88b2afa5-9f56-4285-b224-449d1506285e");
+            
 
+        }
+
+        public class HueDial
+        {
+
+            public HueButtonRequestModel One { get; private set; }
+            public HueButtonRequestModel Two { get; private set; }
+            public HueButtonRequestModel Three { get; private set; }
+            public HueButtonRequestModel Four { get; private set; }
+
+
+            public HueDial(SmartContextBase context,
+                            string onOffButtonId,
+                            string increaseButtonId,
+                            string decreaseButtonId,
+                            string hueButtonId)
+            {
+                One = new(context, onOffButtonId);
+                Two = new(context, increaseButtonId);
+                Three = new(context, decreaseButtonId);
+                Four = new(context, hueButtonId);
+            }
 
         }
 
