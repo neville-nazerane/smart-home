@@ -39,8 +39,9 @@ namespace SmartHome.ServerServices.Automation
                         action = "long pressed";
                         await Scenes.SwitchAsync(SceneName.GoodNight);
                     }
-                    else
+                    else if (button.LastEvent.Contains("short_release"))
                     {
+
                         await Scenes.SwitchAsync(SceneName.Snooze);
                     }
                 }
