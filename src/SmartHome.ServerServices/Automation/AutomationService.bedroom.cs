@@ -37,11 +37,11 @@ namespace SmartHome.ServerServices.Automation
                     if (button.LastEvent.Contains("long"))
                     {
                         action = "long pressed";
-                        await Scenes.SetSceneEnabledAsync(SceneName.GoodNight, true);
+                        await Scenes.SwitchAsync(SceneName.GoodNight);
                     }
                     else
                     {
-                        await Scenes.SetSceneEnabledAsync(SceneName.Snooze, true);
+                        await Scenes.SwitchAsync(SceneName.Snooze);
                     }
                 }
 
