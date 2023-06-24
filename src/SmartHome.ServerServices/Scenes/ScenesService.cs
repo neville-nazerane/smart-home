@@ -50,11 +50,11 @@ namespace SmartHome.ServerServices.Scenes
                          .Where(s => sceneNames.Select(sc => sc.ToString()).Contains(s.Name))
                          .AnyAsync();
 
-        public async Task SetSceneEnabledAsync(SceneName sceneName, bool isEnabled, bool force = false, CancellationToken cancellationToken = default)
+        public async Task SetSceneEnabledAsync(SceneName sceneName, bool isEnabled, CancellationToken cancellationToken = default)
         {
             var scene = await _dbContext.Scenes
                                          .SingleAsync(s => s.Name == sceneName.ToString(), cancellationToken);
-            if (!force && isEnabled == scene.Enabled) return;
+            if (isEnabled == scene.Enabled) return;
             scene.Enabled = isEnabled;
             await _dbContext.SaveChangesAsync(cancellationToken);
 
