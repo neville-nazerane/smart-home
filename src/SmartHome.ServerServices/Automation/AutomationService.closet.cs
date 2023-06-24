@@ -30,9 +30,7 @@ namespace SmartHome.ServerServices.Automation
             {
                 int lastNonMotionMins = (DateTime.UtcNow - motion.LastChanged.ToUniversalTime()).Minutes;
                 if (lastNonMotionMins > 5)
-                {
                     await Devices.ClosetLight.TriggerSwitchAsync(false, cancellationToken);
-                }
             }
         }
 

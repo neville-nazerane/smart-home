@@ -21,30 +21,35 @@ namespace SmartHome.ServerServices.Automation
 
         async ValueTask VerifyBedroomControlAsync(ListenedDevice device)
         {
-            string action = "pressed";
-            var control = Devices.BedroomControl;
-            if (device == control.IncreaseButton)
-                await Devices.BedroomCeilingFan.IncreaseAsync();
-            else if (device == control.DecreaseButton)
-                await Devices.BedroomCeilingFan.DecreaseAsync();
-            else if (device == control.OnOffButton)
-                await Scenes.SwitchAsync(SceneName.Bedroom);
-            else if (device == control.HueButton)
+            if (device == Devices.BedroomControl)
             {
-                var button = await control.HueButton.GetAsync();
-                if (button.LastEvent.Contains("long"))
+                string action = "pressed";
+                var control = Devices.BedroomControl;
+                if (device == control.IncreaseButton)
+                    await Devices.BedroomCeilingFan.IncreaseAsync();
+                else if (device == control.DecreaseButton)
+                    await Devices.BedroomCeilingFan.DecreaseAsync();
+                else if (device == control.OnOffButton)
+                    await Scenes.SwitchAsync(SceneName.Bedroom);
+                else if (device == control.HueButton)
                 {
-                    action = "long pressed";
-                    await Scenes.SetSceneEnabledAsync(SceneName.GoodNight, true);
+                    var button = await control.HueButton.GetAsync();
+                    if (button.LastEvent.Contains("long"))
+                    {
+                        action = "long pressed";
+                        await Scenes.SetSceneEnabledAsync(SceneName.GoodNight, true);
+                    }
+                    else
+                    {
+                        await Scenes.SetSceneEnabledAsync(SceneName.Snooze, true);
+                    }
                 }
-                else
-                {
-                    await Scenes.SetSceneEnabledAsync(SceneName.Snooze, true);
-                }
-            }
-            else return;
+                else if (device == control.HueButton)
+                    await Scenes.SwitchAsync(SceneName.GoodNight);
 
-            await LogListenedAsync(device, action);
+                await LogListenedAsync(device, action);
+            }
+
         }
 
         async ValueTask VerifyBedroomMotionsAsync(ListenedDevice device)

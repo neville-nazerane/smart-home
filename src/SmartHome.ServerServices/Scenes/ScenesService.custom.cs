@@ -16,6 +16,7 @@ namespace SmartHome.ServerServices.Scenes
             switch (name)
             {
                 case SceneName.GoodNight:
+                    await GoodNightTriggeredAsync(state);
                     break;
                 case SceneName.Snooze:
                     break;
