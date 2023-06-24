@@ -58,5 +58,20 @@ namespace SmartHome.ServerServices.Automation
 
         }
 
+        async Task BedroomMinuteCheckAsync(CancellationToken cancellationToken = default)
+        {
+            var motion1 = await Devices.BedroomMotionSensor1.GetAsync(cancellationToken);
+            var motion2 = await Devices.BedroomMotionSensor2.GetAsync(cancellationToken);
+
+            if (!motion1.IsMotionDetected && !motion2.IsMotionDetected)
+            {
+                int lastNonMotionMins1 = (DateTime.UtcNow - motion1.LastChanged.ToUniversalTime()).Minutes;
+                int lastNonMotionMins2 = (DateTime.UtcNow - motion2.LastChanged.ToUniversalTime()).Minutes;
+
+                if (lastNonMotionMins1 > 5 && lastNonMotionMins2 > 5)
+                    await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, false, cancellationToken);
+            }
+        }
+
     }
 }

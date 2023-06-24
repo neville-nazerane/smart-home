@@ -23,7 +23,7 @@ namespace SmartHome.ServerServices.Automation
             }
         }
 
-        async Task ClosetMinuiteCheckAsync(CancellationToken cancellationToken = default)
+        async Task ClosetMinuteCheckAsync(CancellationToken cancellationToken = default)
         {
             var motion = await Devices.ClosetMotionSensor.GetAsync(cancellationToken);
             if (!motion.IsMotionDetected)
