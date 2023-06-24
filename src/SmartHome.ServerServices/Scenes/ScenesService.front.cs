@@ -18,7 +18,7 @@ namespace SmartHome.ServerServices.Scenes
 
         async Task FrontRoomTriggerAsync(bool state)
         {
-            await SetSceneEnabledAsync(SceneName.Kitchen, state);
+            await Devices.MiddleLight.TriggerSwitchAsync(state);
 
             if (state)
             {
@@ -30,6 +30,8 @@ namespace SmartHome.ServerServices.Scenes
                 await Devices.FrontCeilingFan.TurnOffAsync();
                 await Devices.FrontCeilingFan.TurnLightOffAsync();
             }
+
+            await SetSceneEnabledAsync(SceneName.Kitchen, state);
 
         }
 

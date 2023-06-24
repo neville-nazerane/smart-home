@@ -43,5 +43,14 @@ namespace SmartHome.ServerServices.Automation
 
         }
 
+        async ValueTask VerifyFrontMotionAsync(ListenedDevice device)
+        {
+            if (device == Devices.FrontMotionSensor)
+            {
+                await LogListenedAsync(device, "motion");
+                await Scenes.SetSceneEnabledAsync(SceneName.FrontRoom, true);
+            }
+        }
+
     }
 }
