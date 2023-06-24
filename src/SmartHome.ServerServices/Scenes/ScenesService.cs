@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartHome.ServerServices
+namespace SmartHome.ServerServices.Scenes
 {
     public partial class ScenesService : IScenesService
     {

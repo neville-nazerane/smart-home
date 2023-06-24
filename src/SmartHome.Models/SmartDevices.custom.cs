@@ -124,7 +124,8 @@ namespace SmartHome.Models
                             "e5d1f28c-68fe-4507-ac8f-50066552aff3",
                             "912e79bb-de5e-49ba-892d-370757841ba9",
                             "88b2afa5-9f56-4285-b224-449d1506285e");
-            
+            FrontCeilingFan = new(_context, "77f2be51");
+            MiddleLight = new(_context, "ff9e4968-20f7-41f4-8bf3-3e045564896c");
 
         }
 

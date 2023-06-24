@@ -47,5 +47,16 @@ namespace SmartHome.ServerServices.Automation
             await LogListenedAsync(device, action);
         }
 
+        async ValueTask VerifyBedroomMotionsAsync(ListenedDevice device)
+        {
+
+            if (device == Devices.BedroomMotionSensor1 || device == Devices.BedroomMotionSensor2)
+            {
+                await LogListenedAsync(device, "motion");
+                await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, true);
+            }
+
+        }
+
     }
 }
