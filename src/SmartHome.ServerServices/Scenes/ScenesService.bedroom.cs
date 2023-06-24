@@ -42,7 +42,6 @@ namespace SmartHome.ServerServices.Scenes
 
         async Task GoodNightTriggeredAsync(bool state)
         {
-            await SetSceneEnabledAsync(SceneName.FrontRoom, !state);
             if (state)
             {
                 await SetSceneEnabledAsync(SceneName.Computer, false);
@@ -53,6 +52,7 @@ namespace SmartHome.ServerServices.Scenes
                 await SetSceneEnabledAsync(SceneName.Bedroom, false);
                 await SetSceneEnabledAsync(SceneName.Bedroom, true);
             }
+            await SetSceneEnabledAsync(SceneName.FrontRoom, !state);
         }
 
     }
