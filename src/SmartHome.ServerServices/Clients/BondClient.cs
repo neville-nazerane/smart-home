@@ -108,8 +108,23 @@ namespace SmartHome.ServerServices.Clients
             }
         }
 
-        public Task TurnOnFanAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnOn", cancellationToken);
-        public Task TurnOffFanAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnOff", cancellationToken);
+        public Task TurnOnFanAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var model = new BondRequest
+            {
+                Argument = 0
+            };
+            return RunActionAsync(id, "SetSpeed", model, cancellationToken);
+        }
+        public Task TurnOffFanAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var model = new BondRequest
+            {
+                Argument = 0
+            };
+            return RunActionAsync(id, "SetSpeed", model, cancellationToken);
+        }
+
         public Task TurnOnFanLightAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnLightOn", cancellationToken);
         public Task TurnOffFanLightAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnLightOff", cancellationToken);
 
