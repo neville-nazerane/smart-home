@@ -21,6 +21,8 @@ namespace SmartHome.Models
 
         protected abstract IBondClient BondClient { get; }
 
+        protected abstract ISmartThingsClient SmartThingsClient { get; }
+
         public abstract IScenesService Scenes { get; }
 
         public SmartContextBase()
@@ -67,8 +69,8 @@ namespace SmartHome.Models
         public BondRollerRequestModel Request(BondModels.RollerModel model) => new(this, model.Id);
 
 
-
         #endregion
+
 
         #region Hue Request Models
 
@@ -178,6 +180,35 @@ namespace SmartHome.Models
 
             public Task<BondModels.RollerModel> GetAsync(CancellationToken cancellationToken = default)
                 => Client.GetRollerAsync(Id, cancellationToken);
+
+        }
+
+        #endregion
+
+        #region Smartthings request models
+
+        public abstract class SmartThingsRequestBase : RequestableDeviceBase
+        {
+
+            private readonly SmartContextBase _context;
+
+            protected ISmartThingsClient Client => _context.SmartThingsClient;
+
+            protected SmartThingsRequestBase(string id, DeviceType deviceType, SmartContextBase context) : base(id, deviceType)
+            {
+                _context = context;
+            }
+
+        }
+
+        public class SwitchBotRequestModel : SmartThingsRequestBase
+        {
+            public SwitchBotRequestModel(SmartContextBase context, string id) : base(id, DeviceType.SwitchBot, context)
+            {
+            }
+
+            public Task TriggerSwitchAsync(bool isOn, CancellationToken cancellationToken = default)
+                => Client.TriggerSwitchBotAsync(Id, isOn, cancellationToken);
 
         }
 

@@ -24,10 +24,17 @@ namespace SmartHome.ClientServices
 
         }
 
-        public Task StartAsync()
+        public async Task StartAsync()
         {
             SetupListeners();
-            return _connection.StartAsync();
+            try
+            {
+                await _connection.StartAsync();
+            }
+            catch 
+            {
+                await Console.Out.WriteLineAsync("Failed to start signalR");
+            }
         }
 
         void SetupListeners()

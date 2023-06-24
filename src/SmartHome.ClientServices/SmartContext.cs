@@ -25,6 +25,8 @@ namespace SmartHome.ClientServices
         protected override IBondClient BondClient => _allClients;
         public override IScenesService Scenes => _allClients;
 
+        protected override ISmartThingsClient SmartThingsClient => _allClients;
+
         public SmartContext(HttpClient httpClient) : base()
         {
             _allClients = new AllCLients(httpClient);
@@ -37,7 +39,7 @@ namespace SmartHome.ClientServices
             => _httpClient.GetFromJsonAsync<IEnumerable<DeviceLog>>($"listeningLogs?pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken);
 
 
-        class AllCLients : IPhilipsHueClient, IBondClient, IScenesService
+        class AllCLients : IPhilipsHueClient, IBondClient, IScenesService, ISmartThingsClient
         {
             private readonly HttpClient _httpClient;
 
@@ -141,6 +143,11 @@ namespace SmartHome.ClientServices
                 res.EnsureSuccessStatusCode();
             }
 
+            public async Task TriggerSwitchBotAsync(string deviceId, bool isOn, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PostAsync($"smartthings/switchbot/{deviceId}/trigger/{isOn}", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
         }
 
 

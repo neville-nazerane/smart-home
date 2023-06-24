@@ -13,6 +13,7 @@ namespace SmartHome.Models
         HueLight = 2,
         BondFan = 3,
         BondRoller = 4,
-        HueButton = 5
+        HueButton = 5,
+        SwitchBot = 6
     }
 }

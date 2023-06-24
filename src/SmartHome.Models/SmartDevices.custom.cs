@@ -10,16 +10,24 @@ namespace SmartHome.Models
     public partial class SmartDevices
     {
 
+        #region Closet
+
         public HueButtonRequestModel HueClosetButton { get; private set; }
 
         public HueMotionRequestModel ClosetMotionSensor { get; private set; }
 
         public HueLightRequestModel ClosetLight { get; private set; }
 
+
+        #endregion
+
+
+
+        #region Bedroom
+
         public HueDimmerSwitch BedroomControl { get; private set; }
 
         public BondCeilingFanRequestModel BedroomCeilingFan { get; private set; }
-
 
 
         public HueLightRequestModel ComputerLightPlug { get; private set; }
@@ -31,6 +39,18 @@ namespace SmartHome.Models
         public HueLightRequestModel ComputerLeftIris { get; private set; }
 
         public HueLightRequestModel ComputerRightIris { get; private set; }
+
+
+        #endregion
+
+        
+        #region Kitchen
+
+        public SwitchBotRequestModel KitchenLight2 { get; set; }
+
+        public SwitchBotRequestModel KitchenLight1 { get; set; }
+
+        #endregion
 
 
         partial void InitDevices()
@@ -51,6 +71,12 @@ namespace SmartHome.Models
                                  "b2e0d9ac-dc4a-4f4e-aea3-d38edf78b76d",
                                  "c3e07c4d-6ecf-4575-9aa9-c18013aa7ffb",
                                  "33fbad67-0ce8-462a-8f7b-ecf47b58d55d");
+
+
+            // kitchen 
+            KitchenLight1 = new(_context, "0d6a32dc-d772-45f9-96c8-96669004b1c8");
+            KitchenLight2 = new(_context, "235be111-09d2-40f5-8a30-3b185aebcf4e");
+
         }
 
         public class HueDimmerSwitch
