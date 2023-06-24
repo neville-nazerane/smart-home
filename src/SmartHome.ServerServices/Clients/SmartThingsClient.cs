@@ -23,7 +23,7 @@ namespace SmartHome.ServerServices.Clients
         {
             client.BaseAddress = new Uri("https://api.smartthings.com/v1");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pat);
-            client.Timeout = TimeSpan.FromSeconds(1);
+            client.Timeout = TimeSpan.FromSeconds(3);
         }
 
         public Task TriggerSwitchBotAsync(string deviceId, bool isOn, CancellationToken cancellationToken = default)
