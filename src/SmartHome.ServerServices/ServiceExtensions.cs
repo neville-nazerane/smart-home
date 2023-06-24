@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SmartHome.Models.Contracts;
 using SmartHome.ServerServices.Automation;
 using SmartHome.ServerServices.Clients;
+using SmartHome.ServerServices.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

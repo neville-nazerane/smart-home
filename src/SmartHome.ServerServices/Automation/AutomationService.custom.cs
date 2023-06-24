@@ -14,11 +14,17 @@ namespace SmartHome.ServerServices.Automation
 
         public async Task OnDeviceListenedAsync(ListenedDevice device, CancellationToken cancellationToken = default)
         {
-            // closet sensor turn on closet
+            // CLOSET
             await VerifyClosetMotionSensorAsync(device);
             await VerifyClosetButtonAsync(device);
+
+            // BEDROOM
             await VerifyBedroomControlAsync(device);
             await VerifyComputerButtonAsync(device);
+            await VerifyBedroomMotionsAsync(device);
+
+            // FRONT
+
 
         }
 
