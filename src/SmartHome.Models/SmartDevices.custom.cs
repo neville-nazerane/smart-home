@@ -103,7 +103,7 @@ namespace SmartHome.Models
                                  "0f7ed57c-7df9-41d5-b8bc-aa1ef244ff99",
                                  "b2e0d9ac-dc4a-4f4e-aea3-d38edf78b76d",
                                  "c3e07c4d-6ecf-4575-9aa9-c18013aa7ffb",
-                                 "33fbad67-0ce8-462a-8f7b-ecf47b58d55X");
+                                 "33fbad67-0ce8-462a-8f7b-ecf47b58d55d");
 
 
             // kitchen 
@@ -156,6 +156,15 @@ namespace SmartHome.Models
             public static bool operator !=(ListenedDevice device, HueDial self)
                 => device != self.One && device != self.Two && device != self.Three && device != self.Four;
 
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+
+            public override bool Equals(object obj)
+            {
+                return base.Equals(obj);
+            }
         }
 
         public class HueDimmerSwitch
@@ -183,7 +192,17 @@ namespace SmartHome.Models
 
             public static bool operator !=(ListenedDevice device, HueDimmerSwitch self)
                 => device != self.OnOffButton && device != self.IncreaseButton && device != self.DecreaseButton && device != self.HueButton;
-            
+
+            public override bool Equals(object obj)
+            {
+                return base.Equals(obj);
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+
         }
 
     }
