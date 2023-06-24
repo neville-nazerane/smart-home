@@ -29,8 +29,10 @@ namespace SmartHome.ServerServices.Automation
 
         }
 
-        public Task OnMinuiteTimerAsync(CancellationToken cancellationToken = default) 
-            => ClosetMinuiteCheckAsync(cancellationToken);
-
+        public async Task OnMinuiteTimerAsync(CancellationToken cancellationToken = default)
+        {
+            await ClosetMinuteCheckAsync(cancellationToken);
+            await BedroomMinuteCheckAsync(cancellationToken);
+        }
     }
 }
