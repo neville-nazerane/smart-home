@@ -49,7 +49,7 @@ namespace SmartHome.ServerServices.Scenes
                 await Devices.BedroomCeilingFan.TurnLightOffAsync();
             }
             else
-                await SetSceneEnabledAsync(SceneName.Bedroom, true);
+                await SetSceneEnabledAsync(SceneName.Bedroom, true, true);
         }
 
     }
