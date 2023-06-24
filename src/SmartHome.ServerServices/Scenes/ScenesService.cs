@@ -44,11 +44,11 @@ namespace SmartHome.ServerServices.Scenes
                          .Select(s => s.Enabled)
                          .SingleAsync(cancellationToken);
 
-        public async Task SetSceneEnabledAsync(SceneName sceneName, bool isEnabled, CancellationToken cancellationToken = default)
+        public async Task SetSceneEnabledAsync(SceneName sceneName, bool isEnabled, bool force = false, CancellationToken cancellationToken = default)
         {
             var scene = await _dbContext.Scenes
                                          .SingleAsync(s => s.Name == sceneName.ToString(), cancellationToken);
-            if (isEnabled == scene.Enabled) return;
+            if (!force && isEnabled == scene.Enabled) return;
             scene.Enabled = isEnabled;
             await _dbContext.SaveChangesAsync(cancellationToken);
 
