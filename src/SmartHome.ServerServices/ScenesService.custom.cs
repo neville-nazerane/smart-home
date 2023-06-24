@@ -12,7 +12,7 @@ namespace SmartHome.ServerServices
 
         async Task OnSceneChangedAsync(SceneName name)
         {
-            bool state = await IsEnabledAsync(SceneName.Bedroom);
+            bool state = await IsEnabledAsync(name);
             switch (name)
             {
                 case SceneName.GoodNight:
