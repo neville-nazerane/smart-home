@@ -9,6 +9,8 @@ trigger:
   paths:
     include:
       - src/SmartHome.BackgroundProcessor
+      - src/SmartHome.ServerServices
+      - src/SmartHome.Models
       - pipelines/background.yaml
 
 parameters:
