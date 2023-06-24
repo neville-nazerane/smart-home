@@ -9,6 +9,8 @@ trigger:
   paths:
     include:
       - src/SmartHome.Website
+      - src/SmartHome.ClientServices
+      - src/SmartHome.Models
       - pipelines/website.yaml
 
 variables:

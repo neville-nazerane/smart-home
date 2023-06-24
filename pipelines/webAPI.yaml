@@ -9,6 +9,8 @@ trigger:
   paths:
     include:
       - src/SmartHome.WebAPI
+      - src/SmartHome.ServerServices
+      - src/SmartHome.Models
       - pipelines/webAPI.yaml
 
 parameters:
