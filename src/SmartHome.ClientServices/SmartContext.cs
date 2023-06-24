@@ -125,8 +125,16 @@ namespace SmartHome.ClientServices
             public Task<HueModels.ButtonModel> GetButtonAsync(string id, CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<HueModels.ButtonModel>($"philipsHue/button/{id}", cancellationToken);
 
-            public Task<IEnumerable<Scene>> GetAllAsync(CancellationToken cancellationToken = default)
+            public Task<IEnumerable<Scene>> GetAllScenesAsync(CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<IEnumerable<Scene>>("scenes", cancellationToken);
+
+
+            public async Task<bool> IsAnySceneEnabledAsync(params SceneName[] sceneNames)
+            {
+                using var res = await _httpClient.PostAsJsonAsync("scene/anyEnabled", sceneNames);
+                res.EnsureSuccessStatusCode();
+                return await res.Content.ReadFromJsonAsync<bool>();
+            }
 
             public Task<bool> IsEnabledAsync(SceneName sceneName, CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<bool>($"scene/{sceneName}", cancellationToken);
@@ -148,6 +156,7 @@ namespace SmartHome.ClientServices
                 using var res = await _httpClient.PostAsync($"smartthings/switchbot/{deviceId}/trigger/{isOn}", null, cancellationToken);
                 res.EnsureSuccessStatusCode();
             }
+
         }
 
 

@@ -44,6 +44,12 @@ namespace SmartHome.ServerServices.Scenes
                          .Select(s => s.Enabled)
                          .SingleAsync(cancellationToken);
 
+        public Task<bool> IsAnySceneEnabledAsync(params SceneName[] sceneNames)
+            => _dbContext.Scenes
+                         .AsNoTracking()
+                         .Where(s => sceneNames.Select(sc => sc.ToString()).Contains(s.Name))
+                         .AnyAsync();
+
         public async Task SetSceneEnabledAsync(SceneName sceneName, bool isEnabled, bool force = false, CancellationToken cancellationToken = default)
         {
             var scene = await _dbContext.Scenes
@@ -56,7 +62,7 @@ namespace SmartHome.ServerServices.Scenes
             await OnSceneChangedAsync(sceneName);
         }
 
-        public async Task<IEnumerable<Scene>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Scene>> GetAllScenesAsync(CancellationToken cancellationToken = default)
             => await _dbContext.Scenes.ToListAsync(cancellationToken);
     }
 }

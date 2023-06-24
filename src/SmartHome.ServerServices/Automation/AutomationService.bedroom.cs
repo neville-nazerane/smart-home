@@ -44,8 +44,6 @@ namespace SmartHome.ServerServices.Automation
                         await Scenes.SetSceneEnabledAsync(SceneName.Snooze, true);
                     }
                 }
-                else if (device == control.HueButton)
-                    await Scenes.SwitchAsync(SceneName.GoodNight);
 
                 await LogListenedAsync(device, action);
             }
@@ -54,28 +52,36 @@ namespace SmartHome.ServerServices.Automation
 
         async ValueTask VerifyBedroomMotionsAsync(ListenedDevice device)
         {
+            bool isSleeping = await Scenes.IsAnySceneEnabledAsync(SceneName.GoodNight, SceneName.Snooze);
 
             if (device == Devices.BedroomMotionSensor1 || device == Devices.BedroomMotionSensor2)
             {
                 await LogListenedAsync(device, "motion");
-                await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, true);
+                if (!isSleeping)
+                    await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, true);
             }
 
         }
 
         async Task BedroomMinuteCheckAsync(CancellationToken cancellationToken = default)
         {
-            var motion1 = await Devices.BedroomMotionSensor1.GetAsync(cancellationToken);
-            var motion2 = await Devices.BedroomMotionSensor2.GetAsync(cancellationToken);
+            bool isSleeping = await Scenes.IsAnySceneEnabledAsync(SceneName.GoodNight, SceneName.Snooze);
 
-            if (!motion1.IsMotionDetected && !motion2.IsMotionDetected)
+            if (!isSleeping)
             {
-                int lastNonMotionMins1 = (DateTime.UtcNow - motion1.LastChanged.ToUniversalTime()).Minutes;
-                int lastNonMotionMins2 = (DateTime.UtcNow - motion2.LastChanged.ToUniversalTime()).Minutes;
+                var motion1 = await Devices.BedroomMotionSensor1.GetAsync(cancellationToken);
+                var motion2 = await Devices.BedroomMotionSensor2.GetAsync(cancellationToken);
 
-                if (lastNonMotionMins1 > 5 && lastNonMotionMins2 > 5)
-                    await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, false, cancellationToken);
+                if (!motion1.IsMotionDetected && !motion2.IsMotionDetected)
+                {
+                    int lastNonMotionMins1 = (DateTime.UtcNow - motion1.LastChanged.ToUniversalTime()).Minutes;
+                    int lastNonMotionMins2 = (DateTime.UtcNow - motion2.LastChanged.ToUniversalTime()).Minutes;
+
+                    if (lastNonMotionMins1 > 5 && lastNonMotionMins2 > 5)
+                        await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, false, cancellationToken);
+                }
             }
+
         }
 
     }

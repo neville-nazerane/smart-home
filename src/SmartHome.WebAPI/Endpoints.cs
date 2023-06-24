@@ -23,6 +23,7 @@ namespace SmartHome.WebAPI
 
             app.MapGet("/scenes", GetScenesAsync);
             app.MapGet("/scene/{sceneName}", IsEnabledAsync);
+            app.MapPost("/scene/anyEnabled", IsAnyEnabledAsync);
             app.MapPut("/scene/{sceneName}/switch", SwitchSceneAsync);
             app.MapPut("/scene/{sceneName}/{isEnabled}", SetSceneEnabled);
 
@@ -68,7 +69,7 @@ namespace SmartHome.WebAPI
         #region scenes
 
         static Task<IEnumerable<Scene>> GetScenesAsync(IScenesService service, CancellationToken cancellationToken = default)
-            => service.GetAllAsync(cancellationToken);
+            => service.GetAllScenesAsync(cancellationToken);
 
         static Task SwitchSceneAsync(IScenesService service, SceneName sceneName, CancellationToken cancellationToken = default)
             => service.SwitchAsync(sceneName, cancellationToken);
@@ -83,6 +84,9 @@ namespace SmartHome.WebAPI
                                     bool isEnabled,
                                     CancellationToken cancellationToken = default)
             => service.SetSceneEnabledAsync(sceneName, isEnabled, cancellationToken);
+
+        static Task<bool> IsAnyEnabledAsync(IScenesService service, SceneName[] sceneNames)
+            => service.IsAnySceneEnabledAsync(sceneNames);
 
         #endregion
 
