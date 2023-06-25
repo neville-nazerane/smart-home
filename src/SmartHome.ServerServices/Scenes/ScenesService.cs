@@ -47,7 +47,7 @@ namespace SmartHome.ServerServices.Scenes
         public Task<bool> IsAnySceneEnabledAsync(params SceneName[] sceneNames)
             => _dbContext.Scenes
                          .AsNoTracking()
-                         .Where(s => sceneNames.Select(sc => sc.ToString()).Contains(s.Name))
+                         .Where(s => s.Enabled && sceneNames.Select(sc => sc.ToString()).Contains(s.Name))
                          .AnyAsync();
 
         public async Task SetSceneEnabledAsync(SceneName sceneName, bool isEnabled, CancellationToken cancellationToken = default)
