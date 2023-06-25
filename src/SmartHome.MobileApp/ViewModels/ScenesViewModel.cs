@@ -1,4 +1,7 @@
-﻿using SmartHome.ClientServices;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using SmartHome.ClientServices;
+using SmartHome.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +10,12 @@ using System.Threading.Tasks;
 
 namespace SmartHome.MobileApp.ViewModels
 {
-    public class ScenesViewModel
+    public partial class ScenesViewModel : ObservableObject
     {
+
+        [ObservableProperty]
+        IEnumerable<Scene> scenes;
+
         private readonly SmartContext _context;
 
         public ScenesViewModel(SmartContext context)
@@ -18,7 +25,7 @@ namespace SmartHome.MobileApp.ViewModels
 
         public async Task InitAsync()
         {
-            var scenes = await _context.Scenes.GetAllScenesAsync();
+            Scenes = await _context.Scenes.GetAllScenesAsync();
         }
 
     }
