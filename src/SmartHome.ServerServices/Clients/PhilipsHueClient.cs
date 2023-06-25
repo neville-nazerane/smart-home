@@ -273,6 +273,9 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("color")]
             public ColorInfo Color { get; set; }
 
+            [JsonPropertyName("dimming")]
+            public DimmingInfo Dimming { get; set; }
+
             public LightModel ToModel()
                 => new()
                 {
@@ -280,6 +283,7 @@ namespace SmartHome.ServerServices.Clients
                     IsSwitchedOn = On.On,
                     Name = Metadata.Name,
                     ColorHex = ConvertColorObjectToHex(Color),
+                    Brightness = Dimming?.Brightness ?? 0
                 };
         }
 

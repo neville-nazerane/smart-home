@@ -11,6 +11,7 @@ namespace SmartHome.Models.PhilipsHue
 
         public bool IsSwitchedOn { get; set; }
         public string ColorHex { get; set; }
+        public double Brightness { get; set; }
 
         public LightModel() : base(DeviceType.HueLight)
         {
