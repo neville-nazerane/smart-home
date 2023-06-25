@@ -175,6 +175,9 @@ namespace SmartHome.ServerServices.Clients
             roller.IsOpen = state.Open == 1;
         }
 
+        public Task ToggleRollerAsync(string id, CancellationToken cancellationToken = default)
+            => RunActionAsync(id, "ToggleOpen", cancellationToken);
+
         #endregion
 
         Task RunActionAsync(string deviceId, string action, CancellationToken cancellationToken = default)

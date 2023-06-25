@@ -47,6 +47,7 @@ namespace SmartHome.WebAPI
             app.MapPut("/bond/ceilingFan/{id}/lightOff", TurnOffFanLightAsync);
             app.MapGet("/bond/rollers", GetRollersAsync);
             app.MapGet("/bond/roller/{id}", GetRollerAsync);
+            app.MapPut("/bond/roller/{id}/toggle", ToggleBondRollerAsync);
 
             app.MapPost("/smartthings/switchbot/{deviceId}/trigger/{isOn}", TriggerSwitchBotAsync);
         }
@@ -170,6 +171,9 @@ namespace SmartHome.WebAPI
 
         static Task<RollerModel> GetRollerAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
             => bondClient.GetRollerAsync(id, cancellationToken);
+
+        static Task ToggleBondRollerAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
+            => bondClient.ToggleRollerAsync(id, cancellationToken);
 
         static Task<IEnumerable<RollerModel>> GetRollersAsync(IBondClient bondClient,
                                                               CancellationToken cancellationToken = default)
