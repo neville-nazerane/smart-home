@@ -195,6 +195,9 @@ namespace SmartHome.Models
             public Task<BondModels.RollerModel> GetAsync(CancellationToken cancellationToken = default)
                 => Client.GetRollerAsync(Id, cancellationToken);
 
+            public Task ToggleAsync(CancellationToken cancellationToken = default)
+                => Client.ToggleRollerAsync(Id, cancellationToken);
+
         }
 
         #endregion

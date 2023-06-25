@@ -84,6 +84,12 @@ namespace SmartHome.ClientServices
                 res.EnsureSuccessStatusCode();
             }
 
+            public async Task ToggleRollerAsync(string id, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"bond/roller/{id}/toggle", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
             public async Task TurnOffFanLightAsync(string id, CancellationToken cancellationToken = default)
             {
                 using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/lightOff", null, cancellationToken);

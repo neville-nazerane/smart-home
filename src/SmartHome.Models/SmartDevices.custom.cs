@@ -51,6 +51,8 @@ namespace SmartHome.Models
 
         #region Front
 
+        public BondRollerRequestModel KitchenRoller { get; private set; }
+
         public HueMotionRequestModel FrontMotionSensor { get; private set; }
 
         public BondCeilingFanRequestModel FrontCeilingFan { get; private set; }
@@ -114,6 +116,7 @@ namespace SmartHome.Models
 
             // front
             FrontMotionSensor = new(_context, "b37b3923-e905-42d1-9b20-ef19a5ebdbae");
+            KitchenRoller = new(_context, "e2a857cfe29c2a53");
             FrontControl = new(_context,
                                "1e22fc91-d3d3-4051-895e-6590a32ed339",
                                "6e63013c-5b2e-42ef-b456-549a676c47de",

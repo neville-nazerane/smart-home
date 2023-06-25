@@ -19,6 +19,15 @@ namespace SmartHome.ServerServices.Automation
 
                 if (device == Devices.FrontDial.One)
                     await Scenes.SwitchAsync(SceneName.Kitchen);
+                else if (device == Devices.FrontDial.Two)
+                {
+                    var light = await Devices.MiddleLight.GetAsync();
+                    await Devices.MiddleLight.TriggerSwitchAsync(!light.IsSwitchedOn);
+                }
+                else if (device == Devices.FrontDial.Three)
+                {
+                    await Devices.KitchenRoller.ToggleAsync();
+                }
                 else if (device == Devices.FrontDial.Rotary)
                 {
                     var dial = await Devices.FrontDial.Rotary.GetAsync();
