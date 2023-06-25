@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -64,6 +65,19 @@ namespace SmartHome.ServerServices.Clients
             };
             return _httpClient.PutAsJsonAsync($"/clip/v2/resource/light/{id}", model, cancellationToken);
         }
+
+        public Task SetBrightnessAsync(string id, double percent, CancellationToken cancellationToken = default)
+        {
+            var model = new DimmingModel
+            {
+                Dimming = new()
+                {
+                    Brightness = percent
+                }
+            };
+            return _httpClient.PutAsJsonAsync($"/clip/v2/resource/light/{id}", model, cancellationToken);
+        }
+
 
         public async Task<LightModel> GetLightAsync(string id, CancellationToken cancellationToken = default)
         {
@@ -200,6 +214,7 @@ namespace SmartHome.ServerServices.Clients
             return colorObject;
         }
 
+
         #region Models
 
 
@@ -258,6 +273,9 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("color")]
             public ColorInfo Color { get; set; }
 
+            [JsonPropertyName("dimming")]
+            public DimmingInfo Dimming { get; set; }
+
             public LightModel ToModel()
                 => new()
                 {
@@ -265,6 +283,7 @@ namespace SmartHome.ServerServices.Clients
                     IsSwitchedOn = On.On,
                     Name = Metadata.Name,
                     ColorHex = ConvertColorObjectToHex(Color),
+                    Brightness = Dimming?.Brightness ?? 0
                 };
         }
 
@@ -362,6 +381,22 @@ namespace SmartHome.ServerServices.Clients
         {
             [JsonPropertyName("color")]
             public ColorInfo Color { get; set; }
+
+        }
+
+        class DimmingModel
+        {
+
+            [JsonPropertyName("dimming")]
+            public DimmingInfo Dimming { get; set; }
+
+        }
+
+        class DimmingInfo
+        {
+
+            [JsonPropertyName("brightness")]
+            public double Brightness { get; set; }
 
         }
 

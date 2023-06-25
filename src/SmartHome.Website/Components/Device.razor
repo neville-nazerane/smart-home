@@ -26,6 +26,8 @@
                         @onclick="@(() => SmartContext.Request(lightModel).TriggerSwitchAsync(!lightModel.IsSwitchedOn))"></button>
                         <input type="color" value=@lightModel.ColorHex @onchange=@(e => HueColorSetAsync(lightModel, e)) />
 
+                        <input type="range" min="0" max="100" @bind=lightModel.Brightness @oninput=@(e => HueBrightnessSetAsync(lightModel, e)) class="slider" id="myRange">
+
                         break;
                     }
                 case HueModels.MotionModel motionModel:

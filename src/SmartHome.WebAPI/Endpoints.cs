@@ -34,6 +34,7 @@ namespace SmartHome.WebAPI
             app.MapGet("/philipsHue/button/{id}", HueGetButtonAsync);
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
             app.MapPut("/philipsHue/color/{id}/{colorHex}", HueLightColorAsync);
+            app.MapPut("/philipsHue/brightness/{id}/{percent}", SetHueBrightnessAsync);
 
             app.MapGet("/bond/ceilingFans", GetCeilingFansAsync);
             app.MapGet("/bond/ceilingFan/{id}", GetCeilingFanAsync);
@@ -92,35 +93,41 @@ namespace SmartHome.WebAPI
 
         #region Philips Hue
 
-        public static Task<IEnumerable<HueModels.LightModel>> GetAllHueLightsAsync(IPhilipsHueClient client, CancellationToken cancellationToken = default)
+        static Task<IEnumerable<HueModels.LightModel>> GetAllHueLightsAsync(IPhilipsHueClient client, CancellationToken cancellationToken = default)
             => client.GetAllLightsAsync(cancellationToken);
-        public static Task<IEnumerable<HueModels.MotionModel>> GetAllHueMotionAsync(IPhilipsHueClient client, CancellationToken cancellationToken = default)
+        static Task<IEnumerable<HueModels.MotionModel>> GetAllHueMotionAsync(IPhilipsHueClient client, CancellationToken cancellationToken = default)
             => client.GetAllMotionSensorsAsync(cancellationToken);
 
-        public static Task HueLightSwitchAsync(IPhilipsHueClient client,
+        static Task HueLightSwitchAsync(IPhilipsHueClient client,
                                                bool switchOn,
                                                string id,
                                                CancellationToken cancellationToken = default)
             => client.SwitchLightAsync(id, switchOn, cancellationToken);
 
-        public static Task HueLightColorAsync(IPhilipsHueClient client,
+        static Task SetHueBrightnessAsync(IPhilipsHueClient client,
+                                       string id,
+                                       double percent,
+                                       CancellationToken cancellationToken = default)
+            => client.SetBrightnessAsync(id, percent, cancellationToken);
+
+        static Task HueLightColorAsync(IPhilipsHueClient client,
                                                string colorHex,
                                                string id,
                                                CancellationToken cancellationToken = default)
             => client.SetLightColorAsync(id, $"#{colorHex}", cancellationToken);
 
-        public static Task<HueModels.LightModel> HueGetLightAsync(IPhilipsHueClient client,
+        static Task<HueModels.LightModel> HueGetLightAsync(IPhilipsHueClient client,
                                                                     string id,
                                                                     CancellationToken cancellationToken = default)
             => client.GetLightAsync(id, cancellationToken);
 
-        public static Task<HueModels.MotionModel> HueGetMotionAsync(IPhilipsHueClient client,
+        static Task<HueModels.MotionModel> HueGetMotionAsync(IPhilipsHueClient client,
                                                                     string id,
                                                                     CancellationToken cancellationToken = default)
             => client.GetMotionSensorAsync(id, cancellationToken);
 
 
-        public static Task<HueModels.ButtonModel> HueGetButtonAsync(IPhilipsHueClient client,
+        static Task<HueModels.ButtonModel> HueGetButtonAsync(IPhilipsHueClient client,
                                                                     string id,
                                                                     CancellationToken cancellationToken = default)
             => client.GetButtonAsync(id, cancellationToken);
