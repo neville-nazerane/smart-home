@@ -22,5 +22,11 @@ namespace SmartHome.Website.Components
             return SmartContext.Request(model).SetColorAsync(color);
         }
 
+        Task HueBrightnessSetAsync(HueModels.LightModel model, ChangeEventArgs args)
+        {
+            double percent = double.Parse((string)args.Value);
+            return SmartContext.Request(model).SetBrightnessAsync(percent);
+        }
+
     }
 }

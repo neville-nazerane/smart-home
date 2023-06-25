@@ -34,7 +34,7 @@ namespace SmartHome.WebAPI
             app.MapGet("/philipsHue/button/{id}", HueGetButtonAsync);
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
             app.MapPut("/philipsHue/color/{id}/{colorHex}", HueLightColorAsync);
-            app.MapPut("/philipsHue/color/{id}/{percent}", SetHueBrightnessAsync);
+            app.MapPut("/philipsHue/brightness/{id}/{percent}", SetHueBrightnessAsync);
 
             app.MapGet("/bond/ceilingFans", GetCeilingFansAsync);
             app.MapGet("/bond/ceilingFan/{id}", GetCeilingFanAsync);

@@ -117,7 +117,7 @@ namespace SmartHome.ClientServices
 
             public async Task SetBrightnessAsync(string id, double percent, CancellationToken cancellationToken = default)
             {
-                using var res = await _httpClient.PutAsync($"philipsHue/color/{id}/{percent}", null, cancellationToken);
+                using var res = await _httpClient.PutAsync($"philipsHue/brightness/{id}/{percent}", null, cancellationToken);
                 res.EnsureSuccessStatusCode();
             }
 
