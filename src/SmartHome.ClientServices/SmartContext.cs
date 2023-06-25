@@ -115,6 +115,12 @@ namespace SmartHome.ClientServices
                 res.EnsureSuccessStatusCode();
             }
 
+            public async Task SetBrightnessAsync(string id, double percent, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"philipsHue/color/{id}/{percent}", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
             public async Task SetLightColorAsync(string id, string colorHex, CancellationToken cancellationToken = default)
             {
                 colorHex = colorHex.Replace("#", string.Empty);

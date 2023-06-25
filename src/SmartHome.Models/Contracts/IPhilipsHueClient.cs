@@ -15,6 +15,7 @@ namespace SmartHome.Models.Contracts
         Task<ButtonModel> GetButtonAsync(string id, CancellationToken cancellationToken = default);
         Task<LightModel> GetLightAsync(string id, CancellationToken cancellationToken = default);
         Task<MotionModel> GetMotionSensorAsync(string id, CancellationToken cancellationToken = default);
+        Task SetBrightnessAsync(string id, double percent, CancellationToken cancellationToken = default);
         Task SetLightColorAsync(string id, string colorHex, CancellationToken cancellationToken = default);
         Task SwitchLightAsync(string id, bool switchOn, CancellationToken cancellationToken = default);
     }

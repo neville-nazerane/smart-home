@@ -112,6 +112,9 @@ namespace SmartHome.Models
             public Task<HueModels.LightModel> GetAsync(CancellationToken cancellationToken = default)
                => Client.GetLightAsync(Id, cancellationToken);
 
+            public Task SetBrightnessAsync(double percent, CancellationToken cancellationToken = default)
+                => Client.SetBrightnessAsync(Id, percent, cancellationToken);
+
         }
 
         public class HueButtonRequestModel : HueRequestBase
