@@ -78,7 +78,6 @@ namespace SmartHome.ClientServices
             public Task<BondModels.RollerModel> GetRollerAsync(string id, CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<BondModels.RollerModel>($"bond/roller/{id}", cancellationToken);
 
-
             public async Task TurnOffFanAsync(string id, CancellationToken cancellationToken = default)
             {
                 using var res = await _httpClient.PutAsync($"bond/ceilingFan/{id}/off", null, cancellationToken);
@@ -130,6 +129,8 @@ namespace SmartHome.ClientServices
 
             public Task<HueModels.ButtonModel> GetButtonAsync(string id, CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<HueModels.ButtonModel>($"philipsHue/button/{id}", cancellationToken);
+            public Task<HueModels.RotaryModel> GetRotaryAsync(string id, CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<HueModels.RotaryModel>($"philipsHue/rotary/{id}", cancellationToken);
 
             public Task<IEnumerable<Scene>> GetAllScenesAsync(CancellationToken cancellationToken = default)
                 => _httpClient.GetFromJsonAsync<IEnumerable<Scene>>("scenes", cancellationToken);

@@ -123,7 +123,8 @@ namespace SmartHome.Models
                             "4c7244ad-f79b-49df-9071-29513953f89d",
                             "e5d1f28c-68fe-4507-ac8f-50066552aff3",
                             "912e79bb-de5e-49ba-892d-370757841ba9",
-                            "88b2afa5-9f56-4285-b224-449d1506285e");
+                            "88b2afa5-9f56-4285-b224-449d1506285e",
+                            "2986dc69-87b8-41c4-9275-6c79a1a6bd06");
             FrontCeilingFan = new(_context, "77f2be51");
             MiddleLight = new(_context, "ff9e4968-20f7-41f4-8bf3-3e045564896c");
 
@@ -136,25 +137,28 @@ namespace SmartHome.Models
             public HueButtonRequestModel Two { get; private set; }
             public HueButtonRequestModel Three { get; private set; }
             public HueButtonRequestModel Four { get; private set; }
+            public HueRotaryRequestModel Rotary { get; private set; }
 
 
             public HueDial(SmartContextBase context,
                             string onOffButtonId,
                             string increaseButtonId,
                             string decreaseButtonId,
-                            string hueButtonId)
+                            string hueButtonId,
+                            string rotaryId)
             {
                 One = new(context, onOffButtonId);
                 Two = new(context, increaseButtonId);
                 Three = new(context, decreaseButtonId);
                 Four = new(context, hueButtonId);
+                Rotary = new(context, rotaryId);
             }
 
             public static bool operator ==(ListenedDevice device, HueDial self)
-                => device == self.One || device == self.Two || device == self.Three || device == self.Four;
+                => device == self.One || device == self.Two || device == self.Three || device == self.Four || device == self.Rotary;
 
             public static bool operator !=(ListenedDevice device, HueDial self)
-                => device != self.One && device != self.Two && device != self.Three && device != self.Four;
+                => device != self.One && device != self.Two && device != self.Three && device != self.Four && device != self.Rotary;
 
             public override int GetHashCode()
             {

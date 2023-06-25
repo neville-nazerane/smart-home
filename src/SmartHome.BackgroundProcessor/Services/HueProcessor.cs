@@ -33,7 +33,6 @@ namespace SmartHome.BackgroundProcessor.Services
 
             _queue = new();
         }
-
         public async Task KeepListeningAsync(CancellationToken cancellationToken = default)
         {
             var loop = InfinityUtil.BeyondAsync(25,
@@ -93,6 +92,9 @@ namespace SmartHome.BackgroundProcessor.Services
                     case "button":
                         if (e.Button.LastEvent != "initial_press")
                             model.DeviceType = DeviceType.HueButton;
+                        break;
+                    case "relative_rotary":
+                        model.DeviceType = DeviceType.HueRotary;
                         break;
                 }
 

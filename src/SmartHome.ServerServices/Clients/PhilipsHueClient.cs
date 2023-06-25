@@ -93,6 +93,12 @@ namespace SmartHome.ServerServices.Clients
             return res.Data.SingleOrDefault().ToModel();
         }
 
+        public async Task<RotaryModel> GetRotaryAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var res = await _httpClient.GetFromJsonAsync<HueData<RotaryResponse>>($"clip/v2/resource/relative_rotary/{id}", cancellationToken);
+            return res.Data.SingleOrDefault().ToModel();
+        }
+
         #region Motion Sensor
 
         public async Task<IEnumerable<MotionModel>> GetAllMotionSensorsAsync(CancellationToken cancellationToken = default)
@@ -334,6 +340,44 @@ namespace SmartHome.ServerServices.Clients
             [JsonPropertyName("archetype")]
             public string Archetype { get; set; }
 
+        }
+
+        public class RotaryResponse
+        {
+            [JsonPropertyName("id")]
+            public string Id { get; set; }
+
+            [JsonPropertyName("relative_rotary")]
+            public RelativeRotary RelativeRotary { get; set; }
+
+            public RotaryModel ToModel()
+                => new()
+                {
+                    Id = Id,
+                    IsLastRotatedClockWise = RelativeRotary?.RotaryReport?.Rotation?.Direction == "clock_wise",
+                    LastUpdated = RelativeRotary?.RotaryReport?.Updated
+                };
+        }
+
+        public class RelativeRotary
+        {
+            [JsonPropertyName("rotary_report")]
+            public RotaryReport RotaryReport { get; set; }
+        }
+
+        public class RotaryReport
+        {
+            [JsonPropertyName("updated")]
+            public DateTime Updated { get; set; }
+
+            [JsonPropertyName("rotation")]
+            public Rotation Rotation { get; set; }
+        }
+
+        public class Rotation
+        {
+            [JsonPropertyName("direction")]
+            public string Direction { get; set; }
         }
 
         class MotionResponse
