@@ -19,9 +19,24 @@ namespace SmartHome.ServerServices.Automation
 
                 if (device == Devices.FrontDial.One)
                     await Scenes.SwitchAsync(SceneName.Kitchen);
-                else if (device == Devices.FrontDial.Two)
-                    await Scenes.SwitchAsync(SceneName.FrontRoom);
+                else if (device == Devices.FrontDial.Rotary)
+                {
+                    var dial = await Devices.FrontDial.Rotary.GetAsync();
+                    var light = await Devices.MiddleLight.GetAsync();
+                    double percent;
+                    if (dial.IsLastRotatedClockWise)
+                    {
+                        if (light.Brightness == 100) return;
+                        percent = Math.Min(100, light.Brightness + 10);
+                    }
+                    else
+                    {
+                        if (light.Brightness == 0) return;
+                        percent = Math.Max(0, light.Brightness - 10);
+                    }
 
+                    await Devices.MiddleLight.SetBrightnessAsync(percent);
+                }
             }
 
         }

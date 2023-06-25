@@ -129,6 +129,17 @@ namespace SmartHome.Models
                => Client.GetButtonAsync(Id, cancellationToken);
         }
 
+        public class HueRotaryRequestModel : HueRequestBase
+        {
+            public HueRotaryRequestModel(SmartContextBase context, string id) : base(context, id, DeviceType.HueRotary)
+            {
+            }
+
+            public Task<HueModels.RotaryModel> GetAsync(CancellationToken cancellationToken = default)
+                => Client.GetRotaryAsync(Id, cancellationToken);
+
+        }
+
         #endregion
 
 

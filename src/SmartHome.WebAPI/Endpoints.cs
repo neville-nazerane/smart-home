@@ -31,6 +31,7 @@ namespace SmartHome.WebAPI
             app.MapGet("/philipsHue/motions", GetAllHueMotionAsync);
             app.MapGet("/philipsHue/light/{id}", HueGetLightAsync);
             app.MapGet("/philipsHue/motion/{id}", HueGetMotionAsync);
+            app.MapGet("/philipsHue/rotary/{id}", HueGetRotaryAsync);
             app.MapGet("/philipsHue/button/{id}", HueGetButtonAsync);
             app.MapPut("/philipsHue/switchLight/{id}/{switchOn}", HueLightSwitchAsync);
             app.MapPut("/philipsHue/color/{id}/{colorHex}", HueLightColorAsync);
@@ -126,6 +127,10 @@ namespace SmartHome.WebAPI
                                                                     CancellationToken cancellationToken = default)
             => client.GetMotionSensorAsync(id, cancellationToken);
 
+        static Task<HueModels.RotaryModel> HueGetRotaryAsync(IPhilipsHueClient client,
+                                                            string id,
+                                                            CancellationToken cancellationToken = default)
+            => client.GetRotaryAsync(id, cancellationToken);
 
         static Task<HueModels.ButtonModel> HueGetButtonAsync(IPhilipsHueClient client,
                                                                     string id,
