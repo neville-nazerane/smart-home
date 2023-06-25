@@ -3,14 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SmartHome.MobileApp.ViewModels"
              xmlns:model="clr-namespace:SmartHome.Models;assembly=SmartHome.Models"
+             xmlns:conv="clr-namespace:SmartHome.MobileApp.ValueConverters"
              x:Class="SmartHome.MobileApp.Pages.ScenesPage"
              x:DataType="vm:ScenesViewModel"
              Title="ScenesPage">
 
+    <ContentPage.Resources>
+        <conv:BoolToGreenConverter x:Key="boolToGreen" />
+    </ContentPage.Resources>
+
     <CollectionView ItemsSource="{Binding Scenes}">
+        <CollectionView.ItemsLayout>
+            <LinearItemsLayout ItemSpacing="8"
+                               Orientation="Vertical" />
+        </CollectionView.ItemsLayout>
         <CollectionView.ItemTemplate>
             <DataTemplate x:DataType="model:Scene">
-                <Label Text="{Binding Name}" />
+                <Grid IsClippedToBounds="True"
+                      Padding="15"
+                      Margin="10, 0, 10, 0"
+                      BackgroundColor="{Binding Enabled, Converter={StaticResource boolToGreen}}" >
+                    <Label Text="{Binding Name}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SwitchSceneCommand, Source={RelativeSource AncestorType={x:Type vm:ScenesViewModel}}}"
+                                              CommandParameter="{Binding .}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>

@@ -15,8 +15,15 @@ public partial class ScenesPage : ContentPage
 
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
+        _viewModel.Subscribe();
 		await _viewModel.InitAsync();
         base.OnNavigatedTo(args);
+    }
+
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        _viewModel.Unsubscribe();
+        base.OnNavigatedFrom(args);
     }
 
 }

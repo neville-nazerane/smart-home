@@ -9,14 +9,13 @@ namespace SmartHome.MobileApp
 {
     public static class MauiProgram
     {
-
+        private const string baseUrl = "http://192.168.1.155:5010";
         static readonly HttpClient httpClient = new();
 
         public static MauiApp CreateMauiApp()
         {
 
-
-            httpClient.BaseAddress = new("http://192.168.1.155:5010");
+            httpClient.BaseAddress = new(baseUrl);
 
 
             var builder = MauiApp.CreateBuilder();
@@ -30,8 +29,10 @@ namespace SmartHome.MobileApp
                 });
 
             var services = builder.Services;
-            services.AddTransient(c => new SmartContext(httpClient))
-
+            services
+                    .AddTransient(c => new SmartContext(httpClient))
+                    .AddScoped(p => new ChangeListener(baseUrl))
+                    
                     .AddTransient<ScenesPage>()
                     .AddTransient<ScenesViewModel>();
 
