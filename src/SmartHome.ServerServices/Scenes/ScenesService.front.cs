@@ -1,4 +1,5 @@
-﻿using SmartHome.Models;
+﻿using Microsoft.Extensions.Logging;
+using SmartHome.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,14 @@ namespace SmartHome.ServerServices.Scenes
         async Task FrontRoomTriggerAsync(bool state)
         {
             await Devices.MiddleLight.TriggerSwitchAsync(state);
-            await SetSceneEnabledAsync(SceneName.Kitchen, state);
+            try
+            {
+                await SetSceneEnabledAsync(SceneName.Kitchen, state);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to switch kitchen");
+            }
 
             if (state)
             {
