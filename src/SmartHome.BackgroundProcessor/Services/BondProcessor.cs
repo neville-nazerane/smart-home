@@ -106,7 +106,7 @@ namespace SmartHome.BackgroundProcessor.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Failed single enqueue");
+                    _logger.LogError(ex, "Failed dequeue from bond");
                 }
             }
         }

@@ -355,6 +355,7 @@ namespace SmartHome.ServerServices.Clients
                 {
                     Id = Id,
                     IsLastRotatedClockWise = RelativeRotary?.RotaryReport?.Rotation?.Direction == "clock_wise",
+                    Steps = (RelativeRotary?.RotaryReport?.Rotation?.Steps ?? 0) / 15,
                     LastUpdated = RelativeRotary?.RotaryReport?.Updated
                 };
         }
@@ -378,6 +379,7 @@ namespace SmartHome.ServerServices.Clients
         {
             [JsonPropertyName("direction")]
             public string Direction { get; set; }
+            public int Steps { get; set; }
         }
 
         class MotionResponse

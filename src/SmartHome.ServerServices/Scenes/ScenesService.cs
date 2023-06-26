@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SmartHome.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace SmartHome.ServerServices.Scenes
 
         private readonly IServiceProvider _serviceProvider;
         private readonly AppDbContext _dbContext;
+        private readonly ILogger<ScenesService> _logger;
         private readonly ISignalRPusher _signalRPusher;
 
         SmartContext context;
@@ -23,10 +25,12 @@ namespace SmartHome.ServerServices.Scenes
 
         public ScenesService(IServiceProvider serviceProvider,
                              AppDbContext dbContext,
+                             ILogger<ScenesService> logger,
                              ISignalRPusher signalRPusher)
         {
             _serviceProvider = serviceProvider;
             _dbContext = dbContext;
+            _logger = logger;
             _signalRPusher = signalRPusher;
         }
 

@@ -35,15 +35,16 @@ namespace SmartHome.ServerServices.Automation
                     var dial = await Devices.FrontDial.Rotary.GetAsync();
                     var light = await Devices.MiddleLight.GetAsync();
                     double percent;
+                    int increment = dial.Steps * 5;
                     if (dial.IsLastRotatedClockWise)
                     {
                         if (light.Brightness == 100) return;
-                        percent = Math.Min(100, light.Brightness + 10);
+                        percent = Math.Min(100, light.Brightness + increment);
                     }
                     else
                     {
                         if (light.Brightness == 0) return;
-                        percent = Math.Max(0, light.Brightness - 10);
+                        percent = Math.Max(0, light.Brightness - increment);
                     }
 
                     await Devices.MiddleLight.SetBrightnessAsync(percent);

@@ -1,4 +1,5 @@
-﻿using SmartHome.Models;
+﻿using Microsoft.Extensions.Logging;
+using SmartHome.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,15 +43,21 @@ namespace SmartHome.ServerServices.Scenes
 
         async Task GoodNightTriggeredAsync(bool state)
         {
-            if (state)
+            await SetSceneEnabledAsync(SceneName.Computer, !state);
+            try
             {
-                await SetSceneEnabledAsync(SceneName.Computer, false);
-                await Devices.BedroomCeilingFan.TurnLightOffAsync();
+                if (state)
+                {
+                    await Devices.BedroomCeilingFan.TurnLightOffAsync();
+                }
+                else
+                {
+                    await Devices.BedroomCeilingFan.TurnLightOnAsync();
+                }
             }
-            else
+            catch (Exception e)
             {
-                await SetSceneEnabledAsync(SceneName.Bedroom, false);
-                await SetSceneEnabledAsync(SceneName.Bedroom, true);
+                _logger.LogError(e, "Failed to switch bedroom light");
             }
             await SetSceneEnabledAsync(SceneName.FrontRoom, !state);
         }
