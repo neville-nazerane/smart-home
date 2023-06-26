@@ -12,6 +12,7 @@ namespace SmartHome.Models.PhilipsHue
         public bool IsLastRotatedClockWise { get; set; }
 
         public DateTime? LastUpdated { get; set; }
+        public int Steps { get; set; }
 
         public RotaryModel() : base(DeviceType.HueRotary)
         {
