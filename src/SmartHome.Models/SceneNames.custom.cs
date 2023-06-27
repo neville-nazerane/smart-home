@@ -14,6 +14,7 @@ namespace SmartHome.Models
         Bedroom, 
         FrontRoom,
         Computer,
-        Kitchen
+        Kitchen,
+        TvLights
     }
 }

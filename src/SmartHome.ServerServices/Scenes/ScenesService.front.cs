@@ -43,5 +43,13 @@ namespace SmartHome.ServerServices.Scenes
 
         }
 
+        async Task TvLightsTriggerAsync(bool state)
+        {
+            await Devices.TvBottomLightStrip.TriggerSwitchAsync(state);
+            await Devices.TvLeftBar.TriggerSwitchAsync(state);
+            await Devices.TvRightBar.TriggerSwitchAsync(state);
+            await Devices.TvLight.TriggerSwitchAsync(state);
+        }
+
     }
 }
