@@ -57,11 +57,16 @@ namespace SmartHome.Models
 
         public BondCeilingFanRequestModel FrontCeilingFan { get; private set; }
 
-        public HueLightRequestModel MiddleLight { get; set; }
+        public HueLightRequestModel MiddleLight { get; private set; }
 
         public HueDimmerSwitch FrontControl { get; private set; }
         
         public HueDial FrontDial { get; private set; }
+
+        public HueLightRequestModel TvLeftBar { get; set; }
+        public HueLightRequestModel TvRightBar { get; set; }
+        public HueLightRequestModel TvLight { get; set; }
+        public HueLightRequestModel TvBottomLightStrip { get; set; }
 
 
         #endregion
@@ -130,6 +135,10 @@ namespace SmartHome.Models
                             "2986dc69-87b8-41c4-9275-6c79a1a6bd06");
             FrontCeilingFan = new(_context, "77f2be51");
             MiddleLight = new(_context, "ff9e4968-20f7-41f4-8bf3-3e045564896c");
+            TvLeftBar = new(_context, "8f0514bf-2bf7-43b9-8a73-d7e88fe92eae");
+            TvRightBar = new(_context, "1ac9fcf2-b3ca-4f6a-9747-8e72222c196c");
+            TvLight = new(_context, "23fc03a9-b8ab-4e91-b710-af106b2a25b0");
+            TvBottomLightStrip = new(_context, "0de87304-c438-4c6e-951b-2cd9274d54b9");
 
         }
 

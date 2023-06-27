@@ -17,19 +17,6 @@ namespace SmartHome.Models
         static SmartDevices()
         {
             _listeningDevices = GetAllDeviceInfos(typeof(SmartDevices), new SmartDevices(null));
-                                            //.GetProperties()
-                                            //.Where(p => p.PropertyType.IsAssignableTo(typeof(RequestableDeviceBase)))
-                                            //.Select(p =>
-                                            //{
-                                            //    var obj = (RequestableDeviceBase) p.GetValue(dummyDevices);
-                                            //    return new ListeningDeviceInfo
-                                            //    {
-                                            //        Id = obj.Id,
-                                            //        DeviceType = obj.DeviceType,
-                                            //        Name = p.Name
-                                            //    };
-                                            //})
-                                            //.ToArray();
         }
 
         static IEnumerable<ListeningDeviceInfo> GetAllDeviceInfos(Type type,

@@ -32,6 +32,9 @@ namespace SmartHome.ServerServices.Scenes
                 case SceneName.Kitchen:
                     await KitchenTriggerAsync(state);
                     break;
+                case SceneName.TvLights:
+                    await TvLightsTriggerAsync(state);
+                    break;
             }
         }
 
