@@ -31,6 +31,7 @@ namespace SmartHome.ServerServices.Scenes
 
             await Devices.FrontCeilingFan.SwitchAsync(state);
             await Devices.FrontCeilingFan.SwitchLightAsync(state);
+            await SetSceneEnabledAsync(SceneName.TvLights, state);
         }
 
         async Task TvLightsTriggerAsync(bool state)
