@@ -1,5 +1,6 @@
 ﻿using SmartHome.Models.Contracts;
 using SmartHome.Models.PhilipsHue;
+using SmartHome.ServerServices.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -165,7 +166,8 @@ namespace SmartHome.ServerServices.Clients
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 request.Version = new Version(2, 0);
-                return base.SendAsync(request, cancellationToken);
+                return RetryUtil.Setup(3, TimeSpan.FromSeconds(1))
+                                .ExecuteAsync(() => base.SendAsync(request, cancellationToken));
             }
 
         }

@@ -41,10 +41,8 @@ namespace SmartHome.WebAPI
             app.MapGet("/bond/ceilingFan/{id}", GetCeilingFanAsync);
             app.MapPut("/bond/ceilingFan/{id}/increase", IncreaseFanAsync);
             app.MapPut("/bond/ceilingFan/{id}/decrease", DecreaseFanAsync);
-            app.MapPut("/bond/ceilingFan/{id}/on", TurnOnFanAsync);
-            app.MapPut("/bond/ceilingFan/{id}/off", TurnOffFanAsync);
-            app.MapPut("/bond/ceilingFan/{id}/lightOn", TurnOnFanLightAsync);
-            app.MapPut("/bond/ceilingFan/{id}/lightOff", TurnOffFanLightAsync);
+            app.MapPut("/bond/ceilingFan/{id}/switch/{isOn}", SwitchFanAsync);
+            app.MapPut("/bond/ceilingFan/{id}/switchLight/{isOn}", SwitchFanLightAsync);
             app.MapGet("/bond/rollers", GetRollersAsync);
             app.MapGet("/bond/roller/{id}", GetRollerAsync);
             app.MapPut("/bond/roller/{id}/toggle", ToggleBondRollerAsync);
@@ -143,17 +141,11 @@ namespace SmartHome.WebAPI
         #region Bond
 
 
-        static Task TurnOnFanAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
-            => bondClient.TurnOnFanAsync(id, cancellationToken);
-
-        static Task TurnOffFanAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
-            => bondClient.TurnOffFanAsync(id, cancellationToken);
-
-        static Task TurnOnFanLightAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
-            => bondClient.TurnOnFanLightAsync(id, cancellationToken);
-
-        static Task TurnOffFanLightAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)
-            => bondClient.TurnOffFanLightAsync(id, cancellationToken);
+        static Task SwitchFanAsync(IBondClient bondClient, string id, bool isOn, CancellationToken cancellationToken = default)
+            => bondClient.SwitchFanAsync(id, isOn, cancellationToken);
+        
+        static Task SwitchFanLightAsync(IBondClient bondClient, string id, bool isOn, CancellationToken cancellationToken = default)
+            => bondClient.SwitchFanLightAsync(id, isOn, cancellationToken);
 
 
         static Task DecreaseFanAsync(IBondClient bondClient, string id, CancellationToken cancellationToken = default)

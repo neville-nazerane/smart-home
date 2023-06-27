@@ -17,17 +17,11 @@ namespace SmartHome.ServerServices.Scenes
             await SetSceneEnabledAsync(SceneName.Snooze, false);
             await SetSceneEnabledAsync(SceneName.Computer, state);
 
-            if (state)
-            {
-                await Devices.BedroomCeilingFan.TurnLightOnAsync();
-                await Devices.BedroomCeilingFan.TurnOnAsync();
-            }
-            else
-            {
+            await Devices.BedroomCeilingFan.SwitchLightAsync(state);
+            await Devices.BedroomCeilingFan.SwitchAsync(state);
+
+            if (!state)
                 await Devices.ClosetLight.TriggerSwitchAsync(false);
-                await Devices.BedroomCeilingFan.TurnLightOffAsync();
-                await Devices.BedroomCeilingFan.TurnOffAsync();
-            }
         }
 
         async Task ComputerTriggeredAsync(bool state)
@@ -46,14 +40,7 @@ namespace SmartHome.ServerServices.Scenes
             await SetSceneEnabledAsync(SceneName.Computer, !state);
             try
             {
-                if (state)
-                {
-                    await Devices.BedroomCeilingFan.TurnLightOffAsync();
-                }
-                else
-                {
-                    await Devices.BedroomCeilingFan.TurnLightOnAsync();
-                }
+                await Devices.BedroomCeilingFan.SwitchLightAsync(!state);
             }
             catch (Exception e)
             {
