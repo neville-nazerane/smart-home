@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -29,25 +30,35 @@ namespace SmartHome.ServerServices.Utils
             return this;
         }
 
-        public async Task ExecuteAsync(Func<Task> func)
+        public Task ExecuteAsync(Func<Task> func)
+            => ExecuteAsync(async () =>
+            {
+                await func();
+                return 0;
+            });
+
+        public async Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> func)
         {
-            Exception exception = null;
+            Exception exception = new("Something went wrong");
             for (int i = 0; i < _count; i++)
             {
                 try
                 {
-                    await func();
+                    var res = await func();
                     exception = null;
                     if (verifyFunc is null || await verifyFunc())
-                        continue;
+                        return res;
+                    throw new Exception("Failed to validate");
                 }
                 catch (Exception ex)
                 {
+                    if (ex is TaskCanceledException || ex is OperationCanceledException)
+                        throw;
                     exception = ex;
-                    await Task.Delay(_spacing);
                 }
+                await Task.Delay(_spacing);
             }
-            if (exception is not null) throw exception;
+            throw exception;
         }
 
     }

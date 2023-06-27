@@ -173,15 +173,11 @@ namespace SmartHome.Models
             public Task IncreaseAsync(CancellationToken cancellationToken = default)
                 => Client.IncreaseFanAsync(Id, cancellationToken);
 
-            public Task TurnOnAsync(CancellationToken cancellationToken = default)
-                => Client.TurnOnFanAsync(Id, cancellationToken);
+            public Task SwitchAsync(bool isOn, CancellationToken cancellationToken = default)
+                => Client.SwitchFanAsync(Id, isOn, cancellationToken);
 
-            public Task TurnOffAsync(CancellationToken cancellationToken = default)
-                => Client.TurnOffFanAsync(Id, cancellationToken);
-            public Task TurnLightOnAsync(CancellationToken cancellationToken = default)
-               => Client.TurnOnFanLightAsync(Id, cancellationToken);
-            public Task TurnLightOffAsync(CancellationToken cancellationToken = default)
-               => Client.TurnOffFanLightAsync(Id, cancellationToken);
+            public Task SwitchLightAsync(bool isOn, CancellationToken cancellationToken = default)
+               => Client.SwitchFanLightAsync(Id, isOn, cancellationToken);
 
         }
 
