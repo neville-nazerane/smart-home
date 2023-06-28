@@ -26,9 +26,9 @@ namespace SmartHome.ServerServices.Automation
                     await Devices.MiddleLight.TriggerSwitchAsync(!light.IsSwitchedOn);
                 }
                 else if (device == Devices.FrontDial.Three)
-                {
                     await Devices.KitchenRoller.ToggleAsync();
-                }
+                else if (device == Devices.FrontDial.Four)
+                    await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, false);
                 else if (device == Devices.FrontDial.Rotary)
                 {
                     action = "spun";
