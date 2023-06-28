@@ -20,6 +20,8 @@ namespace SmartHome.ServerServices.Scenes
         async Task FrontRoomTriggerAsync(bool state)
         {
             await Devices.MiddleLight.TriggerSwitchAsync(state);
+            if (state)
+                await Devices.MiddleLight.SetBrightnessAsync(100);
             try
             {
                 await SetSceneEnabledAsync(SceneName.Kitchen, state);

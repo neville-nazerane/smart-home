@@ -37,6 +37,11 @@ namespace SmartHome.ServerServices.Scenes
 
         async Task GoodNightTriggeredAsync(bool state)
         {
+            // DIM the middle light
+            await Devices.MiddleLight.TriggerSwitchAsync(true);
+            await Devices.MiddleLight.SetBrightnessAsync(20);
+            await Devices.MiddleLight.TriggerSwitchAsync(false);
+
             await SetSceneEnabledAsync(SceneName.Computer, !state);
             try
             {
