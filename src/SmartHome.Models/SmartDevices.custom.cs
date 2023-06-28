@@ -22,8 +22,6 @@ namespace SmartHome.Models
 
         #endregion
 
-
-
         #region Bedroom
 
         public HueDimmerSwitch BedroomControl { get; private set; }
@@ -52,7 +50,7 @@ namespace SmartHome.Models
 
         #region Front
 
-        public IHueSyncClient HueSync => _context.HueSyncClient;
+        public IHueSyncClient HueSync => _context?.HueSyncClient;
 
         public BondRollerRequestModel KitchenRoller { get; private set; }
 
