@@ -42,10 +42,21 @@ namespace SmartHome.Models
 
             foreach (var other in otherProperties)
             {
-                var others = GetAllDeviceInfos(other.PropertyType,
-                                               other.GetValue(dummyDevices),
-                                               UseNamePrefix(other.Name, namePrefix));
-                infos.AddRange(others);
+                try
+                {
+                    var value = other.GetValue(dummyDevices);
+                    if (value is not null)
+                    {
+                        var others = GetAllDeviceInfos(other.PropertyType,
+                                                       other.GetValue(dummyDevices),
+                                                       UseNamePrefix(other.Name, namePrefix));
+                        infos.AddRange(others);
+                    }
+                }
+                catch
+                {
+
+                }
             }
 
             return infos;
