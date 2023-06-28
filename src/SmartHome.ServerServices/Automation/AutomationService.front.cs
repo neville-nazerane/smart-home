@@ -19,14 +19,18 @@ namespace SmartHome.ServerServices.Automation
                 string action = "pressed";
 
                 if (device == Devices.FrontDial.One)
-                    await Scenes.SwitchAsync(SceneName.Kitchen);
+                    await Devices.KitchenRoller.ToggleAsync();
+
                 else if (device == Devices.FrontDial.Two)
+                    await Scenes.SwitchAsync(SceneName.Kitchen);
+
+
+                else if (device == Devices.FrontDial.Three)
                 {
                     var light = await Devices.MiddleLight.GetAsync();
                     await Devices.MiddleLight.TriggerSwitchAsync(!light.IsSwitchedOn);
                 }
-                else if (device == Devices.FrontDial.Three)
-                    await Devices.KitchenRoller.ToggleAsync();
+
                 else if (device == Devices.FrontDial.Four)
                     await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, false);
                 else if (device == Devices.FrontDial.Rotary)
