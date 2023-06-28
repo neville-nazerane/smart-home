@@ -1,4 +1,5 @@
-﻿using SmartHome.Models;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using SmartHome.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,16 +81,22 @@ namespace SmartHome.ServerServices.Automation
         {
             if (device == Devices.FrontMotionSensor)
             {
-                await LogListenedAsync(device, "motion");
-
-                if (await Scenes.IsEnabledAsync(SceneName.GoodNight))
+                var motion = await Devices.FrontMotionSensor.GetAsync();
+                
+                if (motion.IsMotionDetected)
                 {
+                    await LogListenedAsync(device, "motion");
 
+                    if (await Scenes.IsEnabledAsync(SceneName.GoodNight))
+                    {
+                        await Devices.MiddleLight.TriggerSwitchAsync(true);
+                    }
+                    else
+                    {
+                        await Scenes.SetSceneEnabledAsync(SceneName.FrontRoom, true);
+                    }
                 }
-                else
-                {
-                    await Scenes.SetSceneEnabledAsync(SceneName.FrontRoom, true);
-                }
+                else await LogListenedAsync(device, "no motion");
             }
         }
 
@@ -125,6 +132,21 @@ namespace SmartHome.ServerServices.Automation
                     await Devices.TvRightBar.TriggerSwitchAsync(false, cancellationToken);
                 }
             }
+        }
+
+        async Task MiddleLightMinuiteCheckAsync(CancellationToken cancellationToken = default)
+        {
+            bool isSceneEnabled = await Scenes.IsAnySceneEnabledAsync(SceneName.GoodNight);
+            if (isSceneEnabled)
+            {
+                var motion = await Devices.FrontMotionSensor.GetAsync(cancellationToken);
+                if (!motion.IsMotionDetected && (DateTime.UtcNow - motion.LastChanged.ToUniversalTime()).TotalMinutes > 5)
+                {
+                    await Devices.MiddleLight.TriggerSwitchAsync(false, cancellationToken);
+                }
+
+            }
+            
         }
 
     }
