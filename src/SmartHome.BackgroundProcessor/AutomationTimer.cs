@@ -1,4 +1,5 @@
-﻿using SmartHome.ServerServices.Automation;
+﻿using SmartHome.BackgroundProcessor.Util;
+using SmartHome.ServerServices.Automation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,8 @@ namespace SmartHome.BackgroundProcessor
 
         async Task MinuiteTimerAsync(CancellationToken cancellationToken = default)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            var loop = InfinityUtil.BeyondAsync(5, TimeSpan.FromMilliseconds(500), TimeSpan.FromMinutes(2), cancellationToken);
+            await foreach (var count in loop)
             {
                 try
                 {

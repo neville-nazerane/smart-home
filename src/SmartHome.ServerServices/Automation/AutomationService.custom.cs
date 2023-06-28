@@ -27,7 +27,7 @@ namespace SmartHome.ServerServices.Automation
             await VerifyFrontDialAsync(device);
             await VerifyFrontControlAsync(device);
             await VerifyFrontMotionAsync(device);
-
+            await VerifyInsectPowerAsync(device);
         }
 
         public async Task OnMinuiteTimerAsync(CancellationToken cancellationToken = default)

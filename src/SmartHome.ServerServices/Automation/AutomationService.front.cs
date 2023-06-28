@@ -26,13 +26,13 @@ namespace SmartHome.ServerServices.Automation
 
 
                 else if (device == Devices.FrontDial.Three)
-                    await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, false);
-
-                else if (device == Devices.FrontDial.Four)
                 {
                     var light = await Devices.MiddleLight.GetAsync();
                     await Devices.MiddleLight.TriggerSwitchAsync(!light.IsSwitchedOn);
                 }
+
+                else if (device == Devices.FrontDial.Four)
+                    await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, false);
 
                 else if (device == Devices.FrontDial.Rotary)
                 {
@@ -90,6 +90,16 @@ namespace SmartHome.ServerServices.Automation
                 {
                     await Scenes.SetSceneEnabledAsync(SceneName.FrontRoom, true);
                 }
+            }
+        }
+
+        async ValueTask VerifyInsectPowerAsync(ListenedDevice device)
+        {
+            if (device == Devices.InsectPower)
+            {
+                var power = await Devices.InsectPower.GetAsync();
+                if (power.IsSwitchedOn)
+                    await Devices.InsectSwitch.TriggerSwitchAsync(true);
             }
         }
 
