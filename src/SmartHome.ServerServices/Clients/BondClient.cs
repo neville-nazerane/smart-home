@@ -2,6 +2,7 @@
 using SmartHome.Models.Bond;
 using SmartHome.Models.Contracts;
 using SmartHome.ServerServices.InternalJsonConverters;
+using SmartHome.ServerServices.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +47,7 @@ namespace SmartHome.ServerServices.Clients
 
 
         #region Fan
-        
+
         public async Task<CeilingFanModel> GetCeilingFanAsync(string id, CancellationToken cancellationToken = default)
         {
             var info = await GetDeviceInfoAsync(id, cancellationToken);
@@ -108,25 +109,24 @@ namespace SmartHome.ServerServices.Clients
             }
         }
 
-        public Task TurnOnFanAsync(string id, CancellationToken cancellationToken = default)
-        {
-            var model = new BondRequest
-            {
-                Argument = 0
-            };
-            return RunActionAsync(id, "SetSpeed", model, cancellationToken);
-        }
-        public Task TurnOffFanAsync(string id, CancellationToken cancellationToken = default)
-        {
-            var model = new BondRequest
-            {
-                Argument = 0
-            };
-            return RunActionAsync(id, "SetSpeed", model, cancellationToken);
-        }
+        public Task SwitchFanAsync(string id, bool isOn, CancellationToken cancellationToken = default)
+            => RetryUtil.Setup(4, TimeSpan.FromMilliseconds(200))
+                        .SetVerification(async () =>
+                        {
+                            var status = await GetFanStateAsync(id);
+                            return status.Power == 1 == isOn;
+                        })
+                        .ExecuteAsync(() => RunActionAsync(id, isOn ? "TurnOn" : "TurnOff", cancellationToken));
 
-        public Task TurnOnFanLightAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnLightOn", cancellationToken);
-        public Task TurnOffFanLightAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "TurnLightOff", cancellationToken);
+        public Task SwitchFanLightAsync(string id, bool isOn, CancellationToken cancellationToken = default)
+            => RetryUtil.Setup(4, TimeSpan.FromMilliseconds(200))
+                        .SetVerification(async () =>
+                        {
+                            var status = await GetFanStateAsync(id);
+                            return status.Light == 1 == isOn;
+                        })
+                        .ExecuteAsync(() => RunActionAsync(id, isOn ? "TurnLightOn" : "TurnLightOff", cancellationToken));
+
 
         Task<CFanState> GetFanStateAsync(string id, CancellationToken cancellationToken = default) => _client.GetFromJsonAsync<CFanState>($"v2/devices/{id}/state", cancellationToken);
 

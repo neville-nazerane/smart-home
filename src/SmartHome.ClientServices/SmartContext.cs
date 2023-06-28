@@ -170,6 +170,17 @@ namespace SmartHome.ClientServices
                 res.EnsureSuccessStatusCode();
             }
 
+            public async Task SwitchFanAsync(string id, bool isOn, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PostAsync($"bond/ceilingFan/{id}/switch/{isOn}", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
+            public async Task SwitchFanLightAsync(string id, bool isOn, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PostAsync($"bond/ceilingFan/{id}/switchLight/{isOn}", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
         }
 
 
