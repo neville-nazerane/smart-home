@@ -99,7 +99,7 @@ namespace SmartHome.ServerServices.Automation
             }
 
             // force TV light to go off to account for HUE bug
-            if (await Scenes.IsEnabledAsync(SceneName.TvLights, cancellationToken))
+            if (!await Scenes.IsEnabledAsync(SceneName.TvLights, cancellationToken))
             {
                 var light = await Devices.TvLight.GetAsync(cancellationToken);
                 if (light.IsSwitchedOn)
