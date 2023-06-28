@@ -42,5 +42,7 @@ namespace SmartHome.ServerServices.Scenes
             await Devices.TvLight.TriggerSwitchAsync(state);
         }
 
+        Task SyncTriggeredAsync(bool state) => Devices.HueSync.SetSyncStateAsync(state);
+
     }
 }
