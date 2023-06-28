@@ -34,6 +34,7 @@ namespace SmartHome.ServerServices.Automation
         {
             await ClosetMinuteCheckAsync(cancellationToken);
             await BedroomMinuteCheckAsync(cancellationToken);
+            await HueSyncMinuiteCheckAsync(cancellationToken);
         }
     }
 }

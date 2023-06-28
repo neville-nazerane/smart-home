@@ -80,5 +80,16 @@ namespace SmartHome.ServerServices.Automation
             }
         }
 
+        async Task HueSyncMinuiteCheckAsync(CancellationToken cancellationToken = default)
+        {
+            var sceneIsEnabled = await Scenes.IsEnabledAsync(SceneName.TvSync, cancellationToken);
+            if (sceneIsEnabled)
+            {
+                var isSyncing = await Devices.HueSync.GetSyncStateAsync(cancellationToken);
+                if (!isSyncing)
+                    await Devices.HueSync.SetSyncStateAsync(true, cancellationToken);
+            }
+        }
+
     }
 }
