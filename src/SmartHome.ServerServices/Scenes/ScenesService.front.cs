@@ -28,10 +28,26 @@ namespace SmartHome.ServerServices.Scenes
             {
                 _logger.LogError(e, "Failed to switch kitchen");
             }
-
-            await Devices.FrontCeilingFan.SwitchAsync(state);
-            await Devices.FrontCeilingFan.SwitchLightAsync(state);
             await SetSceneEnabledAsync(SceneName.TvLights, state);
+
+            try
+            {
+                await Devices.FrontCeilingFan.SwitchAsync(state);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to switch fan");
+            }
+
+            try
+            {
+                await Devices.FrontCeilingFan.SwitchLightAsync(state);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to switch fan");
+            }
+
         }
 
         async Task TvLightsTriggerAsync(bool state)
