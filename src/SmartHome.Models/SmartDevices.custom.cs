@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartHome.Models.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,6 +51,8 @@ namespace SmartHome.Models
 
 
         #region Front
+
+        public IHueSyncClient HueSync => _context.HueSyncClient;
 
         public BondRollerRequestModel KitchenRoller { get; private set; }
 

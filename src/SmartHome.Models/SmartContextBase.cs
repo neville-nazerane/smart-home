@@ -23,6 +23,8 @@ namespace SmartHome.Models
 
         protected abstract ISmartThingsClient SmartThingsClient { get; }
 
+        public abstract IHueSyncClient HueSyncClient { get; }
+
         public abstract IScenesService Scenes { get; }
 
         public SmartContextBase()
