@@ -76,7 +76,15 @@ namespace SmartHome.ServerServices.Automation
             if (device == Devices.FrontMotionSensor)
             {
                 await LogListenedAsync(device, "motion");
-                await Scenes.SetSceneEnabledAsync(SceneName.FrontRoom, true);
+
+                if (await Scenes.IsEnabledAsync(SceneName.GoodNight))
+                {
+
+                }
+                else
+                {
+                    await Scenes.SetSceneEnabledAsync(SceneName.FrontRoom, true);
+                }
             }
         }
 
@@ -88,6 +96,19 @@ namespace SmartHome.ServerServices.Automation
                 var isSyncing = await Devices.HueSync.GetSyncStateAsync(cancellationToken);
                 if (!isSyncing)
                     await Devices.HueSync.SetSyncStateAsync(true, cancellationToken);
+            }
+
+            // force TV light to go off to account for HUE bug
+            if (await Scenes.IsEnabledAsync(SceneName.TvLights, cancellationToken))
+            {
+                var light = await Devices.TvLight.GetAsync(cancellationToken);
+                if (light.IsSwitchedOn)
+                {
+                    await Devices.TvLight.TriggerSwitchAsync(false, cancellationToken);
+                    await Devices.TvBottomLightStrip.TriggerSwitchAsync(false, cancellationToken);
+                    await Devices.TvLeftBar.TriggerSwitchAsync(false, cancellationToken);
+                    await Devices.TvRightBar.TriggerSwitchAsync(false, cancellationToken);
+                }
             }
         }
 
