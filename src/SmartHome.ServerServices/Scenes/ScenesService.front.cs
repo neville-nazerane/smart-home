@@ -36,10 +36,14 @@ namespace SmartHome.ServerServices.Scenes
 
         async Task TvLightsTriggerAsync(bool state)
         {
+            if (!state)
+                await SetSceneEnabledAsync(SceneName.TvSync, false);
             await Devices.TvBottomLightStrip.TriggerSwitchAsync(state);
             await Devices.TvLeftBar.TriggerSwitchAsync(state);
             await Devices.TvRightBar.TriggerSwitchAsync(state);
             await Devices.TvLight.TriggerSwitchAsync(state);
+            if (state)
+                await SetSceneEnabledAsync(SceneName.TvSync, true);
         }
 
         Task SyncTriggeredAsync(bool state) => Devices.HueSync.SetSyncStateAsync(state);
