@@ -32,6 +32,11 @@ namespace SmartHome.ServerServices
             services.AddHttpClient<ISmartThingsClient, SmartThingsClient>(
                         c => SmartThingsClient.SetupClient(c, smartConfgs["PAT"]));
 
+            var hueSyncConfig = configuration.GetSection("hueSync");
+            services.AddHttpClient<IHueSyncClient, HueSyncClient>(
+                            c => HueSyncClient.SetupClient(c, hueSyncConfig["baseUrl"], hueSyncConfig["token"]))
+                    .ConfigurePrimaryHttpMessageHandler(HueSyncClient.GetHandler);
+
             services.AddScoped<SmartContext>()
                     .AddScoped<IScenesService, ScenesService>()
                     .AddTransient<AutomationService>();
