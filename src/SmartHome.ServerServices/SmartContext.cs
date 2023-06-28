@@ -22,17 +22,20 @@ namespace SmartHome.ServerServices
         protected override ISmartThingsClient SmartThingsClient { get; }
 
         public override IScenesService Scenes { get; }
+        public override IHueSyncClient HueSyncClient { get; }
 
         public SmartContext(IPhilipsHueClient philipsHueClient,
                             IBondClient bondClient,
                             IScenesService scenesService,
                             ISmartThingsClient smartThingsClient,
+                            IHueSyncClient hueSyncClient,
                             AppDbContext dbContext) : base()
         {
             PhilipsHueClient = philipsHueClient;
             BondClient = bondClient;
             Scenes = scenesService;
             SmartThingsClient = smartThingsClient;
+            HueSyncClient = hueSyncClient;
             _dbContext = dbContext;
         }
 

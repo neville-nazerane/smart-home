@@ -23,6 +23,8 @@ namespace SmartHome.ServerServices.Clients
 
         private static readonly JsonSerializerOptions DeviceIdsJsonOptions;
 
+        RetryUtil BeginRetry => RetryUtil.Setup(3, TimeSpan.FromMilliseconds(200));
+
         static BondClient()
         {
             DeviceIdsJsonOptions = new();
@@ -84,14 +86,26 @@ namespace SmartHome.ServerServices.Clients
             var state = await GetFanStateAsync(id, cancellationToken);
             int targetSpeed = (state.Power * state.Speed) - 1;
             if (targetSpeed == 0)
-                await RunActionAsync(id, "TurnOff", cancellationToken);
+                await BeginRetry.SetVerification(async () =>
+                                {
+                                    var state = await GetFanStateAsync(id, cancellationToken);
+                                    return state.Power == 0;
+                                })
+                                .ExecuteAsync(() => RunActionAsync(id, "TurnOff", cancellationToken));
+
             else if (targetSpeed > 0)
             {
                 var model = new BondRequest
                 {
                     Argument = (short)targetSpeed
                 };
-                await RunActionAsync(id, "SetSpeed", model, cancellationToken);
+                await BeginRetry.SetVerification(async () =>
+                                {
+                                    var state = await GetFanStateAsync(id, cancellationToken);
+                                    return state.Speed == targetSpeed;
+                                })
+                                .ExecuteAsync(() => RunActionAsync(id, "SetSpeed", model, cancellationToken));
+
             }
         }
 
@@ -105,7 +119,12 @@ namespace SmartHome.ServerServices.Clients
                 {
                     Argument = (short)targetSpeed
                 };
-                await RunActionAsync(id, "SetSpeed", model, cancellationToken);
+                await BeginRetry.SetVerification(async () =>
+                {
+                    var state = await GetFanStateAsync(id, cancellationToken);
+                    return state.Speed == targetSpeed;
+                })
+                .ExecuteAsync(() => RunActionAsync(id, "SetSpeed", model, cancellationToken));
             }
         }
 
@@ -171,12 +190,13 @@ namespace SmartHome.ServerServices.Clients
 
         async Task FillupRollerStateAsync(RollerModel roller, CancellationToken cancellationToken = default)
         {
-            var state = await _client.GetFromJsonAsync<RollerState>($"v2/devices/{roller.Id}/state", cancellationToken);
+            var state = await GetRollerStateAsync(roller.Id, cancellationToken);
             roller.IsOpen = state.Open == 1;
         }
 
-        public Task ToggleRollerAsync(string id, CancellationToken cancellationToken = default)
-            => RunActionAsync(id, "ToggleOpen", cancellationToken);
+        private Task<RollerState> GetRollerStateAsync(string id, CancellationToken cancellationToken) => _client.GetFromJsonAsync<RollerState>($"v2/devices/{id}/state", cancellationToken);
+
+        public Task ToggleRollerAsync(string id, CancellationToken cancellationToken = default) => RunActionAsync(id, "ToggleOpen", cancellationToken);
 
         #endregion
 

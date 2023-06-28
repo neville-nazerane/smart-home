@@ -24,8 +24,10 @@ namespace SmartHome.ClientServices
         protected override IPhilipsHueClient PhilipsHueClient => _allClients;
         protected override IBondClient BondClient => _allClients;
         public override IScenesService Scenes => _allClients;
+        public override IHueSyncClient HueSyncClient => _allClients;
 
         protected override ISmartThingsClient SmartThingsClient => _allClients;
+
 
         public SmartContext(HttpClient httpClient) : base()
         {
@@ -39,7 +41,7 @@ namespace SmartHome.ClientServices
             => _httpClient.GetFromJsonAsync<IEnumerable<DeviceLog>>($"listeningLogs?pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken);
 
 
-        class AllCLients : IPhilipsHueClient, IBondClient, IScenesService, ISmartThingsClient
+        class AllCLients : IPhilipsHueClient, IBondClient, IScenesService, ISmartThingsClient, IHueSyncClient
         {
             private readonly HttpClient _httpClient;
 
@@ -181,6 +183,16 @@ namespace SmartHome.ClientServices
                 using var res = await _httpClient.PostAsync($"bond/ceilingFan/{id}/switchLight/{isOn}", null, cancellationToken);
                 res.EnsureSuccessStatusCode();
             }
+
+            public Task<bool> GetSyncStateAsync(CancellationToken cancellationToken = default)
+                => _httpClient.GetFromJsonAsync<bool>($"hueSync", cancellationToken);
+
+            public async Task SetSyncStateAsync(bool state, CancellationToken cancellationToken = default)
+            {
+                using var res = await _httpClient.PutAsync($"hueSync/{state}", null, cancellationToken);
+                res.EnsureSuccessStatusCode();
+            }
+
         }
 
 

@@ -47,6 +47,9 @@ namespace SmartHome.WebAPI
             app.MapGet("/bond/roller/{id}", GetRollerAsync);
             app.MapPut("/bond/roller/{id}/toggle", ToggleBondRollerAsync);
 
+            app.MapGet("/hueSync", GetSyncStateAsync);
+            app.MapPut("/hueSync/{state}", SetSyncStateAsync);
+
             app.MapPost("/smartthings/switchbot/{deviceId}/trigger/{isOn}", TriggerSwitchBotAsync);
         }
 
@@ -65,6 +68,8 @@ namespace SmartHome.WebAPI
                                                           int pageSize,
                                                           CancellationToken cancellationToken = default)
             => context.GetListeningLogsAsync(pageNumber, pageSize, cancellationToken);
+
+
 
 
         #region scenes
@@ -183,5 +188,15 @@ namespace SmartHome.WebAPI
 
         #endregion
 
+
+        #region hue sync
+        
+        static Task<bool> GetSyncStateAsync(IHueSyncClient hueSyncClient, CancellationToken cancellationToken = default)
+            => hueSyncClient.GetSyncStateAsync(cancellationToken);
+
+        static Task SetSyncStateAsync(IHueSyncClient hueSyncClient, bool state, CancellationToken cancellationToken = default)
+            => hueSyncClient.SetSyncStateAsync(state, cancellationToken);
+
+        #endregion
     }
 }
