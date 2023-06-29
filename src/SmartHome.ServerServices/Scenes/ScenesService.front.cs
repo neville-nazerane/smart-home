@@ -64,6 +64,9 @@ namespace SmartHome.ServerServices.Scenes
             }
 
             await Devices.MiddleLight.TriggerSwitchAsync(!state);
+            if (!state)
+                if (state)
+                    await Devices.MiddleLight.SetBrightnessAsync(100);
             try
             {
                 await SetSceneEnabledAsync(SceneName.Kitchen, !state);

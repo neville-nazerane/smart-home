@@ -88,7 +88,7 @@ namespace SmartHome.ServerServices.Automation
                 {
                     await LogListenedAsync(device, "motion");
 
-                    if (await Scenes.IsEnabledAsync(SceneName.GoodNight))
+                    if (await Scenes.IsAnySceneEnabledAsync(SceneName.GoodNight, SceneName.FrontGoodNight))
                     {
                         await Devices.MiddleLight.TriggerSwitchAsync(true);
                     }
