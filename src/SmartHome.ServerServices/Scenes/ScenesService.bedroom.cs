@@ -38,9 +38,12 @@ namespace SmartHome.ServerServices.Scenes
         async Task GoodNightTriggeredAsync(bool state)
         {
             // DIM the middle light
-            await Devices.MiddleLight.TriggerSwitchAsync(true);
-            await Devices.MiddleLight.SetBrightnessAsync(20);
-            await Devices.MiddleLight.TriggerSwitchAsync(false);
+            //if (state)
+            //{
+            //    await Devices.MiddleLight.TriggerSwitchAsync(true);
+            //    await Devices.MiddleLight.SetBrightnessAsync(20);
+            //    await Devices.MiddleLight.TriggerSwitchAsync(false);
+            //}
 
             await SetSceneEnabledAsync(SceneName.Computer, !state);
             try
@@ -51,7 +54,8 @@ namespace SmartHome.ServerServices.Scenes
             {
                 _logger.LogError(e, "Failed to switch bedroom light");
             }
-            await SetSceneEnabledAsync(SceneName.FrontRoom, !state);
+
+            //await SetSceneEnabledAsync(SceneName.FrontRoom, !state);
         }
 
     }

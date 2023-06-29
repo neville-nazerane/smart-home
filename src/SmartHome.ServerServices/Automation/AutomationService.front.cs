@@ -137,14 +137,12 @@ namespace SmartHome.ServerServices.Automation
 
         async Task MiddleLightMinuiteCheckAsync(CancellationToken cancellationToken = default)
         {
-            bool isSceneEnabled = await Scenes.IsAnySceneEnabledAsync(SceneName.GoodNight);
+            bool isSceneEnabled = await Scenes.IsAnySceneEnabledAsync(SceneName.GoodNight, SceneName.FrontGoodNight);
             if (isSceneEnabled)
             {
-                var motion = await Devices.BedroomMotionSensor2.GetAsync(cancellationToken);
+                var motion = await Devices.FrontMotionSensor.GetAsync(cancellationToken);
                 if (!motion.IsMotionDetected && (DateTime.UtcNow - motion.LastChanged.ToUniversalTime()).TotalMinutes > 5)
-                {
                     await Devices.MiddleLight.TriggerSwitchAsync(false, cancellationToken);
-                }
 
             }
             
