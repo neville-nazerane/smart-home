@@ -35,6 +35,9 @@ namespace SmartHome.ServerServices.Scenes
                 case SceneName.TvLights:
                     await TvLightsTriggerAsync(state);
                     break;
+                case SceneName.TvSync:
+                    await SyncTriggeredAsync(state);
+                    break;
             }
         }
 
