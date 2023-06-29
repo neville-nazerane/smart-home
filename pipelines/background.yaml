@@ -2,7 +2,11 @@
 pool:
   vmImage: ubuntu-latest
 
+pr: none
+
 trigger:
+
+   
   branches:
     include:
       - master
