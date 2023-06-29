@@ -16,6 +16,8 @@ namespace SmartHome.Models
         Computer,
         Kitchen,
         TvLights,
-        TvSync
+        TvSync,
+        FrontGoodNight
+
     }
 }

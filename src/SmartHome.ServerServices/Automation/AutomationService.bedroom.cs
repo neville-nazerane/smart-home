@@ -41,8 +41,8 @@ namespace SmartHome.ServerServices.Automation
                     }
                     else if (button.LastEvent.Contains("short_release"))
                     {
-
-                        await Scenes.SwitchAsync(SceneName.Snooze);
+                        await Scenes.SwitchAsync(SceneName.GoodNight);
+                        //await Scenes.SwitchAsync(SceneName.Snooze);
                     }
                 }
 

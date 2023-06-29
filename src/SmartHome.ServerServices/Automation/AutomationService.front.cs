@@ -66,7 +66,8 @@ namespace SmartHome.ServerServices.Automation
                     await Devices.FrontCeilingFan.IncreaseAsync();
                 else if (device == Devices.FrontControl.DecreaseButton)
                     await Devices.FrontCeilingFan.DecreaseAsync();
-
+                else if (device == Devices.FrontControl.HueButton)
+                    await Scenes.SwitchAsync(SceneName.FrontGoodNight);
             }
 
         }
