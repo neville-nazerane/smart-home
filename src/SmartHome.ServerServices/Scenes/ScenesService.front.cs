@@ -19,6 +19,7 @@ namespace SmartHome.ServerServices.Scenes
 
         async Task FrontRoomTriggerAsync(bool state)
         {
+            await Scenes.SetSceneEnabledAsync(SceneName.FrontGoodNight, false);
             await Devices.MiddleLight.TriggerSwitchAsync(state);
             if (state)
                 await Devices.MiddleLight.SetBrightnessAsync(100);
@@ -47,7 +48,41 @@ namespace SmartHome.ServerServices.Scenes
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Failed to switch fan");
+                _logger.LogError(e, "Failed to switch fan light");
+            }
+
+        }
+
+        async Task FrontGoodNightTriggerAsync(bool state)
+        {
+            // DIM the middle light
+            if (state)
+            {
+                await Devices.MiddleLight.TriggerSwitchAsync(true);
+                await Devices.MiddleLight.SetBrightnessAsync(20);
+                await Devices.MiddleLight.TriggerSwitchAsync(false);
+            }
+
+            await Devices.MiddleLight.TriggerSwitchAsync(state);
+            if (state)
+                await Devices.MiddleLight.SetBrightnessAsync(100);
+            try
+            {
+                await SetSceneEnabledAsync(SceneName.Kitchen, state);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to switch kitchen");
+            }
+            await SetSceneEnabledAsync(SceneName.TvLights, state);
+
+            try
+            {
+                await Devices.FrontCeilingFan.SwitchLightAsync(state);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to switch fan light");
             }
 
         }

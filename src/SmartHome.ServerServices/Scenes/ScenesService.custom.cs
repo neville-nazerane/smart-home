@@ -29,6 +29,9 @@ namespace SmartHome.ServerServices.Scenes
                 case SceneName.FrontRoom:
                     await FrontRoomTriggerAsync(state);
                     break;
+                case SceneName.FrontGoodNight:
+                    await FrontGoodNightTriggerAsync(state);
+                    break;
                 case SceneName.Kitchen:
                     await KitchenTriggerAsync(state);
                     break;

@@ -21,6 +21,8 @@ namespace SmartHome.ServerServices.Scenes
         SmartContext context;
         SmartContext Context => context ??= _serviceProvider.GetService<SmartContext>();
 
+        IScenesService Scenes => this;
+
         SmartDevices Devices => Context.Devices;
 
         public ScenesService(IServiceProvider serviceProvider,
