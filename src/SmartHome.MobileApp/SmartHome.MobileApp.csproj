@@ -15,7 +15,7 @@
 		<ApplicationTitle>SmartHome.MobileApp</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.smarthome.mobileapp</ApplicationId>
+		<ApplicationId>com.nevillenazerane.home</ApplicationId>
 		<ApplicationIdGuid>cf97b999-5a71-48cc-a945-d8fc3357503e</ApplicationIdGuid>
 
 		<!-- Versions -->
