@@ -143,7 +143,6 @@ namespace SmartHome.ServerServices.Automation
                 var motion = await Devices.FrontMotionSensor.GetAsync(cancellationToken);
                 if (!motion.IsMotionDetected && (DateTime.UtcNow - motion.LastChanged.ToUniversalTime()).TotalMinutes > 5)
                     await Devices.MiddleLight.TriggerSwitchAsync(false, cancellationToken);
-
             }
             
         }

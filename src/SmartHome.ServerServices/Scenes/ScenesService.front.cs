@@ -65,8 +65,7 @@ namespace SmartHome.ServerServices.Scenes
 
             await Devices.MiddleLight.TriggerSwitchAsync(!state);
             if (!state)
-                if (state)
-                    await Devices.MiddleLight.SetBrightnessAsync(100);
+                await Devices.MiddleLight.SetBrightnessAsync(100);
             try
             {
                 await SetSceneEnabledAsync(SceneName.Kitchen, !state);
@@ -83,8 +82,8 @@ namespace SmartHome.ServerServices.Scenes
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to switch fan light");
-            }            
-            
+            }
+
             await SetSceneEnabledAsync(SceneName.TvLights, !state);
         }
 
