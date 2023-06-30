@@ -137,7 +137,7 @@ namespace SmartHome.ServerServices.Automation
 
         async Task MiddleLightMinuiteCheckAsync(CancellationToken cancellationToken = default)
         {
-            bool isSceneEnabled = await Scenes.IsAnySceneEnabledAsync(SceneName.GoodNight, SceneName.FrontGoodNight);
+            bool isSceneEnabled = await Scenes.IsAnySceneEnabledAsync(SceneName.FrontGoodNight);
             if (isSceneEnabled)
             {
                 var motion = await Devices.FrontMotionSensor.GetAsync(cancellationToken);
