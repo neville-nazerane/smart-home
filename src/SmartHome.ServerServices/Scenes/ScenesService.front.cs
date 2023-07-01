@@ -35,7 +35,8 @@ namespace SmartHome.ServerServices.Scenes
 
             try
             {
-                await Devices.FrontCeilingFan.SwitchAsync(state);
+                if (!state)
+                    await Devices.FrontCeilingFan.SwitchAsync(state);
             }
             catch (Exception e)
             {
@@ -44,7 +45,7 @@ namespace SmartHome.ServerServices.Scenes
 
             try
             {
-                await Devices.FrontCeilingFan.SwitchLightAsync(state);
+                   await Devices.FrontCeilingFan.SwitchLightAsync(state);
             }
             catch (Exception e)
             {
@@ -77,7 +78,8 @@ namespace SmartHome.ServerServices.Scenes
 
             try
             {
-                await Devices.FrontCeilingFan.SwitchLightAsync(!state);
+                if (state)
+                    await Devices.FrontCeilingFan.SwitchLightAsync(!state);
             }
             catch (Exception e)
             {
