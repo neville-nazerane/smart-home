@@ -45,7 +45,7 @@ namespace SmartHome.ServerServices.Scenes
 
             try
             {
-                   await Devices.FrontCeilingFan.SwitchLightAsync(state);
+                await Devices.FrontCeilingFan.SwitchLightAsync(state);
             }
             catch (Exception e)
             {
@@ -103,6 +103,54 @@ namespace SmartHome.ServerServices.Scenes
             await Devices.TvLight.TriggerSwitchAsync(state);
             if (state)
                 await SetSceneEnabledAsync(SceneName.TvSync, true);
+        }
+
+        async Task MovieTriggerAsync(bool state)
+        {
+            // DIM/BRIGHT the middle light
+            if (state)
+            {
+                await Devices.MiddleLight.TriggerSwitchAsync(true);
+                await Devices.MiddleLight.SetBrightnessAsync(20);
+                await Devices.MiddleLight.TriggerSwitchAsync(false);
+            }
+            else
+            {
+                await Devices.MiddleLight.TriggerSwitchAsync(true);
+                await Devices.MiddleLight.SetBrightnessAsync(100);
+            }
+
+            await Task.WhenAll(
+                Task.Run(async () =>
+                {
+
+                    try
+                    {
+                        await SetSceneEnabledAsync(SceneName.Kitchen, !state);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, "Failed to switch kitchen");
+                    }
+
+                }),
+                Task.Run(async () =>
+                {
+
+                    try
+                    {
+                        if (state)
+                            await Devices.FrontCeilingFan.SwitchLightAsync(!state);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, "Failed to switch fan light");
+                    }
+
+                })
+            );
+
+            await Devices.InsectPower.TriggerSwitchAsync(!state);
         }
 
         Task SyncTriggeredAsync(bool state) => Devices.HueSync.SetSyncStateAsync(state);

@@ -41,6 +41,9 @@ namespace SmartHome.ServerServices.Scenes
                 case SceneName.TvSync:
                     await SyncTriggeredAsync(state);
                     break;
+                case SceneName.Movie:
+                    await MovieTriggerAsync(state);
+                    break;
             }
         }
 
