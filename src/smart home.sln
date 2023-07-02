@@ -15,7 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.Website", "SmartH
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.BackgroundProcessor", "SmartHome.BackgroundProcessor\SmartHome.BackgroundProcessor.csproj", "{8A71F343-44FD-43F3-B0DA-31284D70BD35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.MobileApp", "SmartHome.MobileApp\SmartHome.MobileApp.csproj", "{7592D38F-8918-4E53-A9C0-22B21A503C3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHome.MobileApp", "SmartHome.MobileApp\SmartHome.MobileApp.csproj", "{7592D38F-8918-4E53-A9C0-22B21A503C3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62DA9007-F11E-444F-A2BF-2F9F08695507}"
+	ProjectSection(SolutionItems) = preProject
+		ReleaseNotes.txt = ReleaseNotes.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

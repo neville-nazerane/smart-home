@@ -1,0 +1,98 @@
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+name: $(majorVersion).$(minorVersion).$(Build.BuildId)
+
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - src/SmartHome.MobileApp
+      - src/SmartHome.ClientServices
+      - src/SmartHome.Models
+      - pipelines/website.yaml
+
+variables:
+  majorVersion: 1
+  minorVersion: 0
+
+  projectPath: src/SmartHome.MobileApp
+  apkName: com.nevillenazerane.home-Signed.apk
+  keyStoreFile: internet.jks
+  appCenterSlug: live.neville-live.com/smarthome
+  appCenterGroup: c1ce37bc-14a8-4d6d-b7c7-1773dd121c0d
+  artifactName: androidApp
+  compileLocation: $(Build.ArtifactStagingDirectory)/published
+  androidManifestLocation: $(projectPath)/Platforms/Android/AndroidManifest.xml
+  releaseNotesPath: src/ReleaseNotes.txt
+
+stages:
+  - stage: Compile
+    jobs:
+      - job: CompileMAUI
+        displayName: Compile MAUI
+        steps:
+
+          - script: dotnet workload install maui-android
+            displayName: Installing maui workload
+
+          - task: android-manifest-version@1
+            displayName: Set Versioning
+            continueOnError: true
+            inputs:
+              sourcePath: $(androidManifestLocation)
+              versionCode: $(Build.BuildId)
+              versionName: $(Build.BuildNumber)
+              printFile: true
+
+          - script: dotnet publish -c release -f net7.0-android -o $(compileLocation)
+            displayName: Compile MAUI android
+            workingDirectory: $(projectPath)
+          
+          - task: AndroidSigning@3
+            displayName: Signing APK
+            inputs:
+              apkFiles: $(compileLocation)/$(apkName)
+              apksignerKeystoreFile: $(keyStoreFile)
+              apksignerKeystorePassword: $(keystore.password)
+              apksignerKeystoreAlias: key0
+              apksignerKeyPassword: $(key.password)
+
+
+          - publish: $(compileLocation)
+            artifact: $(artifactName)
+            displayName: Publish to $(artifactName)
+
+          - publish: $(releaseNotesPath)
+            artifact: text
+            displayName: Publish release notes
+
+
+  - stage: 
+    jobs:
+      - job: Deploy2AppCenter
+        displayName: Deploy to AppCenter
+        steps:
+
+          - checkout: none
+
+          - download: current
+
+          - script: |
+              mapfile notes < $(Pipeline.Workspace)/text/ReleaseNotes.txt
+              echo "##vso[task.setvariable variable=releaseNotes;]$notes"
+
+          - task: AppCenterDistribute@3
+            inputs:
+              serverEndpoint: My App Center
+              appSlug: $(appCenterSlug)
+              appFile: $(Pipeline.Workspace)/$(artifactName)/$(apkName)
+              symbolsOption: Android
+              releaseNotesOption: input
+              releaseNotesInput: $(releaseNotes)
+              destinationType: groups
+              distributionGroupId: $(appCenterGroup)
+              
