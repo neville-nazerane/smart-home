@@ -29,8 +29,9 @@ namespace SmartHome.Models
         public BondCeilingFanRequestModel BedroomCeilingFan { get; private set; }
 
 
-        public HueLightRequestModel ComputerLightPlug { get; private set; }
+        //public HueLightRequestModel ComputerLightPlug { get; private set; }
 
+        public HueLightRequestModel ComputerGradient { get; private set; }
         public HueLightRequestModel ComputerLeftBar { get; private set; }
 
         public HueLightRequestModel ComputerRightBar { get; private set; }
@@ -95,7 +96,9 @@ namespace SmartHome.Models
             BedroomMotionSensor1 = new(_context, "749b6ec1-bc35-4f46-b11d-4f4b77d1605a");
             BedroomMotionSensor2 = new(_context, "9eb3233b-21c5-4fbe-9def-61474abc6e6e");
 
-            ComputerLightPlug = new(_context, "56177214-d8b7-4d05-bb27-119538131e2f");
+            //ComputerLightPlug = new(_context, "56177214-d8b7-4d05-bb27-119538131e2f");
+
+            ComputerGradient = new(_context, "6980ed6c-d4fc-4e52-a2d2-8ff72b7bbb5e");
             ComputerLeftBar = new(_context, "6980ed6c-d4fc-4e52-a2d2-8ff72b7bbb5e");
             ComputerRightBar = new(_context, "14d8fd8b-f454-4dca-87aa-d9164bbe310c");
             ComputerLeftIris = new(_context, "d7bf7254-f2d8-4d6f-8b29-1e5cebe3949d");
