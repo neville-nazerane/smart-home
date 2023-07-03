@@ -98,7 +98,7 @@ namespace SmartHome.Models
 
             //ComputerLightPlug = new(_context, "56177214-d8b7-4d05-bb27-119538131e2f");
 
-            ComputerGradient = new(_context, "6980ed6c-d4fc-4e52-a2d2-8ff72b7bbb5e");
+            ComputerGradient = new(_context, "3b12dfc8-1b32-4ec3-ae84-18f8097b7d53");
             ComputerLeftBar = new(_context, "6980ed6c-d4fc-4e52-a2d2-8ff72b7bbb5e");
             ComputerRightBar = new(_context, "14d8fd8b-f454-4dca-87aa-d9164bbe310c");
             ComputerLeftIris = new(_context, "d7bf7254-f2d8-4d6f-8b29-1e5cebe3949d");
