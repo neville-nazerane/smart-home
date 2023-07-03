@@ -26,7 +26,7 @@ namespace SmartHome.ServerServices.Scenes
 
         async Task ComputerTriggeredAsync(bool state)
         {
-            await Devices.ComputerLightPlug.TriggerSwitchAsync(state);
+            await Devices.ComputerGradient.TriggerSwitchAsync(state);
 
             await Devices.ComputerRightIris.TriggerSwitchAsync(state);
             await Devices.ComputerLeftIris.TriggerSwitchAsync(state);
