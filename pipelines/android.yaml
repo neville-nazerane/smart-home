@@ -2,6 +2,8 @@
 pool:
   vmImage: 'ubuntu-latest'
 
+pr: none
+
 name: $(majorVersion).$(minorVersion).$(Build.BuildId)
 
 trigger:
