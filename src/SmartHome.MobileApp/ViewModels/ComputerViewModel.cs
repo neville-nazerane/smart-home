@@ -1,5 +1,4 @@
-﻿using __XamlGeneratedCode__;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Graphics;
 using SmartHome.ClientServices;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static SmartHome.Models.SmartContextBase;
 using PhilipsHue = SmartHome.Models.PhilipsHue;
 
 namespace SmartHome.MobileApp.ViewModels
@@ -47,6 +47,28 @@ namespace SmartHome.MobileApp.ViewModels
             LeftBarColor = await GetColorAsync(_smartContext.Devices.ComputerLeftBar.GetAsync(cancellationToken));
             RightBarColor = await GetColorAsync(_smartContext.Devices.ComputerRightBar.GetAsync(cancellationToken));
             StripColor = await GetColorAsync(_smartContext.Devices.ComputerGradient.GetAsync(cancellationToken));
+        }
+
+        [RelayCommand]
+        Task SwitchLeftHaloAsync(CancellationToken cancellationToken = default) => SwitchAsync(_smartContext.Devices.ComputerLeftIris, cancellationToken);
+
+        [RelayCommand]
+        Task SwitchRightHaloAsync(CancellationToken cancellationToken = default) => SwitchAsync(_smartContext.Devices.ComputerRightIris, cancellationToken);
+
+        [RelayCommand]
+        Task SwitchLeftBarAsync(CancellationToken cancellationToken = default) => SwitchAsync(_smartContext.Devices.ComputerLeftBar, cancellationToken);
+
+        [RelayCommand]
+        Task SwitchRightBarAsync(CancellationToken cancellationToken = default) => SwitchAsync(_smartContext.Devices.ComputerRightBar, cancellationToken);
+
+        [RelayCommand]
+        Task SwitchStripAsync(CancellationToken cancellationToken = default) => SwitchAsync(_smartContext.Devices.ComputerGradient, cancellationToken);
+
+
+        static async Task SwitchAsync(HueLightRequestModel req, CancellationToken cancellationToken = default)
+        {
+            var light = await req.GetAsync(cancellationToken);
+            await req.TriggerSwitchAsync(!light.IsSwitchedOn, cancellationToken);
         }
 
         static async Task<Color> GetColorAsync(Task<PhilipsHue.LightModel> task)

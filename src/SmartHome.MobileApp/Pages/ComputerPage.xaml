@@ -11,35 +11,60 @@
                  IsRefreshing="{Binding SetupCommand.IsRunning}" 
                  Margin="15" >
         <Grid RowDefinitions="105, *, * , 105"
-              ColumnDefinitions="*, 50, 30"
+              ColumnDefinitions="*, 50, 35"
               RowSpacing="20"
               ColumnSpacing="30" >
 
+            <!-- left iris -->
             <Ellipse Fill="{Binding LeftHaloColor}"
                      Grid.ColumnSpan="2"
-                     Grid.Column="1" />
+                     Grid.Column="1" >
+                <Ellipse.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchLeftHaloCommand}" />
+                </Ellipse.GestureRecognizers>
+            </Ellipse>
 
+            <!--strip--> 
             <Rectangle Fill="{Binding StripColor}"
                        Grid.Row="1"
                        Grid.Column="2"
-                       Grid.RowSpan="2"/>
+                       Grid.RowSpan="2">
+                <Rectangle.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchStripCommand}" />
+                </Rectangle.GestureRecognizers>
+            </Rectangle>
 
+            <!--left bar--> 
             <RoundRectangle Fill="{Binding LeftBarColor}"
                             Grid.Row="1" 
                             Grid.Column="1"
-                            CornerRadius="10" />
+                            CornerRadius="10">
+                <RoundRectangle.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchLeftBarCommand}" />
+                </RoundRectangle.GestureRecognizers>
+            </RoundRectangle>
 
+            <!--right bar--> 
             <RoundRectangle Fill="{Binding RightBarColor}"
                             Grid.Row="2"
                             Grid.Column="1"
-                            CornerRadius="10"  />
+                            CornerRadius="10">
+                <RoundRectangle.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchRightBarCommand}" />
+                </RoundRectangle.GestureRecognizers>
+            </RoundRectangle>
 
+            <!--right iris--> 
             <Ellipse Fill="{Binding RightHaloColor}"
                      Grid.Row="4"
                      Grid.Column="1"
-                     Grid.ColumnSpan="2" />
+                     Grid.ColumnSpan="2" >
+                <Ellipse.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchRightHaloCommand}" />
+                </Ellipse.GestureRecognizers>
+            </Ellipse>
 
         </Grid>
     </RefreshView>
-    
+
 </ContentPage>
