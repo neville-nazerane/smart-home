@@ -1,38 +1,45 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SmartHome.MobileApp.ViewModels"
              x:Class="SmartHome.MobileApp.Pages.ComputerPage"
-             Title="ComputerPage"
+             x:DataType="vm:ComputerViewModel"
+             Title="Computer Page"
              BackgroundColor="DarkSlateGray" >
-    <Grid RowDefinitions="105, *, * , 105"
-          ColumnDefinitions="*, 50, 30"
-          RowSpacing="20"
-          ColumnSpacing="30" 
-          Margin="15" >
 
-        <Ellipse Fill="White"
-                 Grid.ColumnSpan="2"
-                 Grid.Column="1" />
+    <RefreshView Command="{Binding SetupCommand}"
+                 IsRefreshing="{Binding SetupCommand.IsRunning}" 
+                 Margin="15" >
+        <Grid RowDefinitions="105, *, * , 105"
+              ColumnDefinitions="*, 50, 30"
+              RowSpacing="20"
+              ColumnSpacing="30" >
 
-        <Rectangle Fill="White"
-                   Grid.Row="1"
-                   Grid.Column="2"
-                   Grid.RowSpan="2"/>
+            <Ellipse Fill="{Binding LeftHaloColor}"
+                     Grid.ColumnSpan="2"
+                     Grid.Column="1" />
 
-        <RoundRectangle Fill="White"
-                        Grid.Row="1" 
-                        Grid.Column="1"
-                        CornerRadius="10" />
+            <Rectangle Fill="{Binding StripColor}"
+                       Grid.Row="1"
+                       Grid.Column="2"
+                       Grid.RowSpan="2"/>
 
-        <RoundRectangle Fill="White"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        CornerRadius="10"  />
+            <RoundRectangle Fill="{Binding LeftBarColor}"
+                            Grid.Row="1" 
+                            Grid.Column="1"
+                            CornerRadius="10" />
 
-        <Ellipse Fill="White"
-                 Grid.Row="4"
-                 Grid.Column="1"
-                 Grid.ColumnSpan="2" />
+            <RoundRectangle Fill="{Binding RightBarColor}"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            CornerRadius="10"  />
 
-    </Grid>
+            <Ellipse Fill="{Binding RightHaloColor}"
+                     Grid.Row="4"
+                     Grid.Column="1"
+                     Grid.ColumnSpan="2" />
+
+        </Grid>
+    </RefreshView>
+    
 </ContentPage>
