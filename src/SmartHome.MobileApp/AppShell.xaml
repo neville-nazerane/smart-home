@@ -5,11 +5,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SmartHome.MobileApp"
     xmlns:page="clr-namespace:SmartHome.MobileApp.Pages"
-    Shell.FlyoutBehavior="Disabled">
+    Shell.FlyoutBehavior="Flyout">
 
     <ShellContent
         Title="Scenes"
         ContentTemplate="{DataTemplate page:ScenesPage}"
         Route="scenes" />
+
+    <ShellContent
+        Title="Computer"
+        ContentTemplate="{DataTemplate page:ComputerPage}"
+        Route="computer" />
 
 </Shell>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHome.MobileApp.Pages.ComputerPage"
+             Title="ComputerPage"
+             BackgroundColor="DarkSlateGray" >
+    <Grid RowDefinitions="105, *, * , 105"
+          ColumnDefinitions="*, 50, 30"
+          RowSpacing="20"
+          ColumnSpacing="30" 
+          Margin="15" >
+
+        <Ellipse Fill="White"
+                 Grid.ColumnSpan="2"
+                 Grid.Column="1" />
+
+        <Rectangle Fill="White"
+                   Grid.Row="1"
+                   Grid.Column="2"
+                   Grid.RowSpan="2"/>
+
+        <RoundRectangle Fill="White"
+                        Grid.Row="1" 
+                        Grid.Column="1"
+                        CornerRadius="10" />
+
+        <RoundRectangle Fill="White"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        CornerRadius="10"  />
+
+        <Ellipse Fill="White"
+                 Grid.Row="4"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="2" />
+
+    </Grid>
+</ContentPage>
