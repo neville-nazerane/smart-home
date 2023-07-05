@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SmartHome.MobileApp.ViewModels"
+             x:Class="SmartHome.MobileApp.Pages.ComputerPage"
+             x:DataType="vm:ComputerViewModel"
+             Title="Computer Page"
+             BackgroundColor="DarkSlateGray" >
+
+    <RefreshView Command="{Binding SetupCommand}"
+                 IsRefreshing="{Binding SetupCommand.IsRunning}" 
+                 Margin="15" >
+        <Grid RowDefinitions="105, *, * , 105"
+              ColumnDefinitions="*, 50, 35"
+              RowSpacing="20"
+              ColumnSpacing="30" >
+
+            <!-- left iris -->
+            <Ellipse Fill="{Binding LeftHaloColor}"
+                     Grid.ColumnSpan="2"
+                     Grid.Column="1" >
+                <Ellipse.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchLeftHaloCommand}" />
+                </Ellipse.GestureRecognizers>
+            </Ellipse>
+
+            <!--strip--> 
+            <Rectangle Fill="{Binding StripColor}"
+                       Grid.Row="1"
+                       Grid.Column="2"
+                       Grid.RowSpan="2">
+                <Rectangle.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchStripCommand}" />
+                </Rectangle.GestureRecognizers>
+            </Rectangle>
+
+            <!--left bar--> 
+            <RoundRectangle Fill="{Binding LeftBarColor}"
+                            Grid.Row="1" 
+                            Grid.Column="1"
+                            CornerRadius="10">
+                <RoundRectangle.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchLeftBarCommand}" />
+                </RoundRectangle.GestureRecognizers>
+            </RoundRectangle>
+
+            <!--right bar--> 
+            <RoundRectangle Fill="{Binding RightBarColor}"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            CornerRadius="10">
+                <RoundRectangle.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchRightBarCommand}" />
+                </RoundRectangle.GestureRecognizers>
+            </RoundRectangle>
+
+            <!--right iris--> 
+            <Ellipse Fill="{Binding RightHaloColor}"
+                     Grid.Row="4"
+                     Grid.Column="1"
+                     Grid.ColumnSpan="2" >
+                <Ellipse.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchRightHaloCommand}" />
+                </Ellipse.GestureRecognizers>
+            </Ellipse>
+
+        </Grid>
+    </RefreshView>
+
+</ContentPage>

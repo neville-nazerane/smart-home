@@ -32,7 +32,10 @@ namespace SmartHome.MobileApp
             services
                     .AddTransient(c => new SmartContext(httpClient))
                     .AddScoped(p => new ChangeListener(baseUrl))
-                    
+
+                    .AddTransient<ComputerPage>()
+                    .AddTransient<ComputerViewModel>()
+
                     .AddTransient<ScenesPage>()
                     .AddTransient<ScenesViewModel>();
 
