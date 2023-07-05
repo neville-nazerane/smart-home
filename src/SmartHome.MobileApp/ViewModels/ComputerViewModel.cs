@@ -62,8 +62,8 @@ namespace SmartHome.MobileApp.ViewModels
             if (e.Info == _smartContext.Devices.ComputerLeftIris)
                 LeftHaloColor = await GetColorAsync(_smartContext.Devices.ComputerLeftIris.GetAsync());
 
-            if (e.Info == _smartContext.Devices.ComputerLeftIris)
-                RightHaloColor = await GetColorAsync(_smartContext.Devices.ComputerLeftIris.GetAsync());
+            if (e.Info == _smartContext.Devices.ComputerRightIris)
+                RightHaloColor = await GetColorAsync(_smartContext.Devices.ComputerRightIris.GetAsync());
 
             if (e.Info == _smartContext.Devices.ComputerLeftBar)
                 LeftBarColor = await GetColorAsync(_smartContext.Devices.ComputerLeftBar.GetAsync());
