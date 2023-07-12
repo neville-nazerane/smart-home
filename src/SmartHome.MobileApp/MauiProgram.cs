@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using SmartHome.ClientServices;
+using SmartHome.MobileApp.Models;
 using SmartHome.MobileApp.Pages;
 using SmartHome.MobileApp.ViewModels;
 using System.Net.Http;
+using SmartHome.MobileApp.Utils;
 
 namespace SmartHome.MobileApp
 {
@@ -26,6 +28,12 @@ namespace SmartHome.MobileApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                })
+                .ConfigureEssentials(essentials =>
+                {
+                    essentials
+                        .AddAppAction(AppActionType.TurnGoodNightOff)
+                        .OnAppAction(App.HandleAppActions);
                 });
 
             var services = builder.Services;
@@ -45,5 +53,8 @@ namespace SmartHome.MobileApp
 
             return builder.Build();
         }
+
+
+
     }
 }
