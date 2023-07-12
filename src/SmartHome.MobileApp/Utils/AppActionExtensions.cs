@@ -15,14 +15,12 @@ namespace SmartHome.MobileApp.Utils
         [GeneratedRegex("(?<!^)(?=[A-Z])")]
         private static partial Regex CapsPattern();
 
-        public static IEssentialsBuilder AddAppAction(this IEssentialsBuilder essentials, AppActionType actionType)
-        {
-            string display = string.Join(' ', CapsPattern().Split(actionType.ToString()));
-            return essentials.AddAppAction(actionType.ToString(), display);
-        }
+        public static IEssentialsBuilder AddAppAction(this IEssentialsBuilder essentials, AppActionType actionType) 
+            => essentials.AddAppAction(actionType.ToString(), actionType.GetDisplayname());
 
         public static AppActionType GetAction(this AppAction appAction)
             => Enum.Parse<AppActionType>(appAction.Id);
 
+        public static string GetDisplayname(this AppActionType actionType) => string.Join(' ', CapsPattern().Split(actionType.ToString()));
     }
 }
