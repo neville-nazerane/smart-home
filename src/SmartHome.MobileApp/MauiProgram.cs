@@ -26,6 +26,13 @@ namespace SmartHome.MobileApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                })
+                .ConfigureEssentials(essentials =>
+                {
+                    essentials
+                        .AddAppAction("scene", "Scene")
+                        .AddAppAction("computer", "Computer Setup")
+                        .OnAppAction(HandleAppActions);
                 });
 
             var services = builder.Services;
@@ -44,6 +51,24 @@ namespace SmartHome.MobileApp
 #endif
 
             return builder.Build();
+        }
+
+
+        public static void HandleAppActions(AppAction appAction)
+        {
+            App.Current.Dispatcher.Dispatch(async () =>
+            {
+
+                switch (appAction.Id)
+                {
+                    case "scene":
+                        await Shell.Current.GoToAsync("//scene");
+                        break;
+                    case "computer":
+                        await Shell.Current.GoToAsync("//computer");
+                        break;
+                }
+            });
         }
     }
 }
