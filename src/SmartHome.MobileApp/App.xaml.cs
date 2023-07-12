@@ -17,13 +17,12 @@ namespace SmartHome.MobileApp
         {
             Current.Dispatcher.Dispatch(async () =>
             {
+                var context = MauiApplication.Current.Services.GetService<SmartContext>();
 
                 switch (appAction.GetAction())
                 {
                     case Models.AppActionType.TurnGoodNightOff:
-                        var context = MauiApplication.Current.Services.GetService<SmartContext>();
-                        var isEnabled = await context.Scenes.IsEnabledAsync(SceneName.GoodNight);
-                        await context.Scenes.SetSceneEnabledAsync(SceneName.GoodNight, !isEnabled);
+                        await context.Scenes.SetSceneEnabledAsync(SceneName.GoodNight, false);
                         break;
                 }
 
