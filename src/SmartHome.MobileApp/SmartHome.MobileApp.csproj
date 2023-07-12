@@ -12,7 +12,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>SmartHome.MobileApp</ApplicationTitle>
+		<ApplicationTitle>Smart Home</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.nevillenazerane.home</ApplicationId>

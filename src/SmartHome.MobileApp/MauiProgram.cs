@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using SmartHome.ClientServices;
+using SmartHome.MobileApp.Models;
 using SmartHome.MobileApp.Pages;
 using SmartHome.MobileApp.ViewModels;
 using System.Net.Http;
+using SmartHome.MobileApp.Utils;
 
 namespace SmartHome.MobileApp
 {
@@ -30,9 +32,8 @@ namespace SmartHome.MobileApp
                 .ConfigureEssentials(essentials =>
                 {
                     essentials
-                        .AddAppAction("scene", "Scene")
-                        .AddAppAction("computer", "Computer Setup")
-                        .OnAppAction(HandleAppActions);
+                        .AddAppAction(AppActionType.TurnGoodNightOff)
+                        .OnAppAction(App.HandleAppActions);
                 });
 
             var services = builder.Services;
@@ -54,21 +55,6 @@ namespace SmartHome.MobileApp
         }
 
 
-        public static void HandleAppActions(AppAction appAction)
-        {
-            App.Current.Dispatcher.Dispatch(async () =>
-            {
 
-                switch (appAction.Id)
-                {
-                    case "scene":
-                        await Shell.Current.GoToAsync("//scene");
-                        break;
-                    case "computer":
-                        await Shell.Current.GoToAsync("//computer");
-                        break;
-                }
-            });
-        }
     }
 }
