@@ -1,4 +1,5 @@
 ﻿using SmartHome.ClientServices;
+using SmartHome.MobileApp.Pages;
 using SmartHome.MobileApp.Utils;
 using SmartHome.Models;
 
@@ -18,16 +19,17 @@ namespace SmartHome.MobileApp
             Current.Dispatcher.Dispatch(async () =>
             {
                 var context = MauiApplication.Current.Services.GetService<SmartContext>();
+                var action = appAction.GetAction();
+                await Current.MainPage.Navigation.PushAsync(new ActionRunningPage(action.GetDisplayname()));
 
-                switch (appAction.GetAction())
+                switch (action)
                 {
                     case Models.AppActionType.TurnGoodNightOff:
                         await context.Scenes.SetSceneEnabledAsync(SceneName.GoodNight, false);
                         break;
                 }
-
+                
                 Current.Quit();
-
             });
         }
     }
