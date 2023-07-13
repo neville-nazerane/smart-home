@@ -14,7 +14,7 @@ namespace SmartHome.WebAPI
     public static class Endpoints
     {
 
-        public static void MapAllEndpoints(this WebApplication app)
+        public static async void MapAllEndpoints(this WebApplication app)
         {
             app.MapPost("/notifyDeviceChange", NotifyDeviceChangeAsync);
             app.MapPost("/notifySceneChange", NotifySceneChangeAsync);
@@ -51,6 +51,11 @@ namespace SmartHome.WebAPI
             app.MapPut("/hueSync/{state}", SetSyncStateAsync);
 
             app.MapPost("/smartthings/switchbot/{deviceId}/trigger/{isOn}", TriggerSwitchBotAsync);
+
+
+            // CUSTOM
+            app.MapGet("/custom/goodNightOff", GoodNightOffAsync);
+
         }
 
         static Task NotifyDeviceChangeAsync(ISignalRPusher signalRPusher,
@@ -198,5 +203,10 @@ namespace SmartHome.WebAPI
             => hueSyncClient.SetSyncStateAsync(state, cancellationToken);
 
         #endregion
+
+
+        static Task GoodNightOffAsync(SmartContext context, CancellationToken cancellationToken = default)
+            => context.Scenes.SetSceneEnabledAsync(SceneName.GoodNight, false, cancellationToken);
+
     }
 }
