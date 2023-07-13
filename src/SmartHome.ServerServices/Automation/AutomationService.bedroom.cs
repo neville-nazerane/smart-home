@@ -1,4 +1,5 @@
-﻿using SmartHome.Models;
+﻿using Microsoft.VisualBasic;
+using SmartHome.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,13 +73,15 @@ namespace SmartHome.ServerServices.Automation
             {
                 var motion1 = await Devices.BedroomMotionSensor1.GetAsync(cancellationToken);
                 var motion2 = await Devices.BedroomMotionSensor2.GetAsync(cancellationToken);
+                var button = await Devices.BedroomControl.OnOffButton.GetAsync(cancellationToken);
 
                 if (!motion1.IsMotionDetected && !motion2.IsMotionDetected)
                 {
                     int lastNonMotionMins1 = (DateTime.UtcNow - motion1.LastChanged.ToUniversalTime()).Minutes;
                     int lastNonMotionMins2 = (DateTime.UtcNow - motion2.LastChanged.ToUniversalTime()).Minutes;
+                    int lastButtonPressed = (DateTime.UtcNow - button.LastEventExecutedOn.GetValueOrDefault().ToUniversalTime()).Minutes;
 
-                    if (lastNonMotionMins1 > 5 && lastNonMotionMins2 > 5)
+                    if (lastNonMotionMins1 > 5 && lastNonMotionMins2 > 5 && lastButtonPressed > 5)
                         await Scenes.SetSceneEnabledAsync(SceneName.Bedroom, false, cancellationToken);
                 }
             }
